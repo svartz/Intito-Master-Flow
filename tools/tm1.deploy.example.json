@@ -1,0 +1,17 @@
+{
+  "base_url": "https://tm1-host:12354",
+  "api_path": "/api/v1",
+  "auth_mode": "basic",
+  "user": "",
+  "password": "",
+  "namespace": "",
+  "authorization_header": "",
+  "verify_ssl": true,
+  "timeout_s": 60,
+  "process_root": "src/tm1/processes",
+  "object_definition_root": "src/tm1/object-definitions",
+  "deploy_processes": true,
+  "validate_object_definitions": true,
+  "process_name_prefix": "IMF.",
+  "allow_overwrite": true
+}

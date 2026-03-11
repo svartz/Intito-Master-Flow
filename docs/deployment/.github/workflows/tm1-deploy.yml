@@ -32,14 +32,21 @@ jobs:
     environment: dev
     steps:
       - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: Deploy to DEV
         env:
           TM1_BASE_URL: ${{ secrets.TM1_DEV_URL }}
           TM1_USER: ${{ secrets.TM1_DEV_USER }}
           TM1_PASSWORD: ${{ secrets.TM1_DEV_PASSWORD }}
         run: |
-          echo "Deploy dimensions, cubes and TI processes to DEV"
-          echo "Call TM1 REST API or deployment utility here"
+          export IMF_TM1_BASE_URL="$TM1_BASE_URL"
+          export IMF_TM1_USER="$TM1_USER"
+          export IMF_TM1_PASSWORD="$TM1_PASSWORD"
+          python tools/tm1_deploy.py validate
+          python tools/tm1_deploy.py deploy-processes --execute
 
   smoke-tests:
     needs: deploy-dev
@@ -64,10 +71,18 @@ jobs:
     environment: prod
     steps:
       - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: Deploy to PROD
         env:
           TM1_BASE_URL: ${{ secrets.TM1_PROD_URL }}
           TM1_USER: ${{ secrets.TM1_PROD_USER }}
           TM1_PASSWORD: ${{ secrets.TM1_PROD_PASSWORD }}
         run: |
-          echo "Deploy approved release to PROD"
+          export IMF_TM1_BASE_URL="$TM1_BASE_URL"
+          export IMF_TM1_USER="$TM1_USER"
+          export IMF_TM1_PASSWORD="$TM1_PASSWORD"
+          python tools/tm1_deploy.py validate
+          python tools/tm1_deploy.py deploy-processes --execute

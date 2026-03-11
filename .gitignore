@@ -1,0 +1,3 @@
+tools/tm1.deploy.local.json
+tools/*.secrets.json
+__pycache__/
