@@ -1,10 +1,22 @@
 # Intito MasterFlow technical validation
 # Purpose: Run technical validation checks against a work version.
-#
+# Sources:
+# - IMF.D.Version
+# - IMF.C.Version
+# - Work dimension and related control objects
+# - IMF.C.Validation
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Existing work version
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Existing work version.
+# Prolog:
+# - Validate the version context and resolve the work dimension.
+# Metadata:
+# - Resolve validation rules and delegate attribute validation.
+# Data:
+# - Evaluate duplicate keys, hierarchy issues, alias collisions, and other technical rules.
+# Epilog:
+# - Update version status and write validation notes.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

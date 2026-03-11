@@ -1,11 +1,21 @@
 # Intito MasterFlow export JSON leaf-flat
 # Purpose: Export a managed dimension or version as flat JSON leaf rows.
-#
+# Sources:
+# - Managed master dimension or selected work version
+# - Element attributes and leaf-level structure
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Optional work version
-#   pFilePath       Output file path
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Optional work version.
+# - pFilePath: Output file path.
+# Prolog:
+# - Resolve whether export source is master or work version.
+# Metadata:
+# - Determine JSON leaf schema and attribute set.
+# Data:
+# - Collect leaf elements and serialize them as JSON records.
+# Epilog:
+# - Write the final JSON payload to the requested file path.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

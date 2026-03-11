@@ -1,11 +1,21 @@
 # Intito MasterFlow version lock
 # Purpose: Lock a work version to prevent concurrent edits or publish actions.
-#
+# Sources:
+# - IMF.D.Version
+# - IMF.C.Version
 # Parameters:
-#   pPrefix        Default 'IMF'
-#   pVersionId     Version to lock
-#   pLockedBy      Optional explicit user id
-#   pLockReason    Optional free text
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pVersionId: Version to lock.
+# - pLockedBy: Optional explicit user id.
+# - pLockReason: Optional free text.
+# Prolog:
+# - Validate that the version exists and is not already locked.
+# Metadata:
+# - Resolve lock actor, timestamp, and lock reason.
+# Data:
+# - No structural data movement; this process only updates control metadata.
+# Epilog:
+# - Persist lock flags on the version dimension and cube.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

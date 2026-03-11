@@ -1,10 +1,20 @@
 # Intito MasterFlow version unlock
 # Purpose: Release a previously locked work version.
-#
+# Sources:
+# - IMF.D.Version
+# - IMF.C.Version
 # Parameters:
-#   pPrefix        Default 'IMF'
-#   pVersionId     Version to unlock
-#   pUnlockedBy    Optional explicit user id
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pVersionId: Version to unlock.
+# - pUnlockedBy: Optional explicit user id.
+# Prolog:
+# - Validate that the version exists and is currently locked.
+# Metadata:
+# - Resolve unlock actor and clear lock metadata fields.
+# Data:
+# - No structural data movement; this process only updates control metadata.
+# Epilog:
+# - Persist unlock state and append an unlock note.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

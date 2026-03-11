@@ -1,11 +1,22 @@
 # Intito MasterFlow rollback to archive
 # Purpose: Restore an archived master dimension as the current master.
-#
+# Sources:
+# - IMF.D.Dimension
+# - Selected archive dimension
+# - Current master dimension
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pArchiveName    Existing archive dimension
-#   pRestoredBy     Optional explicit user id
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pArchiveName: Existing archive dimension.
+# - pRestoredBy: Optional explicit user id.
+# Prolog:
+# - Validate rollback context and resolve master dimension.
+# Metadata:
+# - Delegate archive validation and archive current master state.
+# Data:
+# - Restore the selected archive structure as the master dimension.
+# Epilog:
+# - Update managed-dimension metadata to reflect the rollback source.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

@@ -1,10 +1,21 @@
 # Intito MasterFlow impact analysis for cubes
 # Purpose: Evaluate cube dependencies affected by a version diff.
-#
+# Sources:
+# - IMF.C.Diff
+# - Cube definitions that reference the managed dimension
+# - IMF.C.Impact
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Existing work version
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Existing work version.
+# Prolog:
+# - Resolve diff scope for the selected version.
+# Metadata:
+# - Identify cubes referencing the managed dimension.
+# Data:
+# - Evaluate impact severity per affected cube.
+# Epilog:
+# - Write cube-domain findings to IMF.C.Impact.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

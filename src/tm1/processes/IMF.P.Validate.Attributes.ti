@@ -1,10 +1,22 @@
 # Intito MasterFlow attribute validation
 # Purpose: Validate required attributes and attribute hygiene rules for a work version.
-#
+# Sources:
+# - IMF.D.Version
+# - IMF.C.Version
+# - Work dimension and its }ElementAttributes cube
+# - IMF.C.Validation
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Existing work version
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Existing work version.
+# Prolog:
+# - Validate the version context and resolve the work dimension.
+# Metadata:
+# - Resolve mandatory attribute rules for the managed dimension.
+# Data:
+# - Scan elements for missing or invalid attribute values.
+# Epilog:
+# - Write attribute validation findings to IMF.C.Validation.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

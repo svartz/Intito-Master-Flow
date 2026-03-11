@@ -1,10 +1,22 @@
 # Intito MasterFlow impact analysis orchestrator
 # Purpose: Run all impact analysis domains for a work version.
-#
+# Sources:
+# - IMF.D.Version
+# - IMF.C.Version
+# - IMF.C.Diff
+# - Domain-specific impact processes
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Existing work version
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Existing work version.
+# Prolog:
+# - Validate the version context before running domain analysis.
+# Metadata:
+# - Resolve which impact domains should be executed.
+# Data:
+# - Delegate analysis to cube, view, subset, process, security, and integration sub-processes.
+# Epilog:
+# - Mark the version as impact-analyzed and update notes.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

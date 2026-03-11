@@ -1,11 +1,21 @@
 # Intito MasterFlow import SQL leaf-flat
 # Purpose: Import SQL flat leaf rows into a managed dimension or work version.
-#
+# Sources:
+# - Source SQL table or query
+# - Managed master dimension or selected work version
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Optional work version
-#   pSourceQuery    Source SQL table or query name
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Optional work version.
+# - pSourceQuery: Source SQL table or query name.
+# Prolog:
+# - Resolve whether import target is master or work version.
+# Metadata:
+# - Determine SQL leaf schema and target mapping.
+# Data:
+# - Read source rows and apply element and attribute updates.
+# Epilog:
+# - Leave the target dimension updated and ready for validation.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

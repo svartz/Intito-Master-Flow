@@ -1,10 +1,21 @@
 # Intito MasterFlow impact analysis for integrations
 # Purpose: Evaluate integration contracts affected by a version diff.
-#
+# Sources:
+# - IMF.C.Diff
+# - Integration/export-import contract definitions
+# - IMF.C.Impact
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Existing work version
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Existing work version.
+# Prolog:
+# - Resolve diff scope for the selected version.
+# Metadata:
+# - Identify external interfaces depending on keys, paths, or attributes.
+# Data:
+# - Classify downstream integration breakage risk.
+# Epilog:
+# - Write integration-domain findings to IMF.C.Impact.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

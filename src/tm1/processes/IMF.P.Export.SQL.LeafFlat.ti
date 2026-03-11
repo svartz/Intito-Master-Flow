@@ -1,11 +1,21 @@
 # Intito MasterFlow export SQL leaf-flat
 # Purpose: Export a managed dimension or version as SQL-ready flat leaf rows.
-#
+# Sources:
+# - Managed master dimension or selected work version
+# - Element attributes and leaf-level structure
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Optional work version
-#   pTargetTable    Target SQL table or stage name
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Optional work version.
+# - pTargetTable: Target SQL table or stage name.
+# Prolog:
+# - Resolve whether export source is master or work version.
+# Metadata:
+# - Determine SQL leaf schema and destination contract.
+# Data:
+# - Collect leaf rows and prepare them for SQL load.
+# Epilog:
+# - Write or hand off the generated records to the configured SQL target.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

@@ -1,10 +1,21 @@
 # Intito MasterFlow impact analysis for security
 # Purpose: Evaluate security object dependencies affected by a version diff.
-#
+# Sources:
+# - IMF.C.Diff
+# - Security model objects referencing the managed dimension
+# - IMF.C.Impact
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Existing work version
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Existing work version.
+# Prolog:
+# - Resolve diff scope for the selected version.
+# Metadata:
+# - Identify security artefacts depending on the dimension structure.
+# Data:
+# - Classify security impact caused by deletes, moves, or renamed keys.
+# Epilog:
+# - Write security-domain findings to IMF.C.Impact.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

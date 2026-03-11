@@ -1,10 +1,20 @@
 # Intito MasterFlow rollback validation
 # Purpose: Validate that an archive dimension can safely be restored as master.
-#
+# Sources:
+# - IMF.D.Dimension
+# - Selected archive dimension
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pArchiveName    Existing archive dimension
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pArchiveName: Existing archive dimension.
+# Prolog:
+# - Validate rollback inputs and archive existence.
+# Metadata:
+# - Resolve restore preconditions and archive metadata requirements.
+# Data:
+# - Inspect archive structure and required attributes.
+# Epilog:
+# - Return control to the rollback process when the archive is considered valid.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

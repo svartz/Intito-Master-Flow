@@ -1,11 +1,21 @@
 # Intito MasterFlow import CSV parent-child
 # Purpose: Import parent-child CSV rows into a managed dimension or work version.
-#
+# Sources:
+# - Source CSV file
+# - Managed master dimension or selected work version
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Optional work version
-#   pFilePath       Source file path
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Optional work version.
+# - pFilePath: Source file path.
+# Prolog:
+# - Resolve whether import target is master or work version.
+# Metadata:
+# - Determine parent-child field mapping and hierarchy contract.
+# Data:
+# - Read CSV rows and apply structural updates to the target dimension.
+# Epilog:
+# - Leave the target dimension updated and ready for validation.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

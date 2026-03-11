@@ -1,10 +1,21 @@
 # Intito MasterFlow impact analysis for views
 # Purpose: Evaluate view dependencies affected by a version diff.
-#
+# Sources:
+# - IMF.C.Diff
+# - View definitions referencing the managed dimension
+# - IMF.C.Impact
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Existing work version
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Existing work version.
+# Prolog:
+# - Resolve diff scope for the selected version.
+# Metadata:
+# - Identify views referencing changed elements, subsets, or hierarchies.
+# Data:
+# - Evaluate view breakage or review requirements.
+# Epilog:
+# - Write view-domain findings to IMF.C.Impact.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

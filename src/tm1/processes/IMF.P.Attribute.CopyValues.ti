@@ -1,10 +1,20 @@
 # Intito MasterFlow attribute value copy
 # Purpose: Copy element attribute values from a source dimension into a target dimension.
-#
+# Sources:
+# - Source and target }ElementAttributes cubes
+# - Source and target dimension element sets
 # Parameters:
-#   pPrefix           Default 'IMF'
-#   pSourceDimension  Existing source dimension
-#   pTargetDimension  Existing target dimension
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pSourceDimension: Existing source dimension.
+# - pTargetDimension: Existing target dimension.
+# Prolog:
+# - Normalize prefix and validate source/target dimensions and attribute cubes.
+# Metadata:
+# - Resolve available attributes and target writeability.
+# Data:
+# - Copy attribute and alias values for matching elements.
+# Epilog:
+# - Leave target attributes synchronized with the copied structure.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

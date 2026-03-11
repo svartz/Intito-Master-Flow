@@ -1,10 +1,21 @@
 # Intito MasterFlow impact analysis for subsets
 # Purpose: Evaluate subset dependencies affected by a version diff.
-#
+# Sources:
+# - IMF.C.Diff
+# - Public and private subset definitions
+# - IMF.C.Impact
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Existing work version
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Existing work version.
+# Prolog:
+# - Resolve diff scope for the selected version.
+# Metadata:
+# - Identify subsets referencing affected elements or hierarchies.
+# Data:
+# - Evaluate subset membership or MDX breakage risk.
+# Epilog:
+# - Write subset-domain findings to IMF.C.Impact.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

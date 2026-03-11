@@ -1,10 +1,20 @@
 # Intito MasterFlow bootstrap process
 # Purpose: Create the base control dimensions and cubes required for project initialization.
-#
+# Sources:
+# - TI parameters only
+# - TM1 server object catalog at runtime
 # Parameters:
-#   pPrefix              Default 'IMF'
-#   pStatusCsv           Default 'Draft|InProgress|Validated|ImpactAnalyzed|Approved|Published|Archived'
-#   pCreateSampleConfig  Default 'Y'
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pStatusCsv: Lifecycle statuses to seed. Default 'Draft|InProgress|Validated|ImpactAnalyzed|Approved|Published|Archived'.
+# - pCreateSampleConfig: Seed template config values. Default 'Y'.
+# Prolog:
+# - Normalize naming inputs and resolve all control-object names.
+# Metadata:
+# - Create control dimensions, attributes, elements, and cubes.
+# Data:
+# - Seed template config values and default status metadata.
+# Epilog:
+# - Leave the TM1 model initialized for subsequent version, diff, validation, and publish flows.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

@@ -1,11 +1,25 @@
 # Intito MasterFlow publish version
 # Purpose: Publish a validated work version to master after impact analysis.
-#
+# Sources:
+# - IMF.D.Dimension
+# - IMF.D.Version
+# - IMF.C.Version
+# - Validation and impact-analysis processes
+# - Work and master dimensions
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Existing work version
-#   pPublishedBy    Optional explicit user id
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Existing work version.
+# - pPublishedBy: Optional explicit user id.
+# Prolog:
+# - Validate the version context and publishing actor.
+# - Resolve work and master dimension names.
+# Metadata:
+# - Trigger technical validation, impact analysis, and archive registration.
+# Data:
+# - Replace master structure with the selected work version.
+# Epilog:
+# - Mark the version as published and stamp publish metadata.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

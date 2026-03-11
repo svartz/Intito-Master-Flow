@@ -1,11 +1,22 @@
 # Intito MasterFlow full dimension copy
 # Purpose: Orchestrate the structural copy of a source dimension into a target dimension.
-#
+# Sources:
+# - Source dimension structure
+# - Source attribute definitions and values
+# - Target dimension shell
 # Parameters:
-#   pPrefix           Default 'IMF'
-#   pSourceDimension  Existing source dimension
-#   pTargetDimension  Existing or new target dimension
-#   pIncludeData      Reserved for future use, default 'N'
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pSourceDimension: Existing source dimension.
+# - pTargetDimension: Existing or new target dimension.
+# - pIncludeData: Reserved for future use. Default 'N'.
+# Prolog:
+# - Validate source and target dimension names and create target if needed.
+# Metadata:
+# - Reset the target structure and delegate attribute-definition setup.
+# Data:
+# - Copy structural content and then attribute values.
+# Epilog:
+# - Leave the target dimension ready for downstream compare, validate, or publish steps.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

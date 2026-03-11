@@ -1,10 +1,22 @@
 # Intito MasterFlow business validation
 # Purpose: Run business-rule validation checks against a work version.
-#
+# Sources:
+# - IMF.D.Version
+# - IMF.C.Version
+# - Business-owned rules and control metadata
+# - IMF.C.Validation
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Existing work version
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Existing work version.
+# Prolog:
+# - Validate the version context.
+# Metadata:
+# - Resolve business rules relevant to the managed dimension.
+# Data:
+# - Evaluate business-owned hierarchy and attribute constraints.
+# Epilog:
+# - Write business validation findings and notes.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

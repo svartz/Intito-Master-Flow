@@ -1,10 +1,23 @@
 # Intito MasterFlow archive current master
 # Purpose: Archive the current master dimension before publish or rollback.
-#
+# Sources:
+# - IMF.D.Dimension
+# - IMF.D.Version
+# - IMF.C.Version
+# - Current master dimension structure
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Existing work version
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Existing work version.
+# Prolog:
+# - Validate managed dimension and work version context.
+# - Resolve current master dimension name.
+# Metadata:
+# - Generate archive dimension name and update archive metadata references.
+# Data:
+# - Copy master dimension structure into the archive dimension.
+# Epilog:
+# - Persist archive name back to version and managed-dimension registries.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

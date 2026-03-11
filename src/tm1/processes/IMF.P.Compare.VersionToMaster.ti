@@ -1,10 +1,24 @@
 # Intito MasterFlow compare work version to master
 # Purpose: Orchestrate a comparison between the current work dimension and its master.
-#
+# Sources:
+# - IMF.D.Dimension
+# - IMF.D.Version
+# - IMF.C.Version
+# - Master and work dimensions
+# - IMF.C.Diff via compare sub-processes
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Existing work version
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Existing work version.
+# Prolog:
+# - Validate the managed-dimension and version context.
+# - Resolve master and work dimension names.
+# Metadata:
+# - Prepare compare scope and delegate to element, relation, and attribute compare processes.
+# Data:
+# - No direct data movement here; delegated compare processes inspect structures and attributes.
+# Epilog:
+# - Update version status and notes after comparison completes.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

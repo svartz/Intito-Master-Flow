@@ -1,11 +1,21 @@
 # Intito MasterFlow import CSV leaf-flat
 # Purpose: Import flat leaf-level CSV rows into a managed dimension or work version.
-#
+# Sources:
+# - Source CSV file
+# - Managed master dimension or selected work version
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Optional work version
-#   pFilePath       Source file path
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Optional work version.
+# - pFilePath: Source file path.
+# Prolog:
+# - Resolve whether import target is master or work version.
+# Metadata:
+# - Determine leaf-level field mapping and target dimension contract.
+# Data:
+# - Read CSV rows and apply element and attribute updates.
+# Epilog:
+# - Leave the target dimension updated and ready for validation.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

@@ -1,12 +1,23 @@
 # Intito MasterFlow compare relations
 # Purpose: Detect parent-child and weight differences between a work dimension and master dimension.
-#
+# Sources:
+# - Master and work dimensions
+# - Consolidation structures and weights
+# - IMF.C.Diff
 # Parameters:
-#   pPrefix          Default 'IMF'
-#   pDimensionCode   Managed dimension code
-#   pVersionId       Existing work version
-#   pMasterDimension Existing master dimension
-#   pWorkDimension   Existing work dimension
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Existing work version.
+# - pMasterDimension: Existing master dimension.
+# - pWorkDimension: Existing work dimension.
+# Prolog:
+# - Validate compare context and both dimensions.
+# Metadata:
+# - Resolve relation compare conventions for the version.
+# Data:
+# - Compare parent assignments and consolidation weights.
+# Epilog:
+# - Write relation-level deltas to IMF.C.Diff.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

@@ -1,14 +1,27 @@
 # Intito MasterFlow version creation
 # Purpose: Register a new work version and initialize its work dimension.
-#
+# Sources:
+# - IMF.D.Dimension
+# - IMF.D.Version
+# - IMF.C.Config
+# - IMF.C.Version
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code from IMF.D.Dimension
-#   pVersionId      New version identifier
-#   pSourceType     MASTER | VERSION
-#   pSourceVersion  Required when pSourceType = VERSION
-#   pCreatedBy      Optional explicit user id
-#   pNotes          Optional free text
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code from IMF.D.Dimension.
+# - pVersionId: New version identifier.
+# - pSourceType: MASTER or VERSION.
+# - pSourceVersion: Required when pSourceType = VERSION.
+# - pCreatedBy: Optional explicit user id.
+# - pNotes: Optional free text.
+# Prolog:
+# - Validate inputs, dimension registration, and version uniqueness.
+# - Resolve naming convention for the work dimension.
+# Metadata:
+# - Create version registry entry and seed control-cube metadata.
+# Data:
+# - Delegate actual structure initialization to clone-from-master or clone-from-version.
+# Epilog:
+# - Update active-version tracking on the managed dimension.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

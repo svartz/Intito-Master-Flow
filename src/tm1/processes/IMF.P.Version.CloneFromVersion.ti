@@ -1,12 +1,24 @@
 # Intito MasterFlow clone from version
 # Purpose: Initialize a new work dimension using another work version as source.
-#
+# Sources:
+# - IMF.D.Version
+# - IMF.C.Version
+# - Source work dimension
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code from IMF.D.Dimension
-#   pVersionId      Target work version
-#   pSourceVersion  Existing work version used as clone source
-#   pCreatedBy      Optional explicit user id
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code from IMF.D.Dimension.
+# - pVersionId: Target work version.
+# - pSourceVersion: Existing work version used as clone source.
+# - pCreatedBy: Optional explicit user id.
+# Prolog:
+# - Validate target version, source version, and their shared dimension code.
+# - Resolve source and target work dimension names.
+# Metadata:
+# - Confirm lineage metadata before invoking the copy engine.
+# Data:
+# - Copy source work-dimension structure into the target work dimension.
+# Epilog:
+# - Update version notes and source lineage fields.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

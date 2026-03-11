@@ -1,12 +1,22 @@
 # Intito MasterFlow compare elements
 # Purpose: Detect added and deleted elements between a work dimension and master dimension.
-#
+# Sources:
+# - Master and work dimensions
+# - IMF.C.Diff
 # Parameters:
-#   pPrefix          Default 'IMF'
-#   pDimensionCode   Managed dimension code
-#   pVersionId       Existing work version
-#   pMasterDimension Existing master dimension
-#   pWorkDimension   Existing work dimension
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Existing work version.
+# - pMasterDimension: Existing master dimension.
+# - pWorkDimension: Existing work dimension.
+# Prolog:
+# - Validate compare context and both dimensions.
+# Metadata:
+# - Resolve diff-record conventions for the version.
+# Data:
+# - Compare element presence to detect adds and deletes.
+# Epilog:
+# - Write element-level deltas to IMF.C.Diff.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

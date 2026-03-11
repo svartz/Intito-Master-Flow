@@ -1,11 +1,21 @@
 # Intito MasterFlow import JSON leaf-flat
 # Purpose: Import flat JSON leaf rows into a managed dimension or work version.
-#
+# Sources:
+# - Source JSON payload
+# - Managed master dimension or selected work version
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Optional work version
-#   pFilePath       Source file path
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Optional work version.
+# - pFilePath: Source file path.
+# Prolog:
+# - Resolve whether import target is master or work version.
+# Metadata:
+# - Determine JSON leaf schema and target field mapping.
+# Data:
+# - Read JSON rows and apply element and attribute updates.
+# Epilog:
+# - Leave the target dimension updated and ready for validation.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');

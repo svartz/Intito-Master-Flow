@@ -1,11 +1,21 @@
 # Intito MasterFlow export CSV parent-child
 # Purpose: Export a managed dimension or version in parent-child CSV shape.
-#
+# Sources:
+# - Managed master dimension or selected work version
+# - Hierarchy relationships and weights
 # Parameters:
-#   pPrefix         Default 'IMF'
-#   pDimensionCode  Managed dimension code
-#   pVersionId      Optional work version
-#   pFilePath       Output file path
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: Managed dimension code.
+# - pVersionId: Optional work version.
+# - pFilePath: Output file path.
+# Prolog:
+# - Resolve whether export source is master or work version.
+# Metadata:
+# - Determine parent-child output contract and ordering.
+# Data:
+# - Flatten hierarchy into parent-child CSV rows.
+# Epilog:
+# - Write the final CSV payload to the requested file path.
 
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
