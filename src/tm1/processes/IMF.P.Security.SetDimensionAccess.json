@@ -32,18 +32,33 @@
                            "Prompt":  "Log Only",
                            "Value":  "N",
                            "Description":  "Parameter pLogOnly"
+                       },
+                       {
+                           "Name":  "pLogToCube",
+                           "Prompt":  "Log To Cube",
+                           "Value":  "Y",
+                           "Description":  "Parameter pLogToCube"
+                       },
+                       {
+                           "Name":  "pLogFile",
+                           "Prompt":  "Log File",
+                           "Value":  "docs/security/IMF_Security_Bootstrap.log",
+                           "Description":  "Parameter pLogFile"
                        }
                    ],
-    "Sections":  {
-                     "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsDimensionName = Trim(pDimensionName);\r\nsGroupName = Trim(pGroupName);\r\nsAccess = Upper(Trim(pAccess));\r\nsLogOnly = Upper(Trim(pLogOnly));\r\nIf((sDimensionName @= \u0027\u0027) % (sGroupName @= \u0027\u0027)); ProcessBreak; EndIf;\r\n# TODO: Confirm }DimensionSecurity dimension order and class resolution before enabling native writes.\r\n# CellPutS(sAccess, \u0027}DimensionSecurity\u0027, sGroupName, sDimensionName);\r\nExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027SET_DIMENSION_ACCESS\u0027, \u0027pObjectType\u0027, \u0027DIMENSION\u0027, \u0027pObjectName\u0027, sDimensionName, \u0027pStatus\u0027, If(sLogOnly @= \u0027Y\u0027, \u0027INFO\u0027, \u0027TODO\u0027), \u0027pMessage\u0027, \u0027Group=\u0027 | sGroupName | \u0027; access=\u0027 | sAccess | \u0027; logOnly=\u0027 | sLogOnly);",
-                     "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
-                     "Data":  "# No Data tab logic in this scaffold.",
-                     "Epilog":  "# No Epilog tab logic beyond logging for this scaffold."
-                 },
-    "Tags":  [
+    "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsDimensionName = Trim(pDimensionName);\r\nsGroupName = Trim(pGroupName);\r\nsAccess = Upper(Trim(pAccess));\r\nsLogOnly = Upper(Trim(pLogOnly));\r\nsLogToCube = Upper(Trim(pLogToCube));\r\nsLogFile = Trim(pLogFile);\r\nIf((sDimensionName @= \u0027\u0027) % (sGroupName @= \u0027\u0027)); ProcessBreak; EndIf;\r\n# TODO: Confirm }DimensionSecurity dimension order and wildcard/class-resolution strategy before enabling native writes.\r\nIf(sLogOnly @= \u0027N\u0027);\r\n  # CellPutS(sAccess, \u0027}DimensionSecurity\u0027, sGroupName, sDimensionName);\r\n  ExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027SET_DIMENSION_ACCESS\u0027, \u0027pObjectType\u0027, \u0027DIMENSION\u0027, \u0027pObjectName\u0027, sDimensionName, \u0027pStatus\u0027, \u0027TODO\u0027, \u0027pMessage\u0027, \u0027TODO: Native }DimensionSecurity write must be validated before activation. Group=\u0027 | sGroupName | \u0027; expected=\u0027 | sAccess, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nElse;\r\n  ExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027SET_DIMENSION_ACCESS\u0027, \u0027pObjectType\u0027, \u0027DIMENSION\u0027, \u0027pObjectName\u0027, sDimensionName, \u0027pStatus\u0027, \u0027INFO\u0027, \u0027pMessage\u0027, \u0027Log-only dimension assignment. Group=\u0027 | sGroupName | \u0027; expected=\u0027 | sAccess, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nEndIf;",
+    "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
+    "tags":  [
                  "IMF",
                  "Security",
-                 "DimensionSecurity",
-                 "EnvironmentAware"
-             ]
+                 "TM1",
+                 "PAW",
+                 "v12",
+                 "DimensionSecurity"
+             ],
+    "environmentScope":  [
+                             "DEV",
+                             "TEST",
+                             "PROD"
+                         ]
 }

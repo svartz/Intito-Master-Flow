@@ -38,18 +38,33 @@
                            "Prompt":  "Message",
                            "Value":  "",
                            "Description":  "Parameter pMessage"
+                       },
+                       {
+                           "Name":  "pLogToCube",
+                           "Prompt":  "Log To Cube",
+                           "Value":  "Y",
+                           "Description":  "Parameter pLogToCube"
+                       },
+                       {
+                           "Name":  "pLogFile",
+                           "Prompt":  "Log File",
+                           "Value":  "docs/security/IMF_Security_Bootstrap.log",
+                           "Description":  "Parameter pLogFile"
                        }
                    ],
-    "Sections":  {
-                     "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsStatus = Upper(Trim(pStatus));\r\nIf(sStatus @= \u0027\u0027); sStatus = \u0027INFO\u0027; EndIf;\r\nsLogLine = \u0027[IMF_SECURITY][\u0027 | sEnvironment | \u0027][\u0027 | sStatus | \u0027][\u0027 | Trim(pAction) | \u0027][\u0027 | Trim(pObjectType) | \u0027][\u0027 | Trim(pObjectName) | \u0027] \u0027 | Trim(pMessage);\r\nLogOutput(\u0027INFO\u0027, sLogLine);\r\n# TODO: Mirror the same log line into IMF.C.EventLog once the target cube grain is finalized.",
-                     "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
-                     "Data":  "# No Data tab logic in this scaffold.",
-                     "Epilog":  "# No Epilog tab logic beyond logging for this scaffold."
-                 },
-    "Tags":  [
+    "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsAction = Trim(pAction);\r\nsObjectType = Trim(pObjectType);\r\nsObjectName = Trim(pObjectName);\r\nsStatus = Upper(Trim(pStatus));\r\nsMessage = Trim(pMessage);\r\nsLogToCube = Upper(Trim(pLogToCube));\r\nsLogFile = Trim(pLogFile);\r\nIf(sStatus @= \u0027\u0027); sStatus = \u0027INFO\u0027; EndIf;\r\nIf(sLogToCube @= \u0027\u0027); sLogToCube = \u0027Y\u0027; EndIf;\r\nIf(sLogFile @= \u0027\u0027); sLogFile = \u0027docs/security/IMF_Security_Bootstrap.log\u0027; EndIf;\r\nsLogLine = \u0027[IMF_SECURITY][\u0027 | sEnvironment | \u0027][\u0027 | sStatus | \u0027][\u0027 | sAction | \u0027][\u0027 | sObjectType | \u0027][\u0027 | sObjectName | \u0027] \u0027 | sMessage;\r\nIf(sLogToCube @= \u0027Y\u0027);\r\n  # TODO: Write to IMF.C.EventLog once the cube grain and insertion convention are finalized.\r\nEndIf;\r\nASCIIOutput(sLogFile, sLogLine);\r\nLogOutput(\u0027INFO\u0027, sLogLine);",
+    "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
+    "tags":  [
                  "IMF",
                  "Security",
-                 "Logging",
-                 "EnvironmentAware"
-             ]
+                 "TM1",
+                 "PAW",
+                 "v12",
+                 "Logging"
+             ],
+    "environmentScope":  [
+                             "DEV",
+                             "TEST",
+                             "PROD"
+                         ]
 }

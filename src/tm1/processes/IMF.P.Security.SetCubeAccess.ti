@@ -10,6 +10,8 @@
 # - pGroupName: Parameter pGroupName
 # - pAccess: Parameter pAccess Default 'READ'.
 # - pLogOnly: Parameter pLogOnly Default 'N'.
+# - pLogToCube: Parameter pLogToCube Default 'Y'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Bootstrap.log'.
 # Prolog:
 # - Validate parameters and execute the process-specific security workflow.
 # Metadata:
@@ -25,10 +27,16 @@ sCubeName = Trim(pCubeName);
 sGroupName = Trim(pGroupName);
 sAccess = Upper(Trim(pAccess));
 sLogOnly = Upper(Trim(pLogOnly));
+sLogToCube = Upper(Trim(pLogToCube));
+sLogFile = Trim(pLogFile);
 If((sCubeName @= '') % (sGroupName @= '')); ProcessBreak; EndIf;
-# TODO: Confirm }CubeSecurity dimension order before enabling native writes.
-# CellPutS(sAccess, '}CubeSecurity', sGroupName, sCubeName);
-ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'SET_CUBE_ACCESS', 'pObjectType', 'CUBE', 'pObjectName', sCubeName, 'pStatus', If(sLogOnly @= 'Y', 'INFO', 'TODO'), 'pMessage', 'Group=' | sGroupName | '; access=' | sAccess | '; logOnly=' | sLogOnly);
+# TODO: Confirm }CubeSecurity dimension order in the target TM1 environment before enabling native writes.
+If(sLogOnly @= 'N');
+  # CellPutS(sAccess, '}CubeSecurity', sGroupName, sCubeName);
+  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'SET_CUBE_ACCESS', 'pObjectType', 'CUBE', 'pObjectName', sCubeName, 'pStatus', 'TODO', 'pMessage', 'TODO: Native }CubeSecurity write must be validated before activation. Group=' | sGroupName | '; expected=' | sAccess, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+Else;
+  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'SET_CUBE_ACCESS', 'pObjectType', 'CUBE', 'pObjectName', sCubeName, 'pStatus', 'INFO', 'pMessage', 'Log-only cube assignment. Group=' | sGroupName | '; expected=' | sAccess, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+EndIf;
 #endregion
 
 #region metadata

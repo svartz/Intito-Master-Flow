@@ -7,6 +7,8 @@
 # Parameters:
 # - pEnvironment: Parameter pEnvironment Default 'DEV'.
 # - pOutputFile: Parameter pOutputFile Default 'docs/security/IMF_Process_Security_Matrix.csv'.
+# - pLogToCube: Parameter pLogToCube Default 'Y'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Bootstrap.log'.
 # Prolog:
 # - Validate parameters and execute the process-specific security workflow.
 # Metadata:
@@ -18,9 +20,11 @@
 
 #region prolog
 sEnvironment = Upper(Trim(pEnvironment));
-If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
-# TODO: Implement environment-specific security behavior for IMF.P.Security.ExportProcessMatrix.
-ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'IMF.P.Security.ExportProcessMatrix', 'pObjectType', 'SECURITY_PROCESS', 'pObjectName', 'IMF.P.Security.ExportProcessMatrix', 'pStatus', 'TODO', 'pMessage', 'TODO: Complete process logic for IMF.P.Security.ExportProcessMatrix.');
+sOutputFile = Trim(pOutputFile);
+sLogToCube = Upper(Trim(pLogToCube));
+sLogFile = Trim(pLogFile);
+If(sOutputFile @= ''); sOutputFile = 'docs/security/IMF_Process_Security_Matrix.csv'; EndIf;
+ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'EXPORT_PROCESS_MATRIX', 'pObjectType', 'FILE', 'pObjectName', sOutputFile, 'pStatus', 'INFO', 'pMessage', 'Process security matrix export requested.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
 #endregion
 
 #region metadata

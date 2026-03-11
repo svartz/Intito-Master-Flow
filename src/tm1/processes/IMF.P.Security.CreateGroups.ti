@@ -7,6 +7,9 @@
 # Parameters:
 # - pEnvironment: Parameter pEnvironment Default 'DEV'.
 # - pCreateIfExistsBehavior: Parameter pCreateIfExistsBehavior Default 'SKIP'.
+# - pStrictMode: Parameter pStrictMode Default 'N'.
+# - pLogToCube: Parameter pLogToCube Default 'Y'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Bootstrap.log'.
 # Prolog:
 # - Validate parameters and execute the process-specific security workflow.
 # Metadata:
@@ -19,14 +22,20 @@
 #region prolog
 sEnvironment = Upper(Trim(pEnvironment));
 sCreateBehavior = Upper(Trim(pCreateIfExistsBehavior));
-ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Admin', 'pCreateIfExistsBehavior', sCreateBehavior);
-ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Developer', 'pCreateIfExistsBehavior', sCreateBehavior);
-ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Operator', 'pCreateIfExistsBehavior', sCreateBehavior);
-ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Approver', 'pCreateIfExistsBehavior', sCreateBehavior);
-ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Editor', 'pCreateIfExistsBehavior', sCreateBehavior);
-ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Viewer', 'pCreateIfExistsBehavior', sCreateBehavior);
-ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Auditor', 'pCreateIfExistsBehavior', sCreateBehavior);
-ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Service', 'pCreateIfExistsBehavior', sCreateBehavior);
+sStrictMode = Upper(Trim(pStrictMode));
+sLogToCube = Upper(Trim(pLogToCube));
+sLogFile = Trim(pLogFile);
+If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
+If(sCreateBehavior @= ''); sCreateBehavior = 'SKIP'; EndIf;
+If(sStrictMode @= ''); sStrictMode = 'N'; EndIf;
+ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Admin', 'pCreateIfExistsBehavior', sCreateBehavior, 'pStrictMode', sStrictMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Developer', 'pCreateIfExistsBehavior', sCreateBehavior, 'pStrictMode', sStrictMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Operator', 'pCreateIfExistsBehavior', sCreateBehavior, 'pStrictMode', sStrictMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Approver', 'pCreateIfExistsBehavior', sCreateBehavior, 'pStrictMode', sStrictMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Editor', 'pCreateIfExistsBehavior', sCreateBehavior, 'pStrictMode', sStrictMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Viewer', 'pCreateIfExistsBehavior', sCreateBehavior, 'pStrictMode', sStrictMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Auditor', 'pCreateIfExistsBehavior', sCreateBehavior, 'pStrictMode', sStrictMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Service', 'pCreateIfExistsBehavior', sCreateBehavior, 'pStrictMode', sStrictMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
 #endregion
 
 #region metadata

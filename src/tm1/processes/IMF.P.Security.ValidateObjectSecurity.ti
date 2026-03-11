@@ -6,6 +6,9 @@
 # - IMF.P.Security.LogBootstrap
 # Parameters:
 # - pEnvironment: Parameter pEnvironment Default 'DEV'.
+# - pOutputFile: Parameter pOutputFile Default 'docs/security/IMF_Security_Matrix.csv'.
+# - pLogToCube: Parameter pLogToCube Default 'Y'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Bootstrap.log'.
 # Prolog:
 # - Validate parameters and execute the process-specific security workflow.
 # Metadata:
@@ -17,9 +20,12 @@
 
 #region prolog
 sEnvironment = Upper(Trim(pEnvironment));
-If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
-# TODO: Implement environment-specific security behavior for IMF.P.Security.ValidateObjectSecurity.
-ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'IMF.P.Security.ValidateObjectSecurity', 'pObjectType', 'SECURITY_PROCESS', 'pObjectName', 'IMF.P.Security.ValidateObjectSecurity', 'pStatus', 'TODO', 'pMessage', 'TODO: Complete process logic for IMF.P.Security.ValidateObjectSecurity.');
+sOutputFile = Trim(pOutputFile);
+sLogToCube = Upper(Trim(pLogToCube));
+sLogFile = Trim(pLogFile);
+If(sOutputFile @= ''); sOutputFile = 'docs/security/IMF_Security_Matrix.csv'; EndIf;
+# TODO: Read back actual access from }CubeSecurity and }DimensionSecurity and compare it with the documented IMF matrix.
+ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_OBJECT_SECURITY', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', sOutputFile, 'pStatus', 'TODO', 'pMessage', 'TODO: Implement read-back validation and mismatch export for IMF security.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
 #endregion
 
 #region metadata

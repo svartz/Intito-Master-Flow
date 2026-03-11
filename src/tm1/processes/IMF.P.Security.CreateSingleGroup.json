@@ -20,18 +20,39 @@
                            "Prompt":  "Create If Exists Behavior",
                            "Value":  "SKIP",
                            "Description":  "Parameter pCreateIfExistsBehavior"
+                       },
+                       {
+                           "Name":  "pStrictMode",
+                           "Prompt":  "Strict Mode",
+                           "Value":  "N",
+                           "Description":  "Parameter pStrictMode"
+                       },
+                       {
+                           "Name":  "pLogToCube",
+                           "Prompt":  "Log To Cube",
+                           "Value":  "Y",
+                           "Description":  "Parameter pLogToCube"
+                       },
+                       {
+                           "Name":  "pLogFile",
+                           "Prompt":  "Log File",
+                           "Value":  "docs/security/IMF_Security_Bootstrap.log",
+                           "Description":  "Parameter pLogFile"
                        }
                    ],
-    "Sections":  {
-                     "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nIf(sEnvironment @= \u0027\u0027); sEnvironment = \u0027DEV\u0027; EndIf;\r\n# TODO: Implement environment-specific security behavior for IMF.P.Security.CreateSingleGroup.\r\nExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pObjectType\u0027, \u0027SECURITY_PROCESS\u0027, \u0027pObjectName\u0027, \u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pStatus\u0027, \u0027TODO\u0027, \u0027pMessage\u0027, \u0027TODO: Complete process logic for IMF.P.Security.CreateSingleGroup.\u0027);",
-                     "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
-                     "Data":  "# No Data tab logic in this scaffold.",
-                     "Epilog":  "# No Epilog tab logic beyond logging for this scaffold."
-                 },
-    "Tags":  [
+    "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsGroupName = Trim(pGroupName);\r\nsStrictMode = Upper(Trim(pStrictMode));\r\nsLogToCube = Upper(Trim(pLogToCube));\r\nsLogFile = Trim(pLogFile);\r\nIf((sGroupName @= \u0027\u0027) % (SubSt(sGroupName, 1, 4) @\u003c\u003e \u0027IMF_\u0027)); ProcessBreak; EndIf;\r\n# TODO: Replace this placeholder with an actual group existence check against TM1 or the external identity provider.\r\nsGroupExists = \u0027N\u0027;\r\nIf(sGroupExists @= \u0027Y\u0027);\r\n  ExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027GROUP_VALIDATE\u0027, \u0027pObjectType\u0027, \u0027GROUP\u0027, \u0027pObjectName\u0027, sGroupName, \u0027pStatus\u0027, \u0027INFO\u0027, \u0027pMessage\u0027, \u0027Group already exists.\u0027, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nElseIf(sStrictMode @= \u0027Y\u0027);\r\n  ExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027GROUP_VALIDATE\u0027, \u0027pObjectType\u0027, \u0027GROUP\u0027, \u0027pObjectName\u0027, sGroupName, \u0027pStatus\u0027, \u0027ERROR\u0027, \u0027pMessage\u0027, \u0027Required IMF group missing. Strict mode abort.\u0027, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\n  ProcessBreak;\r\nElse;\r\n  ExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027GROUP_VALIDATE\u0027, \u0027pObjectType\u0027, \u0027GROUP\u0027, \u0027pObjectName\u0027, sGroupName, \u0027pStatus\u0027, \u0027WARN\u0027, \u0027pMessage\u0027, \u0027Group missing; continuing because strict mode is disabled. TODO: implement real creation or validation.\u0027, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nEndIf;",
+    "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
+    "tags":  [
                  "IMF",
                  "Security",
-                 "Groups",
-                 "EnvironmentAware"
-             ]
+                 "TM1",
+                 "PAW",
+                 "v12",
+                 "Groups"
+             ],
+    "environmentScope":  [
+                             "DEV",
+                             "TEST",
+                             "PROD"
+                         ]
 }

@@ -1,32 +1,37 @@
 # IMF Security Model
 
-## Scope
-This package defines the Intito MasterFlow security model for IBM Planning Analytics / TM1 v12 in a Git-reviewable source format.
+## Security model overview
+This package defines a production-oriented, group-based IMF security model for TM1 / Planning Analytics v12.
 
-## IMF groups
-- IMF_Admin
-- IMF_Developer
-- IMF_Operator
-- IMF_Approver
-- IMF_Editor
-- IMF_Viewer
-- IMF_Auditor
-- IMF_Service
+## Role descriptions
+- IMF_Admin: full control
+- IMF_Developer: development/support role with broader access only in DEV
+- IMF_Operator: operational workflow role
+- IMF_Approver: approval review role
+- IMF_Editor: controlled work-version editor
+- IMF_Viewer: least-privilege read-only role
+- IMF_Auditor: audit-focused read-only role
+- IMF_Service: service automation role
 
-## Environment behavior
-- DEV: developers may receive broader write access for selected configuration and governance parameters.
-- TEST: mirror PROD closely while still allowing controlled validation.
-- PROD: apply least privilege and restrict write access to platform-critical settings.
+## Bootstrap instructions
+Run IMF.P.Security.BootstrapAll with pEnvironment, pCreateIfExistsBehavior, pStrictMode, pLogToCube, and pLogFile.
 
-## TODO sections
-- TODO: connect group creation and validation to the target IAM or TM1 security provider
-- TODO: confirm native }CubeSecurity intersection order before enabling direct CellPutS writes
-- TODO: confirm native }DimensionSecurity intersection order before enabling direct CellPutS writes
-- TODO: resolve logical dimension classes such as MasterDimensions and WorkDimensions to actual deployed objects
-- TODO: implement read-back validation of actual object security from TM1 control cubes
-- TODO: mirror bootstrap logs into IMF.C.EventLog once the target cube design is finalized
+## Validation instructions
+Run IMF.P.Security.ValidateGroups and IMF.P.Security.ValidateObjectSecurity, then review IMF_Security_Matrix.csv and IMF_Process_Security_Matrix.csv.
 
-## Assumptions
-- IMF security is group-based only; no direct user grants are created
-- LogOutput is available in the target TM1 environment
-- some IMF cubes referenced by the model may be introduced later than this package
+## DEV / TEST / PROD differences
+- DEV: developers may receive broader rights.
+- TEST: near-production behavior.
+- PROD: strict least privilege.
+
+## External IAM assumptions
+- Group creation may be external to TM1.
+- The package does not fake successful group creation.
+- Strict mode aborts bootstrap if required groups are missing and cannot be validated.
+
+## Remaining environment-dependent TODOs
+- Connect group existence checks and provisioning to the target IAM or TM1 provider.
+- Confirm the exact native write pattern for }CubeSecurity.
+- Confirm the exact native write pattern and wildcard resolution for }DimensionSecurity.
+- Implement read-back validation of actual security assignments.
+- Mirror logging into IMF.C.EventLog once the cube grain is finalized.

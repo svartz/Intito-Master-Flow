@@ -7,6 +7,8 @@
 # Parameters:
 # - pEnvironment: Parameter pEnvironment Default 'DEV'.
 # - pLogOnly: Parameter pLogOnly Default 'N'.
+# - pLogToCube: Parameter pLogToCube Default 'Y'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Bootstrap.log'.
 # Prolog:
 # - Validate parameters and execute the process-specific security workflow.
 # Metadata:
@@ -19,11 +21,15 @@
 #region prolog
 sEnvironment = Upper(Trim(pEnvironment));
 sLogOnly = Upper(Trim(pLogOnly));
-ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.Config', 'pGroupName', 'IMF_Admin', 'pAccess', 'WRITE', 'pLogOnly', sLogOnly);
-ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.Version', 'pGroupName', 'IMF_Operator', 'pAccess', 'WRITE', 'pLogOnly', sLogOnly);
-ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.Impact', 'pGroupName', 'IMF_Auditor', 'pAccess', 'READ', 'pLogOnly', sLogOnly);
-ExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pDimensionName', 'IMF.D.Version', 'pGroupName', 'IMF_Admin', 'pAccess', 'WRITE', 'pLogOnly', sLogOnly);
-ExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pDimensionName', 'WorkDimensions', 'pGroupName', 'IMF_Editor', 'pAccess', If(sEnvironment @= 'PROD', 'READ', 'WRITE'), 'pLogOnly', sLogOnly);
+sLogToCube = Upper(Trim(pLogToCube));
+sLogFile = Trim(pLogFile);
+ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.Config', 'pGroupName', 'IMF_Admin', 'pAccess', 'WRITE', 'pLogOnly', sLogOnly, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.Config', 'pGroupName', 'IMF_Developer', 'pAccess', 'READ', 'pLogOnly', sLogOnly, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.Version', 'pGroupName', 'IMF_Operator', 'pAccess', 'WRITE', 'pLogOnly', sLogOnly, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.PublishHistory', 'pGroupName', 'IMF_Developer', 'pAccess', 'READ', 'pLogOnly', sLogOnly, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pDimensionName', 'IMF.D.*', 'pGroupName', 'IMF_Admin', 'pAccess', 'WRITE', 'pLogOnly', sLogOnly, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pDimensionName', '_WRK_*', 'pGroupName', 'IMF_Editor', 'pAccess', 'WRITE', 'pLogOnly', sLogOnly, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pDimensionName', '_ARC_*', 'pGroupName', 'IMF_Viewer', 'pAccess', 'NONE', 'pLogOnly', sLogOnly, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
 #endregion
 
 #region metadata

@@ -8,6 +8,9 @@
 # - pEnvironment: Parameter pEnvironment Default 'DEV'.
 # - pGroupName: Parameter pGroupName
 # - pCreateIfExistsBehavior: Parameter pCreateIfExistsBehavior Default 'SKIP'.
+# - pStrictMode: Parameter pStrictMode Default 'N'.
+# - pLogToCube: Parameter pLogToCube Default 'Y'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Bootstrap.log'.
 # Prolog:
 # - Validate parameters and execute the process-specific security workflow.
 # Metadata:
@@ -19,9 +22,21 @@
 
 #region prolog
 sEnvironment = Upper(Trim(pEnvironment));
-If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
-# TODO: Implement environment-specific security behavior for IMF.P.Security.CreateSingleGroup.
-ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'IMF.P.Security.CreateSingleGroup', 'pObjectType', 'SECURITY_PROCESS', 'pObjectName', 'IMF.P.Security.CreateSingleGroup', 'pStatus', 'TODO', 'pMessage', 'TODO: Complete process logic for IMF.P.Security.CreateSingleGroup.');
+sGroupName = Trim(pGroupName);
+sStrictMode = Upper(Trim(pStrictMode));
+sLogToCube = Upper(Trim(pLogToCube));
+sLogFile = Trim(pLogFile);
+If((sGroupName @= '') % (SubSt(sGroupName, 1, 4) @<> 'IMF_')); ProcessBreak; EndIf;
+# TODO: Replace this placeholder with an actual group existence check against TM1 or the external identity provider.
+sGroupExists = 'N';
+If(sGroupExists @= 'Y');
+  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'GROUP_VALIDATE', 'pObjectType', 'GROUP', 'pObjectName', sGroupName, 'pStatus', 'INFO', 'pMessage', 'Group already exists.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ElseIf(sStrictMode @= 'Y');
+  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'GROUP_VALIDATE', 'pObjectType', 'GROUP', 'pObjectName', sGroupName, 'pStatus', 'ERROR', 'pMessage', 'Required IMF group missing. Strict mode abort.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+  ProcessBreak;
+Else;
+  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'GROUP_VALIDATE', 'pObjectType', 'GROUP', 'pObjectName', sGroupName, 'pStatus', 'WARN', 'pMessage', 'Group missing; continuing because strict mode is disabled. TODO: implement real creation or validation.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+EndIf;
 #endregion
 
 #region metadata

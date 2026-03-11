@@ -11,6 +11,8 @@
 # - pObjectName: Parameter pObjectName
 # - pStatus: Parameter pStatus Default 'INFO'.
 # - pMessage: Parameter pMessage
+# - pLogToCube: Parameter pLogToCube Default 'Y'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Bootstrap.log'.
 # Prolog:
 # - Validate parameters and execute the process-specific security workflow.
 # Metadata:
@@ -22,11 +24,22 @@
 
 #region prolog
 sEnvironment = Upper(Trim(pEnvironment));
+sAction = Trim(pAction);
+sObjectType = Trim(pObjectType);
+sObjectName = Trim(pObjectName);
 sStatus = Upper(Trim(pStatus));
+sMessage = Trim(pMessage);
+sLogToCube = Upper(Trim(pLogToCube));
+sLogFile = Trim(pLogFile);
 If(sStatus @= ''); sStatus = 'INFO'; EndIf;
-sLogLine = '[IMF_SECURITY][' | sEnvironment | '][' | sStatus | '][' | Trim(pAction) | '][' | Trim(pObjectType) | '][' | Trim(pObjectName) | '] ' | Trim(pMessage);
+If(sLogToCube @= ''); sLogToCube = 'Y'; EndIf;
+If(sLogFile @= ''); sLogFile = 'docs/security/IMF_Security_Bootstrap.log'; EndIf;
+sLogLine = '[IMF_SECURITY][' | sEnvironment | '][' | sStatus | '][' | sAction | '][' | sObjectType | '][' | sObjectName | '] ' | sMessage;
+If(sLogToCube @= 'Y');
+  # TODO: Write to IMF.C.EventLog once the cube grain and insertion convention are finalized.
+EndIf;
+ASCIIOutput(sLogFile, sLogLine);
 LogOutput('INFO', sLogLine);
-# TODO: Mirror the same log line into IMF.C.EventLog once the target cube grain is finalized.
 #endregion
 
 #region metadata

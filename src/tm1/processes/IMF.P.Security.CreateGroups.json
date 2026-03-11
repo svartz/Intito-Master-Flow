@@ -14,18 +14,39 @@
                            "Prompt":  "Create If Exists Behavior",
                            "Value":  "SKIP",
                            "Description":  "Parameter pCreateIfExistsBehavior"
+                       },
+                       {
+                           "Name":  "pStrictMode",
+                           "Prompt":  "Strict Mode",
+                           "Value":  "N",
+                           "Description":  "Parameter pStrictMode"
+                       },
+                       {
+                           "Name":  "pLogToCube",
+                           "Prompt":  "Log To Cube",
+                           "Value":  "Y",
+                           "Description":  "Parameter pLogToCube"
+                       },
+                       {
+                           "Name":  "pLogFile",
+                           "Prompt":  "Log File",
+                           "Value":  "docs/security/IMF_Security_Bootstrap.log",
+                           "Description":  "Parameter pLogFile"
                        }
                    ],
-    "Sections":  {
-                     "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsCreateBehavior = Upper(Trim(pCreateIfExistsBehavior));\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Admin\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Developer\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Operator\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Approver\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Editor\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Viewer\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Auditor\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Service\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);",
-                     "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
-                     "Data":  "# No Data tab logic in this scaffold.",
-                     "Epilog":  "# No Epilog tab logic beyond logging for this scaffold."
-                 },
-    "Tags":  [
+    "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsCreateBehavior = Upper(Trim(pCreateIfExistsBehavior));\r\nsStrictMode = Upper(Trim(pStrictMode));\r\nsLogToCube = Upper(Trim(pLogToCube));\r\nsLogFile = Trim(pLogFile);\r\nIf(sEnvironment @= \u0027\u0027); sEnvironment = \u0027DEV\u0027; EndIf;\r\nIf(sCreateBehavior @= \u0027\u0027); sCreateBehavior = \u0027SKIP\u0027; EndIf;\r\nIf(sStrictMode @= \u0027\u0027); sStrictMode = \u0027N\u0027; EndIf;\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Admin\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior, \u0027pStrictMode\u0027, sStrictMode, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Developer\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior, \u0027pStrictMode\u0027, sStrictMode, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Operator\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior, \u0027pStrictMode\u0027, sStrictMode, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Approver\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior, \u0027pStrictMode\u0027, sStrictMode, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Editor\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior, \u0027pStrictMode\u0027, sStrictMode, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Viewer\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior, \u0027pStrictMode\u0027, sStrictMode, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Auditor\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior, \u0027pStrictMode\u0027, sStrictMode, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Service\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior, \u0027pStrictMode\u0027, sStrictMode, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);",
+    "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
+    "tags":  [
                  "IMF",
                  "Security",
-                 "Groups",
-                 "EnvironmentAware"
-             ]
+                 "TM1",
+                 "PAW",
+                 "v12",
+                 "Groups"
+             ],
+    "environmentScope":  [
+                             "DEV",
+                             "TEST",
+                             "PROD"
+                         ]
 }

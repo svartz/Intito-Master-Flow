@@ -7,7 +7,9 @@
 # Parameters:
 # - pEnvironment: Parameter pEnvironment Default 'DEV'.
 # - pCreateIfExistsBehavior: Parameter pCreateIfExistsBehavior Default 'SKIP'.
-# - pExportFolder: Parameter pExportFolder Default 'docs/security'.
+# - pStrictMode: Parameter pStrictMode Default 'N'.
+# - pLogToCube: Parameter pLogToCube Default 'Y'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Bootstrap.log'.
 # Prolog:
 # - Validate parameters and execute the process-specific security workflow.
 # Metadata:
@@ -20,15 +22,20 @@
 #region prolog
 sEnvironment = Upper(Trim(pEnvironment));
 sCreateBehavior = Upper(Trim(pCreateIfExistsBehavior));
-sExportFolder = Trim(pExportFolder);
+sStrictMode = Upper(Trim(pStrictMode));
+sLogToCube = Upper(Trim(pLogToCube));
+sLogFile = Trim(pLogFile);
 If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
-ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'BOOTSTRAP_START', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'Security bootstrap started.');
-ExecuteProcess('IMF.P.Security.CreateGroups', 'pEnvironment', sEnvironment, 'pCreateIfExistsBehavior', sCreateBehavior);
-ExecuteProcess('IMF.P.Security.ApplyModel', 'pEnvironment', sEnvironment, 'pLogOnly', 'N');
-ExecuteProcess('IMF.P.Security.ValidateGroups', 'pEnvironment', sEnvironment);
-ExecuteProcess('IMF.P.Security.ValidateObjectSecurity', 'pEnvironment', sEnvironment);
-ExecuteProcess('IMF.P.Security.ExportProcessMatrix', 'pEnvironment', sEnvironment, 'pOutputFile', sExportFolder | '/IMF_Process_Security_Matrix.csv');
-ExecuteProcess('IMF.P.Security.ExportSecurityMatrix', 'pEnvironment', sEnvironment, 'pOutputFile', sExportFolder | '/IMF_Security_Matrix.csv');
+If(sCreateBehavior @= ''); sCreateBehavior = 'SKIP'; EndIf;
+If(sStrictMode @= ''); sStrictMode = 'N'; EndIf;
+ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'BOOTSTRAP_START', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'Security bootstrap started.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.CreateGroups', 'pEnvironment', sEnvironment, 'pCreateIfExistsBehavior', sCreateBehavior, 'pStrictMode', sStrictMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.ApplyModel', 'pEnvironment', sEnvironment, 'pLogOnly', 'N', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.ValidateGroups', 'pEnvironment', sEnvironment, 'pStrictMode', sStrictMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.ValidateObjectSecurity', 'pEnvironment', sEnvironment, 'pOutputFile', 'docs/security/IMF_Security_Matrix.csv', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.ExportProcessMatrix', 'pEnvironment', sEnvironment, 'pOutputFile', 'docs/security/IMF_Process_Security_Matrix.csv', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.ExportSecurityMatrix', 'pEnvironment', sEnvironment, 'pOutputFile', 'docs/security/IMF_Security_Matrix.csv', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'BOOTSTRAP_END', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'Security bootstrap completed.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
 #endregion
 
 #region metadata

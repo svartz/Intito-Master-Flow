@@ -8,18 +8,39 @@
                            "Prompt":  "Environment",
                            "Value":  "DEV",
                            "Description":  "Parameter pEnvironment"
+                       },
+                       {
+                           "Name":  "pOutputFile",
+                           "Prompt":  "Output File",
+                           "Value":  "docs/security/IMF_Security_Matrix.csv",
+                           "Description":  "Parameter pOutputFile"
+                       },
+                       {
+                           "Name":  "pLogToCube",
+                           "Prompt":  "Log To Cube",
+                           "Value":  "Y",
+                           "Description":  "Parameter pLogToCube"
+                       },
+                       {
+                           "Name":  "pLogFile",
+                           "Prompt":  "Log File",
+                           "Value":  "docs/security/IMF_Security_Bootstrap.log",
+                           "Description":  "Parameter pLogFile"
                        }
                    ],
-    "Sections":  {
-                     "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nIf(sEnvironment @= \u0027\u0027); sEnvironment = \u0027DEV\u0027; EndIf;\r\n# TODO: Implement environment-specific security behavior for IMF.P.Security.ValidateObjectSecurity.\r\nExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027IMF.P.Security.ValidateObjectSecurity\u0027, \u0027pObjectType\u0027, \u0027SECURITY_PROCESS\u0027, \u0027pObjectName\u0027, \u0027IMF.P.Security.ValidateObjectSecurity\u0027, \u0027pStatus\u0027, \u0027TODO\u0027, \u0027pMessage\u0027, \u0027TODO: Complete process logic for IMF.P.Security.ValidateObjectSecurity.\u0027);",
-                     "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
-                     "Data":  "# No Data tab logic in this scaffold.",
-                     "Epilog":  "# No Epilog tab logic beyond logging for this scaffold."
-                 },
-    "Tags":  [
+    "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsOutputFile = Trim(pOutputFile);\r\nsLogToCube = Upper(Trim(pLogToCube));\r\nsLogFile = Trim(pLogFile);\r\nIf(sOutputFile @= \u0027\u0027); sOutputFile = \u0027docs/security/IMF_Security_Matrix.csv\u0027; EndIf;\r\n# TODO: Read back actual access from }CubeSecurity and }DimensionSecurity and compare it with the documented IMF matrix.\r\nExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027VALIDATE_OBJECT_SECURITY\u0027, \u0027pObjectType\u0027, \u0027SECURITY_MODEL\u0027, \u0027pObjectName\u0027, sOutputFile, \u0027pStatus\u0027, \u0027TODO\u0027, \u0027pMessage\u0027, \u0027TODO: Implement read-back validation and mismatch export for IMF security.\u0027, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);",
+    "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
+    "tags":  [
                  "IMF",
                  "Security",
-                 "Validation",
-                 "EnvironmentAware"
-             ]
+                 "TM1",
+                 "PAW",
+                 "v12",
+                 "Validation"
+             ],
+    "environmentScope":  [
+                             "DEV",
+                             "TEST",
+                             "PROD"
+                         ]
 }

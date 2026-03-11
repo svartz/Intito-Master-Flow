@@ -6,6 +6,9 @@
 # - IMF.P.Security.LogBootstrap
 # Parameters:
 # - pEnvironment: Parameter pEnvironment Default 'DEV'.
+# - pStrictMode: Parameter pStrictMode Default 'N'.
+# - pLogToCube: Parameter pLogToCube Default 'Y'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Bootstrap.log'.
 # Prolog:
 # - Validate parameters and execute the process-specific security workflow.
 # Metadata:
@@ -17,9 +20,14 @@
 
 #region prolog
 sEnvironment = Upper(Trim(pEnvironment));
+sStrictMode = Upper(Trim(pStrictMode));
+sLogToCube = Upper(Trim(pLogToCube));
+sLogFile = Trim(pLogFile);
 If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
-# TODO: Implement environment-specific security behavior for IMF.P.Security.ValidateGroups.
-ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'IMF.P.Security.ValidateGroups', 'pObjectType', 'SECURITY_PROCESS', 'pObjectName', 'IMF.P.Security.ValidateGroups', 'pStatus', 'TODO', 'pMessage', 'TODO: Complete process logic for IMF.P.Security.ValidateGroups.');
+If(sStrictMode @= ''); sStrictMode = 'N'; EndIf;
+# TODO: Implement native group existence checks against the target TM1 security provider or external IAM source.
+ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_GROUPS', 'pObjectType', 'GROUP_SET', 'pObjectName', 'IMF', 'pStatus', If(sStrictMode @= 'Y', 'ERROR', 'WARN'), 'pMessage', 'TODO: Validate required IMF groups against the real security store.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+If(sStrictMode @= 'Y'); ProcessBreak; EndIf;
 #endregion
 
 #region metadata

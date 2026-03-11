@@ -1,26 +1,18 @@
-ObjectClass,ObjectName,Environment,IMF_Admin,IMF_Developer,IMF_Operator,IMF_Approver,IMF_Editor,IMF_Viewer,IMF_Auditor,IMF_Service,Notes
-Cube,IMF.C.Config,DEV,WRITE,WRITE,READ,READ,NONE,NONE,READ,READ,Developer WRITE in DEV only
-Cube,IMF.C.Config,TEST,WRITE,READ,READ,READ,NONE,NONE,READ,READ,Least privilege outside DEV
-Cube,IMF.C.Config,PROD,WRITE,READ,READ,READ,NONE,NONE,READ,READ,Strict least privilege
-Cube,IMF.C.Version,ALL,WRITE,WRITE,WRITE,READ,READ,READ,READ,READ,Version metadata and workflow visibility
-Cube,IMF.C.Diff,ALL,WRITE,WRITE,WRITE,READ,READ,READ,READ,READ,Diff review support
-Cube,IMF.C.Validation,ALL,WRITE,WRITE,WRITE,READ,READ,READ,READ,READ,Validation visibility
-Cube,IMF.C.Impact,ALL,WRITE,WRITE,WRITE,READ,READ,READ,READ,READ,Impact review support
-Cube,IMF.C.EventLog,ALL,WRITE,WRITE,WRITE,READ,READ,READ,READ,WRITE,Service write for automation logs
-Cube,IMF.C.ChangeLog,ALL,WRITE,WRITE,WRITE,READ,READ,READ,READ,WRITE,Service write for automation changes
-Cube,IMF.C.PublishHistory,ALL,WRITE,READ,WRITE,READ,READ,READ,READ,READ,Publish and rollback traceability
-DimensionClass,IMF.D.* control dimensions,ALL,WRITE,READ,READ,READ,READ,READ,READ,READ,Control metadata access
-DimensionClass,Master dimensions,ALL,ADMIN,READ,READ,READ,READ,READ,READ,READ,No direct end-user admin outside Admin
-DimensionClass,Work dimensions,DEV,ADMIN,WRITE,WRITE,READ,WRITE,READ,READ,WRITE,Editors may work actively in DEV
-DimensionClass,Work dimensions,TEST,ADMIN,WRITE,WRITE,READ,WRITE,READ,READ,WRITE,TEST close to PROD with controlled write
-DimensionClass,Work dimensions,PROD,ADMIN,WRITE,WRITE,READ,WRITE,NONE,READ,WRITE,Viewer hidden in PROD for work dimensions
-DimensionClass,Archive dimensions,DEV,ADMIN,READ,READ,READ,READ,NONE,READ,READ,Archive review allowed in lower envs
-DimensionClass,Archive dimensions,TEST,ADMIN,READ,READ,READ,READ,NONE,READ,READ,Archive review allowed in TEST
-DimensionClass,Archive dimensions,PROD,ADMIN,READ,READ,READ,NONE,NONE,READ,READ,Strict least privilege in PROD
-ParameterClass,PlatformCritical,DEV,WRITE,WRITE,READ,READ,NONE,NONE,READ,READ,Developer WRITE only in DEV
-ParameterClass,PlatformCritical,TEST,WRITE,READ,READ,READ,NONE,NONE,READ,READ,Controlled non-prod access
-ParameterClass,PlatformCritical,PROD,WRITE,READ,READ,READ,NONE,NONE,READ,READ,Strict least privilege
-ParameterClass,DimensionGovernance,DEV,WRITE,WRITE,WRITE,READ,NONE,NONE,READ,READ,Operator WRITE optional in configured environments
-ParameterClass,DimensionGovernance,TEST,WRITE,READ,WRITE,READ,NONE,NONE,READ,READ,Developer reduced in TEST
-ParameterClass,DimensionGovernance,PROD,WRITE,READ,WRITE,READ,NONE,NONE,READ,READ,Developer WRITE removed in PROD
-ParameterClass,VersionMetadata,ALL,WRITE,WRITE,WRITE,APPROVAL_ONLY,OWN_OR_AUTHORIZED,READ,READ,WRITE,Field-level restrictions apply
+ObjectType,ObjectName,Group,ExpectedAccess,ActualAccess,Status,Comment
+CUBE,IMF.C.Config,IMF_Admin,WRITE,TODO,PendingValidation,Developer WRITE only in DEV is handled by environment policy.
+CUBE,IMF.C.Config,IMF_Developer,READ,TODO,PendingValidation,Base model from security_2 prompt.
+CUBE,IMF.C.Version,IMF_Operator,WRITE,TODO,PendingValidation,Operational workflow access.
+CUBE,IMF.C.Diff,IMF_Auditor,READ,TODO,PendingValidation,Audit transparency.
+CUBE,IMF.C.Validation,IMF_Auditor,READ,TODO,PendingValidation,Audit transparency.
+CUBE,IMF.C.Impact,IMF_Auditor,READ,TODO,PendingValidation,Audit transparency.
+CUBE,IMF.C.EventLog,IMF_Auditor,READ,TODO,PendingValidation,Audit transparency.
+CUBE,IMF.C.ChangeLog,IMF_Auditor,READ,TODO,PendingValidation,Audit transparency.
+CUBE,IMF.C.PublishHistory,IMF_Developer,READ,TODO,PendingValidation,Read-only by design.
+DIMENSION,IMF.D.*,IMF_Admin,WRITE,TODO,PendingValidation,Control dimensions.
+DIMENSION,IMF.D.*,IMF_Viewer,READ,TODO,PendingValidation,Control dimensions.
+DIMENSION,ManagedMasterDimensions,IMF_Admin,ADMIN,TODO,PendingValidation,Managed master dimensions.
+DIMENSION,ManagedMasterDimensions,IMF_Developer,READ,TODO,PendingValidation,Managed master dimensions.
+DIMENSION,_WRK_*,IMF_Editor,WRITE,TODO,PendingValidation,Work dimensions.
+DIMENSION,_WRK_*,IMF_Viewer,NONE,TODO,PendingValidation,Work dimensions.
+DIMENSION,_ARC_*,IMF_Editor,NONE,TODO,PendingValidation,Archive dimensions.
+DIMENSION,_ARC_*,IMF_Auditor,READ,TODO,PendingValidation,Archive dimensions.
