@@ -1,0 +1,73 @@
+
+name: tm1-masterflow-deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate markdown and yaml
+        run: |
+          echo "Validate docs naming, links and yaml structure"
+
+  package-tm1:
+    needs: lint-docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package TM1 artifacts
+        run: |
+          mkdir -p dist
+          tar -czf dist/intito-masterflow.tgz src docs
+
+  deploy-dev:
+    needs: package-tm1
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to DEV
+        env:
+          TM1_BASE_URL: ${{ secrets.TM1_DEV_URL }}
+          TM1_USER: ${{ secrets.TM1_DEV_USER }}
+          TM1_PASSWORD: ${{ secrets.TM1_DEV_PASSWORD }}
+        run: |
+          echo "Deploy dimensions, cubes and TI processes to DEV"
+          echo "Call TM1 REST API or deployment utility here"
+
+  smoke-tests:
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run smoke tests
+        run: |
+          echo "Run Version.Create smoke test"
+          echo "Run Compare/Validate smoke test"
+
+  approve-prod:
+    needs: smoke-tests
+    runs-on: ubuntu-latest
+    environment: prod-approval
+    steps:
+      - run: echo "Manual approval gate"
+
+  deploy-prod:
+    needs: approve-prod
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to PROD
+        env:
+          TM1_BASE_URL: ${{ secrets.TM1_PROD_URL }}
+          TM1_USER: ${{ secrets.TM1_PROD_USER }}
+          TM1_PASSWORD: ${{ secrets.TM1_PROD_PASSWORD }}
+        run: |
+          echo "Deploy approved release to PROD"
