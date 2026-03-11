@@ -20,6 +20,7 @@
 # Epilog:
 # - Update version notes and source lineage fields.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -75,3 +76,13 @@ AttrPutS('MASTER', sDimVersion, sVersionId, 'SourceType');
 AttrPutS('', sDimVersion, sVersionId, 'SourceVersion');
 AttrPutS('Draft', sDimVersion, sVersionId, 'Status');
 AttrPutS('Master clone initialized and routed through IMF.P.Dimension.CopyAll.', sDimVersion, sVersionId, 'Notes');
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

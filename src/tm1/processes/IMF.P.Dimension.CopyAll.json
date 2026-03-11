@@ -1,0 +1,26 @@
+{
+    "Name":  "IMF.P.Dimension.CopyAll",
+    "Code@Code.link":  "IMF.P.Dimension.CopyAll.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pSourceDimension",
+                           "Prompt":  "Source Dimension",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pTargetDimension",
+                           "Prompt":  "Target Dimension",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pIncludeData",
+                           "Prompt":  "Include Data",
+                           "Value":  "N"
+                       }
+                   ]
+}

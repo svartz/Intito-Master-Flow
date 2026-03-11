@@ -18,6 +18,7 @@
 # Epilog:
 # - Write element-level deltas to IMF.C.Diff.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -39,3 +40,13 @@ EndIf;
 # 1. scan master elements and flag deletes missing from work
 # 2. scan work elements and flag adds missing from master
 # 3. write one record per delta to IMF.C.Diff
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

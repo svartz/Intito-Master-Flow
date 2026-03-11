@@ -16,6 +16,7 @@
 # Epilog:
 # - Persist unlock state and append an unlock note.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -48,3 +49,13 @@ AttrPutS('', sDimVersion, sVersionId, 'LockedBy');
 AttrPutS('', sDimVersion, sVersionId, 'LockedAt');
 
 CellPutS('Unlocked by ' | sUnlockedBy | ' at ' | TIMST(NOW, '\Y-\m-\d \h:\i:\s'), sCubeVersion, sVersionId, 'Notes');
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

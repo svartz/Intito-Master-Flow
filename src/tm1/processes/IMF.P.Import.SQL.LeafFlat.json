@@ -1,0 +1,26 @@
+{
+    "Name":  "IMF.P.Import.SQL.LeafFlat",
+    "Code@Code.link":  "IMF.P.Import.SQL.LeafFlat.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pDimensionCode",
+                           "Prompt":  "Dimension Code",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pVersionId",
+                           "Prompt":  "Version Id",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pSourceQuery",
+                           "Prompt":  "Source Query",
+                           "Value":  ""
+                       }
+                   ]
+}

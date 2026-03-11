@@ -17,6 +17,7 @@
 # Epilog:
 # - Write cube-domain findings to IMF.C.Impact.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -26,3 +27,13 @@ EndIf;
 # 1. read IMF.C.Diff for the version
 # 2. identify cubes using the managed dimension
 # 3. write impact findings to IMF.C.Impact
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

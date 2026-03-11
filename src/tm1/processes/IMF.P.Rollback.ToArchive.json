@@ -1,0 +1,26 @@
+{
+    "Name":  "IMF.P.Rollback.ToArchive",
+    "Code@Code.link":  "IMF.P.Rollback.ToArchive.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pDimensionCode",
+                           "Prompt":  "Dimension Code",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pArchiveName",
+                           "Prompt":  "Archive Name",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pRestoredBy",
+                           "Prompt":  "Restored By",
+                           "Value":  ""
+                       }
+                   ]
+}

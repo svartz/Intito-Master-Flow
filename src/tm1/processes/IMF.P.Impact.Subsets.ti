@@ -17,6 +17,7 @@
 # Epilog:
 # - Write subset-domain findings to IMF.C.Impact.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -26,3 +27,13 @@ EndIf;
 # 1. scan static and dynamic subsets using the dimension
 # 2. detect deleted or moved elements affecting membership
 # 3. write impact findings to IMF.C.Impact
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

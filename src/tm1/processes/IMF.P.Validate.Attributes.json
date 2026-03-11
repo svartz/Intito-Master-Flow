@@ -1,0 +1,21 @@
+{
+    "Name":  "IMF.P.Validate.Attributes",
+    "Code@Code.link":  "IMF.P.Validate.Attributes.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pDimensionCode",
+                           "Prompt":  "Dimension Code",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pVersionId",
+                           "Prompt":  "Version Id",
+                           "Value":  ""
+                       }
+                   ]
+}

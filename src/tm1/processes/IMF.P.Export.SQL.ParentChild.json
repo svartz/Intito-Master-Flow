@@ -1,0 +1,26 @@
+{
+    "Name":  "IMF.P.Export.SQL.ParentChild",
+    "Code@Code.link":  "IMF.P.Export.SQL.ParentChild.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pDimensionCode",
+                           "Prompt":  "Dimension Code",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pVersionId",
+                           "Prompt":  "Version Id",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pTargetTable",
+                           "Prompt":  "Target Table",
+                           "Value":  ""
+                       }
+                   ]
+}

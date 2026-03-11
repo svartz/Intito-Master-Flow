@@ -1,0 +1,26 @@
+{
+    "Name":  "IMF.P.Version.CloneFromMaster",
+    "Code@Code.link":  "IMF.P.Version.CloneFromMaster.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pDimensionCode",
+                           "Prompt":  "Dimension Code",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pVersionId",
+                           "Prompt":  "Version Id",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pCreatedBy",
+                           "Prompt":  "Created By",
+                           "Value":  ""
+                       }
+                   ]
+}

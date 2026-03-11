@@ -16,6 +16,7 @@
 # Epilog:
 # - Leave the TM1 model initialized for subsequent version, diff, validation, and publish flows.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -502,3 +503,13 @@ If(Upper(Trim(pCreateSampleConfig)) @= 'Y');
   CellPutS('CSV', sCubeConfig, '__Template.ManagedDimension', 'ExportDefaultFormat');
   CellPutS('365', sCubeConfig, '__Template.ManagedDimension', 'LogRetentionDays');
 EndIf;
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

@@ -1,0 +1,26 @@
+{
+    "Name":  "IMF.P.Version.Lock",
+    "Code@Code.link":  "IMF.P.Version.Lock.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pVersionId",
+                           "Prompt":  "Version Id",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pLockedBy",
+                           "Prompt":  "Locked By",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pLockReason",
+                           "Prompt":  "Lock Reason",
+                           "Value":  ""
+                       }
+                   ]
+}

@@ -1,0 +1,21 @@
+{
+    "Name":  "IMF.P.Impact.Integrations",
+    "Code@Code.link":  "IMF.P.Impact.Integrations.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pDimensionCode",
+                           "Prompt":  "Dimension Code",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pVersionId",
+                           "Prompt":  "Version Id",
+                           "Value":  ""
+                       }
+                   ]
+}

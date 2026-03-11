@@ -18,6 +18,7 @@
 # Epilog:
 # - Leave the target dimension ready for downstream compare, validate, or publish steps.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -66,3 +67,13 @@ ExecuteProcess(sPrefix | '.P.Attribute.CopyValues',
 If(sIncludeData @= 'Y');
   # Reserved for future cube-data synchronization logic.
 EndIf;
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

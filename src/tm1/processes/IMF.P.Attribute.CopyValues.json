@@ -1,0 +1,21 @@
+{
+    "Name":  "IMF.P.Attribute.CopyValues",
+    "Code@Code.link":  "IMF.P.Attribute.CopyValues.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pSourceDimension",
+                           "Prompt":  "Source Dimension",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pTargetDimension",
+                           "Prompt":  "Target Dimension",
+                           "Value":  ""
+                       }
+                   ]
+}

@@ -23,6 +23,7 @@
 # Epilog:
 # - Update active-version tracking on the managed dimension.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -135,3 +136,13 @@ Else;
     'pSourceVersion', sSourceVersion,
     'pCreatedBy', sCreatedBy);
 EndIf;
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

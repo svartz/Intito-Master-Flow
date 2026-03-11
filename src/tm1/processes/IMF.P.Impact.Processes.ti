@@ -17,6 +17,7 @@
 # Epilog:
 # - Write process-domain findings to IMF.C.Impact.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -26,3 +27,13 @@ EndIf;
 # 1. scan TI processes for dimension, subset, and attribute references
 # 2. classify direct and indirect breakage
 # 3. write impact findings to IMF.C.Impact
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

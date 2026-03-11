@@ -18,6 +18,7 @@
 # Epilog:
 # - Update managed-dimension metadata to reflect the rollback source.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -56,3 +57,13 @@ ExecuteProcess(sPrefix | '.P.Rollback.Validate',
 # 3. log rollback actor and timestamp
 
 AttrPutS(sArchiveName, sDimDimension, sDimensionCode, 'LastArchivedDimension');
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

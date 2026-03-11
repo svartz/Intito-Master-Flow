@@ -1,0 +1,26 @@
+{
+    "Name":  "IMF.P.Import.SQL.ParentChild",
+    "Code@Code.link":  "IMF.P.Import.SQL.ParentChild.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pDimensionCode",
+                           "Prompt":  "Dimension Code",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pVersionId",
+                           "Prompt":  "Version Id",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pSourceQuery",
+                           "Prompt":  "Source Query",
+                           "Value":  ""
+                       }
+                   ]
+}

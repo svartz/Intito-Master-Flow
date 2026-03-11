@@ -1,0 +1,41 @@
+{
+    "Name":  "IMF.P.Version.Create",
+    "Code@Code.link":  "IMF.P.Version.Create.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pDimensionCode",
+                           "Prompt":  "Dimension Code",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pVersionId",
+                           "Prompt":  "Version Id",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pSourceType",
+                           "Prompt":  "Source Type",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pSourceVersion",
+                           "Prompt":  "Source Version",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pCreatedBy",
+                           "Prompt":  "Created By",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pNotes",
+                           "Prompt":  "Notes",
+                           "Value":  ""
+                       }
+                   ]
+}

@@ -16,6 +16,7 @@
 # Epilog:
 # - Leave target attributes synchronized with the copied structure.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -51,3 +52,13 @@ EndIf;
 # 1. iterate source elements
 # 2. iterate source attributes
 # 3. copy string or numeric value to the target intersection
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

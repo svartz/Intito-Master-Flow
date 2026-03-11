@@ -1,0 +1,26 @@
+{
+    "Name":  "IMF.P.Commit.PublishVersion",
+    "Code@Code.link":  "IMF.P.Commit.PublishVersion.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pDimensionCode",
+                           "Prompt":  "Dimension Code",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pVersionId",
+                           "Prompt":  "Version Id",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pPublishedBy",
+                           "Prompt":  "Published By",
+                           "Value":  ""
+                       }
+                   ]
+}

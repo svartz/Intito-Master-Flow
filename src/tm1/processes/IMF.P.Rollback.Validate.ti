@@ -16,6 +16,7 @@
 # Epilog:
 # - Return control to the rollback process when the archive is considered valid.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -40,3 +41,13 @@ EndIf;
 # 1. validate archive structure
 # 2. validate required attributes
 # 3. validate publish preconditions
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

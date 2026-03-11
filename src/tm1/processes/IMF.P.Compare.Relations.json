@@ -1,0 +1,31 @@
+{
+    "Name":  "IMF.P.Compare.Relations",
+    "Code@Code.link":  "IMF.P.Compare.Relations.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pDimensionCode",
+                           "Prompt":  "Dimension Code",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pVersionId",
+                           "Prompt":  "Version Id",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pMasterDimension",
+                           "Prompt":  "Master Dimension",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pWorkDimension",
+                           "Prompt":  "Work Dimension",
+                           "Value":  ""
+                       }
+                   ]
+}

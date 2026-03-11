@@ -1,0 +1,21 @@
+{
+    "Name":  "IMF.P.Rollback.Validate",
+    "Code@Code.link":  "IMF.P.Rollback.Validate.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pDimensionCode",
+                           "Prompt":  "Dimension Code",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pArchiveName",
+                           "Prompt":  "Archive Name",
+                           "Value":  ""
+                       }
+                   ]
+}

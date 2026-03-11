@@ -1,0 +1,21 @@
+{
+    "Name":  "IMF.P.Impact.Subsets",
+    "Code@Code.link":  "IMF.P.Impact.Subsets.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pDimensionCode",
+                           "Prompt":  "Dimension Code",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pVersionId",
+                           "Prompt":  "Version Id",
+                           "Value":  ""
+                       }
+                   ]
+}

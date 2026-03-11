@@ -17,6 +17,7 @@
 # Epilog:
 # - Persist lock flags on the version dimension and cube.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -50,3 +51,13 @@ CellPutS(sLockReason, sCubeVersion, sVersionId, 'LockReason');
 AttrPutS('Y', sDimVersion, sVersionId, 'IsLocked');
 AttrPutS(sLockedBy, sDimVersion, sVersionId, 'LockedBy');
 AttrPutS(sLockedAt, sDimVersion, sVersionId, 'LockedAt');
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

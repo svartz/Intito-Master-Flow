@@ -1,0 +1,21 @@
+{
+    "Name":  "IMF.P.Init.Project",
+    "Code@Code.link":  "IMF.P.Init.Project.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pStatusCsv",
+                           "Prompt":  "Status Csv",
+                           "Value":  "Draft|InProgress|Validated|ImpactAnalyzed|Approved|Published|Archived"
+                       },
+                       {
+                           "Name":  "pCreateSampleConfig",
+                           "Prompt":  "Create Sample Config",
+                           "Value":  "Y"
+                       }
+                   ]
+}

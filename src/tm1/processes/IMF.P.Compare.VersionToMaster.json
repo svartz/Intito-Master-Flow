@@ -1,0 +1,21 @@
+{
+    "Name":  "IMF.P.Compare.VersionToMaster",
+    "Code@Code.link":  "IMF.P.Compare.VersionToMaster.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pDimensionCode",
+                           "Prompt":  "Dimension Code",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pVersionId",
+                           "Prompt":  "Version Id",
+                           "Value":  ""
+                       }
+                   ]
+}

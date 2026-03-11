@@ -19,6 +19,7 @@
 # Epilog:
 # - Persist archive name back to version and managed-dimension registries.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -59,3 +60,13 @@ sArchiveDimension = sMasterDimension | '_ARC_' | TIMST(NOW, '\Y\m\d\h\i\s');
 AttrPutS(sArchiveDimension, sDimVersion, sVersionId, 'ArchiveDimension');
 CellPutS(sArchiveDimension, sCubeVersion, sVersionId, 'ArchiveDimension');
 AttrPutS(sArchiveDimension, sDimDimension, sDimensionCode, 'LastArchivedDimension');
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

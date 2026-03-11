@@ -18,6 +18,7 @@
 # Epilog:
 # - Write attribute validation findings to IMF.C.Validation.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -46,3 +47,13 @@ EndIf;
 # 1. identify mandatory attributes for the managed dimension
 # 2. scan work-dimension elements for blanks
 # 3. write validation findings to IMF.C.Validation
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

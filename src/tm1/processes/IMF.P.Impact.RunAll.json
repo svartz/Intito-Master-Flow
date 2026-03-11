@@ -1,0 +1,21 @@
+{
+    "Name":  "IMF.P.Impact.RunAll",
+    "Code@Code.link":  "IMF.P.Impact.RunAll.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pDimensionCode",
+                           "Prompt":  "Dimension Code",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pVersionId",
+                           "Prompt":  "Version Id",
+                           "Value":  ""
+                       }
+                   ]
+}

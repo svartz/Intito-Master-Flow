@@ -17,6 +17,7 @@
 # Epilog:
 # - Write the final CSV payload to the requested file path.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -26,3 +27,13 @@ EndIf;
 # 1. resolve source dimension from version or master
 # 2. select leaf elements and attributes
 # 3. write CSV file to pFilePath
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

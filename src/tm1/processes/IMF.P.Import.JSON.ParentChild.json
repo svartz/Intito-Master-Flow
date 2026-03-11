@@ -1,0 +1,26 @@
+{
+    "Name":  "IMF.P.Import.JSON.ParentChild",
+    "Code@Code.link":  "IMF.P.Import.JSON.ParentChild.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pPrefix",
+                           "Prompt":  "Prefix",
+                           "Value":  "IMF"
+                       },
+                       {
+                           "Name":  "pDimensionCode",
+                           "Prompt":  "Dimension Code",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pVersionId",
+                           "Prompt":  "Version Id",
+                           "Value":  ""
+                       },
+                       {
+                           "Name":  "pFilePath",
+                           "Prompt":  "File Path",
+                           "Value":  ""
+                       }
+                   ]
+}

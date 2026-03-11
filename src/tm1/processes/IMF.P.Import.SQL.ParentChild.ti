@@ -17,6 +17,7 @@
 # Epilog:
 # - Leave the target dimension updated and ready for validation.
 
+#region prolog
 sPrefix = Trim(pPrefix);
 If(sPrefix @= '');
   sPrefix = 'IMF';
@@ -26,3 +27,13 @@ EndIf;
 # 1. resolve target dimension from version or master
 # 2. read parent-child records from pSourceQuery
 # 3. apply structure updates to target dimension
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion
