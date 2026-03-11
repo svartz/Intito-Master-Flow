@@ -1,0 +1,18 @@
+# Intito MasterFlow import SQL leaf-flat
+# Purpose: Import SQL flat leaf rows into a managed dimension or work version.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pVersionId      Optional work version
+#   pSourceQuery    Source SQL table or query name
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+# Placeholder:
+# 1. resolve target dimension from version or master
+# 2. read leaf records from pSourceQuery
+# 3. apply element and attribute updates to target dimension

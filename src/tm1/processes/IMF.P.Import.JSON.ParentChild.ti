@@ -1,0 +1,18 @@
+# Intito MasterFlow import JSON parent-child
+# Purpose: Import parent-child JSON payloads into a managed dimension or work version.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pVersionId      Optional work version
+#   pFilePath       Source file path
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+# Placeholder:
+# 1. resolve target dimension from version or master
+# 2. deserialize parent-child JSON records
+# 3. apply structure updates to target dimension
