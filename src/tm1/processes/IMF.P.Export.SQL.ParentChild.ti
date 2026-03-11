@@ -1,0 +1,18 @@
+# Intito MasterFlow export SQL parent-child
+# Purpose: Export a managed dimension or version as SQL-ready parent-child rows.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pVersionId      Optional work version
+#   pTargetTable    Target SQL table or stage name
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+# Placeholder:
+# 1. resolve source dimension from version or master
+# 2. flatten hierarchy to parent-child records
+# 3. write records to pTargetTable

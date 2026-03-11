@@ -1,0 +1,18 @@
+# Intito MasterFlow export JSON leaf-flat
+# Purpose: Export a managed dimension or version as flat JSON leaf rows.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pVersionId      Optional work version
+#   pFilePath       Output file path
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+# Placeholder:
+# 1. resolve source dimension from version or master
+# 2. collect leaf elements and attributes
+# 3. serialize JSON to pFilePath
