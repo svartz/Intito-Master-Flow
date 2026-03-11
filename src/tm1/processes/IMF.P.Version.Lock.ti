@@ -1,0 +1,42 @@
+# Intito MasterFlow version lock
+# Purpose: Lock a work version to prevent concurrent edits or publish actions.
+#
+# Parameters:
+#   pPrefix        Default 'IMF'
+#   pVersionId     Version to lock
+#   pLockedBy      Optional explicit user id
+#   pLockReason    Optional free text
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sVersionId = Trim(pVersionId);
+sLockedBy = Trim(pLockedBy);
+sLockReason = Trim(pLockReason);
+
+If(sLockedBy @= '');
+  sLockedBy = 'SYSTEM';
+EndIf;
+
+sDimVersion = sPrefix | '.D.Version';
+sCubeVersion = sPrefix | '.C.Version';
+
+If(DimensionElementExists(sDimVersion, sVersionId) = 0);
+  ProcessBreak;
+EndIf;
+If(Upper(Trim(CellGetS(sCubeVersion, sVersionId, 'IsLocked'))) @= 'Y');
+  ProcessBreak;
+EndIf;
+
+sLockedAt = TIMST(NOW, '\Y-\m-\d \h:\i:\s');
+
+CellPutS('Y', sCubeVersion, sVersionId, 'IsLocked');
+CellPutS(sLockedBy, sCubeVersion, sVersionId, 'LockedBy');
+CellPutS(sLockedAt, sCubeVersion, sVersionId, 'LockedAt');
+CellPutS(sLockReason, sCubeVersion, sVersionId, 'LockReason');
+
+AttrPutS('Y', sDimVersion, sVersionId, 'IsLocked');
+AttrPutS(sLockedBy, sDimVersion, sVersionId, 'LockedBy');
+AttrPutS(sLockedAt, sDimVersion, sVersionId, 'LockedAt');

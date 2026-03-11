@@ -1,0 +1,30 @@
+{
+  "name": "IMF.D.Dimension",
+  "kind": "control-dimension",
+  "purpose": "Registry of managed master dimensions handled by Intito MasterFlow.",
+  "attributes": [
+    { "name": "MasterDimensionName", "type": "string", "required": true },
+    { "name": "ActiveVersion", "type": "string", "required": false },
+    { "name": "LastPublishedVersion", "type": "string", "required": false },
+    { "name": "LastArchivedDimension", "type": "string", "required": false },
+    { "name": "ValidationProcess", "type": "string", "required": false },
+    { "name": "ImpactProcess", "type": "string", "required": false },
+    { "name": "ExportProfile", "type": "string", "required": false },
+    { "name": "IsActive", "type": "string", "required": true }
+  ],
+  "hierarchy": {
+    "root": "All Managed Dimensions",
+    "seedElements": [
+      {
+        "name": "__Template.ManagedDimension",
+        "type": "N",
+        "parent": "All Managed Dimensions",
+        "weight": 1
+      }
+    ]
+  },
+  "notes": [
+    "Managed dimension codes are created dynamically by parameter-driven TI processes.",
+    "No application dimension names are hardcoded in this control dimension."
+  ]
+}

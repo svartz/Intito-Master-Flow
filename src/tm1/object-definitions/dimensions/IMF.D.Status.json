@@ -1,0 +1,21 @@
+{
+  "name": "IMF.D.Status",
+  "kind": "control-dimension",
+  "purpose": "Version lifecycle statuses used by Intito MasterFlow.",
+  "hierarchy": {
+    "root": "All Statuses",
+    "seedElements": [
+      { "name": "Draft", "type": "N", "parent": "All Statuses", "weight": 1, "order": 10 },
+      { "name": "InProgress", "type": "N", "parent": "All Statuses", "weight": 1, "order": 20 },
+      { "name": "Validated", "type": "N", "parent": "All Statuses", "weight": 1, "order": 30 },
+      { "name": "ImpactAnalyzed", "type": "N", "parent": "All Statuses", "weight": 1, "order": 40 },
+      { "name": "Approved", "type": "N", "parent": "All Statuses", "weight": 1, "order": 50 },
+      { "name": "Published", "type": "N", "parent": "All Statuses", "weight": 1, "order": 60 },
+      { "name": "Archived", "type": "N", "parent": "All Statuses", "weight": 1, "order": 70 }
+    ]
+  },
+  "attributes": [
+    { "name": "Sequence", "type": "numeric", "required": true },
+    { "name": "IsTerminal", "type": "string", "required": true }
+  ]
+}

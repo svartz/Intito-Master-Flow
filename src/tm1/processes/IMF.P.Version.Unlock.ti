@@ -1,0 +1,40 @@
+# Intito MasterFlow version unlock
+# Purpose: Release a previously locked work version.
+#
+# Parameters:
+#   pPrefix        Default 'IMF'
+#   pVersionId     Version to unlock
+#   pUnlockedBy    Optional explicit user id
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sVersionId = Trim(pVersionId);
+sUnlockedBy = Trim(pUnlockedBy);
+
+If(sUnlockedBy @= '');
+  sUnlockedBy = 'SYSTEM';
+EndIf;
+
+sDimVersion = sPrefix | '.D.Version';
+sCubeVersion = sPrefix | '.C.Version';
+
+If(DimensionElementExists(sDimVersion, sVersionId) = 0);
+  ProcessBreak;
+EndIf;
+If(Upper(Trim(CellGetS(sCubeVersion, sVersionId, 'IsLocked'))) @<> 'Y');
+  ProcessBreak;
+EndIf;
+
+CellPutS('N', sCubeVersion, sVersionId, 'IsLocked');
+CellPutS('', sCubeVersion, sVersionId, 'LockedBy');
+CellPutS('', sCubeVersion, sVersionId, 'LockedAt');
+CellPutS('', sCubeVersion, sVersionId, 'LockReason');
+
+AttrPutS('N', sDimVersion, sVersionId, 'IsLocked');
+AttrPutS('', sDimVersion, sVersionId, 'LockedBy');
+AttrPutS('', sDimVersion, sVersionId, 'LockedAt');
+
+CellPutS('Unlocked by ' | sUnlockedBy | ' at ' | TIMST(NOW, '\Y-\m-\d \h:\i:\s'), sCubeVersion, sVersionId, 'Notes');

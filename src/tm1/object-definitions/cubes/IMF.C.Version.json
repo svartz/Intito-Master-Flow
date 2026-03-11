@@ -1,0 +1,16 @@
+{
+  "name": "IMF.C.Version",
+  "kind": "control-cube",
+  "purpose": "Stores version metadata written during create, validate, publish, archive, and rollback flows.",
+  "dimensions": [
+    "IMF.D.Version",
+    "IMF.D.VersionMeasure"
+  ],
+  "cellTypes": {
+    "default": "string"
+  },
+  "notes": [
+    "Each version element in IMF.D.Version represents a single work version.",
+    "DimensionCode and Status are stored in the cube to simplify TI updates and reporting."
+  ]
+}

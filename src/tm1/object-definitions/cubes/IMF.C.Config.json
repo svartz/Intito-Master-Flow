@@ -1,0 +1,38 @@
+{
+  "name": "IMF.C.Config",
+  "kind": "control-cube",
+  "purpose": "Stores global and per-managed-dimension configuration values for Intito MasterFlow.",
+  "dimensions": [
+    "IMF.D.Dimension",
+    "IMF.D.ConfigKey"
+  ],
+  "cellTypes": {
+    "default": "string"
+  },
+  "seedData": [
+    {
+      "intersection": ["__Template.ManagedDimension", "NamingPrefix"],
+      "value": "IMF"
+    },
+    {
+      "intersection": ["__Template.ManagedDimension", "VersionDelimiter"],
+      "value": "_VER_"
+    },
+    {
+      "intersection": ["__Template.ManagedDimension", "ArchiveTimestampFormat"],
+      "value": "yyyymmddhhmmss"
+    },
+    {
+      "intersection": ["__Template.ManagedDimension", "DefaultSourceType"],
+      "value": "MASTER"
+    },
+    {
+      "intersection": ["__Template.ManagedDimension", "RequireApproval"],
+      "value": "Y"
+    }
+  ],
+  "notes": [
+    "The template row is copied to newly onboarded managed dimensions by parameter-driven processes.",
+    "Config values are intentionally stored outside code so managed dimension names never need to be hardcoded."
+  ]
+}

@@ -1,0 +1,276 @@
+# Intito MasterFlow bootstrap process
+# Purpose: Create the base control dimensions and cubes required for project initialization.
+#
+# Parameters:
+#   pPrefix              Default 'IMF'
+#   pStatusCsv           Default 'Draft|InProgress|Validated|ImpactAnalyzed|Approved|Published|Archived'
+#   pCreateSampleConfig  Default 'Y'
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sDimDimension = sPrefix | '.D.Dimension';
+sDimVersion = sPrefix | '.D.Version';
+sDimStatus = sPrefix | '.D.Status';
+sDimConfigKey = sPrefix | '.D.ConfigKey';
+sDimVersionMeasure = sPrefix | '.D.VersionMeasure';
+sCubeConfig = sPrefix | '.C.Config';
+sCubeVersion = sPrefix | '.C.Version';
+
+sStatusList = Trim(pStatusCsv);
+If(sStatusList @= '');
+  sStatusList = 'Draft|InProgress|Validated|ImpactAnalyzed|Approved|Published|Archived';
+EndIf;
+
+# Create base dimensions.
+If(DimensionExists(sDimDimension) = 0);
+  DimensionCreate(sDimDimension);
+EndIf;
+If(DimensionExists(sDimVersion) = 0);
+  DimensionCreate(sDimVersion);
+EndIf;
+If(DimensionExists(sDimStatus) = 0);
+  DimensionCreate(sDimStatus);
+EndIf;
+If(DimensionExists(sDimConfigKey) = 0);
+  DimensionCreate(sDimConfigKey);
+EndIf;
+If(DimensionExists(sDimVersionMeasure) = 0);
+  DimensionCreate(sDimVersionMeasure);
+EndIf;
+
+# Create root and template elements used by the control model.
+If(DimensionElementExists(sDimDimension, 'All Managed Dimensions') = 0);
+  DimensionElementInsert(sDimDimension, '', 'All Managed Dimensions', 'C');
+EndIf;
+If(DimensionElementExists(sDimDimension, '__Template.ManagedDimension') = 0);
+  DimensionElementInsert(sDimDimension, '', '__Template.ManagedDimension', 'N');
+  DimensionElementComponentAdd(sDimDimension, 'All Managed Dimensions', '__Template.ManagedDimension', 1);
+EndIf;
+
+If(DimensionElementExists(sDimVersion, 'All Versions') = 0);
+  DimensionElementInsert(sDimVersion, '', 'All Versions', 'C');
+EndIf;
+If(DimensionElementExists(sDimVersion, '__Template.Version') = 0);
+  DimensionElementInsert(sDimVersion, '', '__Template.Version', 'N');
+  DimensionElementComponentAdd(sDimVersion, 'All Versions', '__Template.Version', 1);
+EndIf;
+
+If(DimensionElementExists(sDimStatus, 'All Statuses') = 0);
+  DimensionElementInsert(sDimStatus, '', 'All Statuses', 'C');
+EndIf;
+
+If(DimensionElementExists(sDimConfigKey, 'All Config Keys') = 0);
+  DimensionElementInsert(sDimConfigKey, '', 'All Config Keys', 'C');
+EndIf;
+
+If(DimensionElementExists(sDimVersionMeasure, 'All Version Measures') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'All Version Measures', 'C');
+EndIf;
+
+# Create control-dimension attributes.
+AttrInsert(sDimDimension, '', 'MasterDimensionName', 'S');
+AttrInsert(sDimDimension, '', 'ActiveVersion', 'S');
+AttrInsert(sDimDimension, '', 'LastPublishedVersion', 'S');
+AttrInsert(sDimDimension, '', 'LastArchivedDimension', 'S');
+AttrInsert(sDimDimension, '', 'ValidationProcess', 'S');
+AttrInsert(sDimDimension, '', 'ImpactProcess', 'S');
+AttrInsert(sDimDimension, '', 'ExportProfile', 'S');
+AttrInsert(sDimDimension, '', 'IsActive', 'S');
+
+AttrInsert(sDimVersion, '', 'DimensionCode', 'S');
+AttrInsert(sDimVersion, '', 'Status', 'S');
+AttrInsert(sDimVersion, '', 'SourceType', 'S');
+AttrInsert(sDimVersion, '', 'SourceVersion', 'S');
+AttrInsert(sDimVersion, '', 'WorkDimension', 'S');
+AttrInsert(sDimVersion, '', 'ArchiveDimension', 'S');
+AttrInsert(sDimVersion, '', 'CreatedAt', 'S');
+AttrInsert(sDimVersion, '', 'CreatedBy', 'S');
+AttrInsert(sDimVersion, '', 'PublishedAt', 'S');
+AttrInsert(sDimVersion, '', 'PublishedBy', 'S');
+AttrInsert(sDimVersion, '', 'IsLocked', 'S');
+AttrInsert(sDimVersion, '', 'LockedBy', 'S');
+AttrInsert(sDimVersion, '', 'LockedAt', 'S');
+AttrInsert(sDimVersion, '', 'Notes', 'S');
+
+AttrInsert(sDimStatus, '', 'Sequence', 'N');
+AttrInsert(sDimStatus, '', 'IsTerminal', 'S');
+
+AttrInsert(sDimConfigKey, '', 'Scope', 'S');
+AttrInsert(sDimConfigKey, '', 'ValueType', 'S');
+AttrInsert(sDimConfigKey, '', 'DefaultValue', 'S');
+AttrInsert(sDimConfigKey, '', 'Description', 'S');
+
+AttrInsert(sDimVersionMeasure, '', 'ValueType', 'S');
+
+# Populate status dimension from the parameter string.
+sRemaining = sStatusList;
+nSequence = 10;
+While(Long(sRemaining) > 0);
+  nDelimPos = Scan('|', sRemaining, 1);
+  If(nDelimPos = 0);
+    sCurrent = Trim(sRemaining);
+    sRemaining = '';
+  Else;
+    sCurrent = Trim(SubSt(sRemaining, 1, nDelimPos - 1));
+    sRemaining = SubSt(sRemaining, nDelimPos + 1, Long(sRemaining) - nDelimPos);
+  EndIf;
+
+  If(sCurrent @<> '');
+    If(DimensionElementExists(sDimStatus, sCurrent) = 0);
+      DimensionElementInsert(sDimStatus, '', sCurrent, 'N');
+      DimensionElementComponentAdd(sDimStatus, 'All Statuses', sCurrent, 1);
+    EndIf;
+
+    AttrPutN(nSequence, sDimStatus, sCurrent, 'Sequence');
+    If(sCurrent @= 'Archived');
+      AttrPutS('Y', sDimStatus, sCurrent, 'IsTerminal');
+    Else;
+      AttrPutS('N', sDimStatus, sCurrent, 'IsTerminal');
+    EndIf;
+    nSequence = nSequence + 10;
+  EndIf;
+End;
+
+# Populate supporting dimensions for the initial cube grain.
+If(DimensionElementExists(sDimConfigKey, 'NamingPrefix') = 0);
+  DimensionElementInsert(sDimConfigKey, '', 'NamingPrefix', 'N');
+  DimensionElementComponentAdd(sDimConfigKey, 'All Config Keys', 'NamingPrefix', 1);
+EndIf;
+If(DimensionElementExists(sDimConfigKey, 'VersionDelimiter') = 0);
+  DimensionElementInsert(sDimConfigKey, '', 'VersionDelimiter', 'N');
+  DimensionElementComponentAdd(sDimConfigKey, 'All Config Keys', 'VersionDelimiter', 1);
+EndIf;
+If(DimensionElementExists(sDimConfigKey, 'ArchiveTimestampFormat') = 0);
+  DimensionElementInsert(sDimConfigKey, '', 'ArchiveTimestampFormat', 'N');
+  DimensionElementComponentAdd(sDimConfigKey, 'All Config Keys', 'ArchiveTimestampFormat', 1);
+EndIf;
+If(DimensionElementExists(sDimConfigKey, 'DefaultSourceType') = 0);
+  DimensionElementInsert(sDimConfigKey, '', 'DefaultSourceType', 'N');
+  DimensionElementComponentAdd(sDimConfigKey, 'All Config Keys', 'DefaultSourceType', 1);
+EndIf;
+If(DimensionElementExists(sDimConfigKey, 'RequireApproval') = 0);
+  DimensionElementInsert(sDimConfigKey, '', 'RequireApproval', 'N');
+  DimensionElementComponentAdd(sDimConfigKey, 'All Config Keys', 'RequireApproval', 1);
+EndIf;
+If(DimensionElementExists(sDimConfigKey, 'RetainArchives') = 0);
+  DimensionElementInsert(sDimConfigKey, '', 'RetainArchives', 'N');
+  DimensionElementComponentAdd(sDimConfigKey, 'All Config Keys', 'RetainArchives', 1);
+EndIf;
+If(DimensionElementExists(sDimConfigKey, 'ExportDefaultFormat') = 0);
+  DimensionElementInsert(sDimConfigKey, '', 'ExportDefaultFormat', 'N');
+  DimensionElementComponentAdd(sDimConfigKey, 'All Config Keys', 'ExportDefaultFormat', 1);
+EndIf;
+If(DimensionElementExists(sDimConfigKey, 'LogRetentionDays') = 0);
+  DimensionElementInsert(sDimConfigKey, '', 'LogRetentionDays', 'N');
+  DimensionElementComponentAdd(sDimConfigKey, 'All Config Keys', 'LogRetentionDays', 1);
+EndIf;
+
+If(DimensionElementExists(sDimVersionMeasure, 'DimensionCode') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'DimensionCode', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'DimensionCode', 1);
+EndIf;
+If(DimensionElementExists(sDimVersionMeasure, 'Status') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'Status', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'Status', 1);
+EndIf;
+If(DimensionElementExists(sDimVersionMeasure, 'SourceType') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'SourceType', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'SourceType', 1);
+EndIf;
+If(DimensionElementExists(sDimVersionMeasure, 'SourceVersion') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'SourceVersion', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'SourceVersion', 1);
+EndIf;
+If(DimensionElementExists(sDimVersionMeasure, 'WorkDimension') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'WorkDimension', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'WorkDimension', 1);
+EndIf;
+If(DimensionElementExists(sDimVersionMeasure, 'ArchiveDimension') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'ArchiveDimension', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'ArchiveDimension', 1);
+EndIf;
+If(DimensionElementExists(sDimVersionMeasure, 'CreatedAt') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'CreatedAt', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'CreatedAt', 1);
+EndIf;
+If(DimensionElementExists(sDimVersionMeasure, 'CreatedBy') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'CreatedBy', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'CreatedBy', 1);
+EndIf;
+If(DimensionElementExists(sDimVersionMeasure, 'PublishedAt') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'PublishedAt', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'PublishedAt', 1);
+EndIf;
+If(DimensionElementExists(sDimVersionMeasure, 'PublishedBy') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'PublishedBy', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'PublishedBy', 1);
+EndIf;
+If(DimensionElementExists(sDimVersionMeasure, 'IsLocked') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'IsLocked', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'IsLocked', 1);
+EndIf;
+If(DimensionElementExists(sDimVersionMeasure, 'LockedBy') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'LockedBy', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'LockedBy', 1);
+EndIf;
+If(DimensionElementExists(sDimVersionMeasure, 'LockedAt') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'LockedAt', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'LockedAt', 1);
+EndIf;
+If(DimensionElementExists(sDimVersionMeasure, 'LockReason') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'LockReason', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'LockReason', 1);
+EndIf;
+If(DimensionElementExists(sDimVersionMeasure, 'ApprovalState') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'ApprovalState', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'ApprovalState', 1);
+EndIf;
+If(DimensionElementExists(sDimVersionMeasure, 'LastEventId') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'LastEventId', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'LastEventId', 1);
+EndIf;
+If(DimensionElementExists(sDimVersionMeasure, 'Notes') = 0);
+  DimensionElementInsert(sDimVersionMeasure, '', 'Notes', 'N');
+  DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'Notes', 1);
+EndIf;
+
+AttrPutS('String', sDimVersionMeasure, 'DimensionCode', 'ValueType');
+AttrPutS('String', sDimVersionMeasure, 'Status', 'ValueType');
+AttrPutS('String', sDimVersionMeasure, 'SourceType', 'ValueType');
+AttrPutS('String', sDimVersionMeasure, 'SourceVersion', 'ValueType');
+AttrPutS('String', sDimVersionMeasure, 'WorkDimension', 'ValueType');
+AttrPutS('String', sDimVersionMeasure, 'ArchiveDimension', 'ValueType');
+AttrPutS('String', sDimVersionMeasure, 'CreatedAt', 'ValueType');
+AttrPutS('String', sDimVersionMeasure, 'CreatedBy', 'ValueType');
+AttrPutS('String', sDimVersionMeasure, 'PublishedAt', 'ValueType');
+AttrPutS('String', sDimVersionMeasure, 'PublishedBy', 'ValueType');
+AttrPutS('String', sDimVersionMeasure, 'IsLocked', 'ValueType');
+AttrPutS('String', sDimVersionMeasure, 'LockedBy', 'ValueType');
+AttrPutS('String', sDimVersionMeasure, 'LockedAt', 'ValueType');
+AttrPutS('String', sDimVersionMeasure, 'LockReason', 'ValueType');
+AttrPutS('String', sDimVersionMeasure, 'ApprovalState', 'ValueType');
+AttrPutS('Numeric', sDimVersionMeasure, 'LastEventId', 'ValueType');
+AttrPutS('String', sDimVersionMeasure, 'Notes', 'ValueType');
+
+# Create cubes after all dimensions required by their grain exist.
+If(CubeExists(sCubeConfig) = 0);
+  CubeCreate(sCubeConfig, sDimDimension, sDimConfigKey);
+EndIf;
+If(CubeExists(sCubeVersion) = 0);
+  CubeCreate(sCubeVersion, sDimVersion, sDimVersionMeasure);
+EndIf;
+
+# Seed a template config row used when onboarding new managed dimensions.
+If(Upper(Trim(pCreateSampleConfig)) @= 'Y');
+  CellPutS(sPrefix, sCubeConfig, '__Template.ManagedDimension', 'NamingPrefix');
+  CellPutS('_VER_', sCubeConfig, '__Template.ManagedDimension', 'VersionDelimiter');
+  CellPutS('yyyymmddhhmmss', sCubeConfig, '__Template.ManagedDimension', 'ArchiveTimestampFormat');
+  CellPutS('MASTER', sCubeConfig, '__Template.ManagedDimension', 'DefaultSourceType');
+  CellPutS('Y', sCubeConfig, '__Template.ManagedDimension', 'RequireApproval');
+  CellPutS('Y', sCubeConfig, '__Template.ManagedDimension', 'RetainArchives');
+  CellPutS('CSV', sCubeConfig, '__Template.ManagedDimension', 'ExportDefaultFormat');
+  CellPutS('365', sCubeConfig, '__Template.ManagedDimension', 'LogRetentionDays');
+EndIf;

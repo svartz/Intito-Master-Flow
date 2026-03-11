@@ -1,0 +1,65 @@
+# Intito MasterFlow clone from version
+# Purpose: Initialize a new work dimension using another work version as source.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code from IMF.D.Dimension
+#   pVersionId      Target work version
+#   pSourceVersion  Existing work version used as clone source
+#   pCreatedBy      Optional explicit user id
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sDimensionCode = Trim(pDimensionCode);
+sVersionId = Trim(pVersionId);
+sSourceVersion = Trim(pSourceVersion);
+sCreatedBy = Trim(pCreatedBy);
+
+If(sCreatedBy @= '');
+  sCreatedBy = 'SYSTEM';
+EndIf;
+
+sDimVersion = sPrefix | '.D.Version';
+sCubeVersion = sPrefix | '.C.Version';
+
+If(DimensionElementExists(sDimVersion, sVersionId) = 0);
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimVersion, sSourceVersion) = 0);
+  ProcessBreak;
+EndIf;
+If(CellGetS(sCubeVersion, sSourceVersion, 'DimensionCode') @<> sDimensionCode);
+  ProcessBreak;
+EndIf;
+
+sSourceWorkDimension = Trim(CellGetS(sCubeVersion, sSourceVersion, 'WorkDimension'));
+sTargetWorkDimension = Trim(CellGetS(sCubeVersion, sVersionId, 'WorkDimension'));
+If(sSourceWorkDimension @= '');
+  ProcessBreak;
+EndIf;
+If(sTargetWorkDimension @= '');
+  ProcessBreak;
+EndIf;
+If(DimensionExists(sSourceWorkDimension) = 0);
+  ProcessBreak;
+EndIf;
+
+If(DimensionExists(sTargetWorkDimension) = 0);
+  DimensionCreate(sTargetWorkDimension);
+EndIf;
+
+# Physical copy of elements, consolidations, weights, aliases, and attributes
+# is intentionally delegated to the dedicated dimension copy engine in step 3.
+
+CellPutS('VERSION', sCubeVersion, sVersionId, 'SourceType');
+CellPutS(sSourceVersion, sCubeVersion, sVersionId, 'SourceVersion');
+CellPutS('Draft', sCubeVersion, sVersionId, 'Status');
+CellPutS('Version clone initialized from ' | sSourceVersion | '; structural copy delegated to IMF.P.Dimension.CopyAll.', sCubeVersion, sVersionId, 'Notes');
+
+AttrPutS('VERSION', sDimVersion, sVersionId, 'SourceType');
+AttrPutS(sSourceVersion, sDimVersion, sVersionId, 'SourceVersion');
+AttrPutS('Draft', sDimVersion, sVersionId, 'Status');
+AttrPutS('Version clone initialized from ' | sSourceVersion | '; structural copy delegated to IMF.P.Dimension.CopyAll.', sDimVersion, sVersionId, 'Notes');

@@ -1,0 +1,30 @@
+{
+  "name": "IMF.D.VersionMeasure",
+  "kind": "supporting-control-dimension",
+  "purpose": "Metadata fields stored for each work version in IMF.C.Version.",
+  "hierarchy": {
+    "root": "All Version Measures",
+    "seedElements": [
+      { "name": "DimensionCode", "type": "N", "parent": "All Version Measures", "weight": 1 },
+      { "name": "Status", "type": "N", "parent": "All Version Measures", "weight": 1 },
+      { "name": "SourceType", "type": "N", "parent": "All Version Measures", "weight": 1 },
+      { "name": "SourceVersion", "type": "N", "parent": "All Version Measures", "weight": 1 },
+      { "name": "WorkDimension", "type": "N", "parent": "All Version Measures", "weight": 1 },
+      { "name": "ArchiveDimension", "type": "N", "parent": "All Version Measures", "weight": 1 },
+      { "name": "CreatedAt", "type": "N", "parent": "All Version Measures", "weight": 1 },
+      { "name": "CreatedBy", "type": "N", "parent": "All Version Measures", "weight": 1 },
+      { "name": "PublishedAt", "type": "N", "parent": "All Version Measures", "weight": 1 },
+      { "name": "PublishedBy", "type": "N", "parent": "All Version Measures", "weight": 1 },
+      { "name": "IsLocked", "type": "N", "parent": "All Version Measures", "weight": 1 },
+      { "name": "LockedBy", "type": "N", "parent": "All Version Measures", "weight": 1 },
+      { "name": "LockedAt", "type": "N", "parent": "All Version Measures", "weight": 1 },
+      { "name": "LockReason", "type": "N", "parent": "All Version Measures", "weight": 1 },
+      { "name": "ApprovalState", "type": "N", "parent": "All Version Measures", "weight": 1 },
+      { "name": "LastEventId", "type": "N", "parent": "All Version Measures", "weight": 1 },
+      { "name": "Notes", "type": "N", "parent": "All Version Measures", "weight": 1 }
+    ]
+  },
+  "attributes": [
+    { "name": "ValueType", "type": "string", "required": true }
+  ]
+}

@@ -1,0 +1,61 @@
+# Intito MasterFlow clone from master
+# Purpose: Initialize a work dimension from the registered master dimension.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code from IMF.D.Dimension
+#   pVersionId      Target work version
+#   pCreatedBy      Optional explicit user id
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sDimensionCode = Trim(pDimensionCode);
+sVersionId = Trim(pVersionId);
+sCreatedBy = Trim(pCreatedBy);
+
+If(sCreatedBy @= '');
+  sCreatedBy = 'SYSTEM';
+EndIf;
+
+sDimDimension = sPrefix | '.D.Dimension';
+sDimVersion = sPrefix | '.D.Version';
+sCubeVersion = sPrefix | '.C.Version';
+
+If(DimensionElementExists(sDimDimension, sDimensionCode) = 0);
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimVersion, sVersionId) = 0);
+  ProcessBreak;
+EndIf;
+
+sMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));
+If(sMasterDimension @= '');
+  sMasterDimension = sDimensionCode;
+EndIf;
+sWorkDimension = Trim(CellGetS(sCubeVersion, sVersionId, 'WorkDimension'));
+If(sWorkDimension @= '');
+  ProcessBreak;
+EndIf;
+If(DimensionExists(sMasterDimension) = 0);
+  ProcessBreak;
+EndIf;
+
+If(DimensionExists(sWorkDimension) = 0);
+  DimensionCreate(sWorkDimension);
+EndIf;
+
+# Physical copy of elements, consolidations, weights, aliases, and attributes
+# is intentionally delegated to the dedicated dimension copy engine in step 3.
+
+CellPutS('MASTER', sCubeVersion, sVersionId, 'SourceType');
+CellPutS('', sCubeVersion, sVersionId, 'SourceVersion');
+CellPutS('Draft', sCubeVersion, sVersionId, 'Status');
+CellPutS('Master clone initialized; structural copy delegated to IMF.P.Dimension.CopyAll.', sCubeVersion, sVersionId, 'Notes');
+
+AttrPutS('MASTER', sDimVersion, sVersionId, 'SourceType');
+AttrPutS('', sDimVersion, sVersionId, 'SourceVersion');
+AttrPutS('Draft', sDimVersion, sVersionId, 'Status');
+AttrPutS('Master clone initialized; structural copy delegated to IMF.P.Dimension.CopyAll.', sDimVersion, sVersionId, 'Notes');

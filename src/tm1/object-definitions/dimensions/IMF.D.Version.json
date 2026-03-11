@@ -1,0 +1,36 @@
+{
+  "name": "IMF.D.Version",
+  "kind": "control-dimension",
+  "purpose": "Registry of work versions created for managed dimensions.",
+  "attributes": [
+    { "name": "DimensionCode", "type": "string", "required": true },
+    { "name": "Status", "type": "string", "required": true },
+    { "name": "SourceType", "type": "string", "required": true },
+    { "name": "SourceVersion", "type": "string", "required": false },
+    { "name": "WorkDimension", "type": "string", "required": false },
+    { "name": "ArchiveDimension", "type": "string", "required": false },
+    { "name": "CreatedAt", "type": "string", "required": true },
+    { "name": "CreatedBy", "type": "string", "required": true },
+    { "name": "PublishedAt", "type": "string", "required": false },
+    { "name": "PublishedBy", "type": "string", "required": false },
+    { "name": "IsLocked", "type": "string", "required": false },
+    { "name": "LockedBy", "type": "string", "required": false },
+    { "name": "LockedAt", "type": "string", "required": false },
+    { "name": "Notes", "type": "string", "required": false }
+  ],
+  "hierarchy": {
+    "root": "All Versions",
+    "seedElements": [
+      {
+        "name": "__Template.Version",
+        "type": "N",
+        "parent": "All Versions",
+        "weight": 1
+      }
+    ]
+  },
+  "notes": [
+    "Version IDs are globally unique and generated or validated by TI processes.",
+    "Lifecycle status values are constrained by IMF.D.Status."
+  ]
+}
