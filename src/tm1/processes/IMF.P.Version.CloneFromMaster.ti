@@ -47,15 +47,18 @@ If(DimensionExists(sWorkDimension) = 0);
   DimensionCreate(sWorkDimension);
 EndIf;
 
-# Physical copy of elements, consolidations, weights, aliases, and attributes
-# is intentionally delegated to the dedicated dimension copy engine in step 3.
+ExecuteProcess(sPrefix | '.P.Dimension.CopyAll',
+  'pPrefix', sPrefix,
+  'pSourceDimension', sMasterDimension,
+  'pTargetDimension', sWorkDimension,
+  'pIncludeData', 'N');
 
 CellPutS('MASTER', sCubeVersion, sVersionId, 'SourceType');
 CellPutS('', sCubeVersion, sVersionId, 'SourceVersion');
 CellPutS('Draft', sCubeVersion, sVersionId, 'Status');
-CellPutS('Master clone initialized; structural copy delegated to IMF.P.Dimension.CopyAll.', sCubeVersion, sVersionId, 'Notes');
+CellPutS('Master clone initialized and routed through IMF.P.Dimension.CopyAll.', sCubeVersion, sVersionId, 'Notes');
 
 AttrPutS('MASTER', sDimVersion, sVersionId, 'SourceType');
 AttrPutS('', sDimVersion, sVersionId, 'SourceVersion');
 AttrPutS('Draft', sDimVersion, sVersionId, 'Status');
-AttrPutS('Master clone initialized; structural copy delegated to IMF.P.Dimension.CopyAll.', sDimVersion, sVersionId, 'Notes');
+AttrPutS('Master clone initialized and routed through IMF.P.Dimension.CopyAll.', sDimVersion, sVersionId, 'Notes');

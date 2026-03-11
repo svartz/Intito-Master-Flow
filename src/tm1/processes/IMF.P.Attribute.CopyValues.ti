@@ -1,0 +1,43 @@
+# Intito MasterFlow attribute value copy
+# Purpose: Copy element attribute values from a source dimension into a target dimension.
+#
+# Parameters:
+#   pPrefix           Default 'IMF'
+#   pSourceDimension  Existing source dimension
+#   pTargetDimension  Existing target dimension
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sSourceDimension = Trim(pSourceDimension);
+sTargetDimension = Trim(pTargetDimension);
+
+If(sSourceDimension @= '');
+  ProcessBreak;
+EndIf;
+If(sTargetDimension @= '');
+  ProcessBreak;
+EndIf;
+If(DimensionExists(sSourceDimension) = 0);
+  ProcessBreak;
+EndIf;
+If(DimensionExists(sTargetDimension) = 0);
+  ProcessBreak;
+EndIf;
+
+sSourceAttrCube = '}ElementAttributes_' | sSourceDimension;
+sTargetAttrCube = '}ElementAttributes_' | sTargetDimension;
+
+If(CubeExists(sSourceAttrCube) = 0);
+  ProcessBreak;
+EndIf;
+If(CubeExists(sTargetAttrCube) = 0);
+  ProcessBreak;
+EndIf;
+
+# Placeholder for attribute-value loop:
+# 1. iterate source elements
+# 2. iterate source attributes
+# 3. copy string or numeric value to the target intersection

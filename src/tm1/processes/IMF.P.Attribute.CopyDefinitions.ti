@@ -1,0 +1,48 @@
+# Intito MasterFlow attribute definition copy
+# Purpose: Create the source dimension's attribute definitions on the target dimension.
+#
+# Parameters:
+#   pPrefix           Default 'IMF'
+#   pSourceDimension  Existing source dimension
+#   pTargetDimension  Existing target dimension
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sSourceDimension = Trim(pSourceDimension);
+sTargetDimension = Trim(pTargetDimension);
+
+If(sSourceDimension @= '');
+  ProcessBreak;
+EndIf;
+If(sTargetDimension @= '');
+  ProcessBreak;
+EndIf;
+If(DimensionExists(sSourceDimension) = 0);
+  ProcessBreak;
+EndIf;
+If(DimensionExists(sTargetDimension) = 0);
+  ProcessBreak;
+EndIf;
+
+sSourceAttrCube = '}ElementAttributes_' | sSourceDimension;
+sTargetAttrCube = '}ElementAttributes_' | sTargetDimension;
+
+If(CubeExists(sSourceAttrCube) = 0);
+  ProcessBreak;
+EndIf;
+
+# The exact list of attribute elements is read from the }ElementAttributes dimension.
+# This scaffold prepares the copy boundary and is intentionally conservative until
+# tested against a live TM1 model.
+
+If(CubeExists(sTargetAttrCube) = 0);
+  # The attribute cube is created automatically when the first attribute is added.
+EndIf;
+
+# Placeholder for attribute-definition loop:
+# 1. enumerate attribute names from the source attribute dimension
+# 2. inspect each attribute type
+# 3. create missing attributes on the target dimension
