@@ -9,4 +9,4 @@ This folder contains the Intito MasterFlow security model package for TM1 / Plan
 - README.md
 
 ## Source-control package
-The corresponding TI processes live in src/ti_processes/ and are delivered as both .ti and .json artefacts.
+The corresponding TI processes live in `src/tm1/processes/` and are delivered as both `.ti` and `.json` artefacts.
