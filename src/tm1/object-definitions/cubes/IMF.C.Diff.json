@@ -1,0 +1,12 @@
+{
+  "name": "IMF.C.Diff",
+  "kind": "control-cube",
+  "purpose": "Stores raw diff records between a work version and its master dimension.",
+  "dimensions": [
+    "IMF.D.DiffRecord",
+    "IMF.D.DiffMeasure"
+  ],
+  "cellTypes": {
+    "default": "string"
+  }
+}

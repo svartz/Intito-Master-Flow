@@ -1,0 +1,31 @@
+# Intito MasterFlow compare relations
+# Purpose: Detect parent-child and weight differences between a work dimension and master dimension.
+#
+# Parameters:
+#   pPrefix          Default 'IMF'
+#   pDimensionCode   Managed dimension code
+#   pVersionId       Existing work version
+#   pMasterDimension Existing master dimension
+#   pWorkDimension   Existing work dimension
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sDimensionCode = Trim(pDimensionCode);
+sVersionId = Trim(pVersionId);
+sMasterDimension = Trim(pMasterDimension);
+sWorkDimension = Trim(pWorkDimension);
+
+If((sDimensionCode @= '') % (sVersionId @= ''));
+  ProcessBreak;
+EndIf;
+If((DimensionExists(sMasterDimension) = 0) % (DimensionExists(sWorkDimension) = 0));
+  ProcessBreak;
+EndIf;
+
+# Placeholder for hierarchy compare loop:
+# 1. compare parent assignments per element
+# 2. compare consolidation weights
+# 3. write one record per relation delta to IMF.C.Diff

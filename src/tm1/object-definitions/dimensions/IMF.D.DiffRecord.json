@@ -1,0 +1,16 @@
+{
+  "name": "IMF.D.DiffRecord",
+  "kind": "supporting-control-dimension",
+  "purpose": "Synthetic diff record ids created by comparison processes.",
+  "hierarchy": {
+    "root": "All Diff Records",
+    "seedElements": [
+      { "name": "__Template.DiffRecord", "type": "N", "parent": "All Diff Records", "weight": 1 }
+    ]
+  },
+  "attributes": [
+    { "name": "VersionId", "type": "string", "required": false },
+    { "name": "DimensionCode", "type": "string", "required": false },
+    { "name": "ChangeType", "type": "string", "required": false }
+  ]
+}

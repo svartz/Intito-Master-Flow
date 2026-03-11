@@ -16,8 +16,11 @@ sDimVersion = sPrefix | '.D.Version';
 sDimStatus = sPrefix | '.D.Status';
 sDimConfigKey = sPrefix | '.D.ConfigKey';
 sDimVersionMeasure = sPrefix | '.D.VersionMeasure';
+sDimDiffRecord = sPrefix | '.D.DiffRecord';
+sDimDiffMeasure = sPrefix | '.D.DiffMeasure';
 sCubeConfig = sPrefix | '.C.Config';
 sCubeVersion = sPrefix | '.C.Version';
+sCubeDiff = sPrefix | '.C.Diff';
 
 sStatusList = Trim(pStatusCsv);
 If(sStatusList @= '');
@@ -39,6 +42,12 @@ If(DimensionExists(sDimConfigKey) = 0);
 EndIf;
 If(DimensionExists(sDimVersionMeasure) = 0);
   DimensionCreate(sDimVersionMeasure);
+EndIf;
+If(DimensionExists(sDimDiffRecord) = 0);
+  DimensionCreate(sDimDiffRecord);
+EndIf;
+If(DimensionExists(sDimDiffMeasure) = 0);
+  DimensionCreate(sDimDiffMeasure);
 EndIf;
 
 # Create root and template elements used by the control model.
@@ -68,6 +77,16 @@ EndIf;
 
 If(DimensionElementExists(sDimVersionMeasure, 'All Version Measures') = 0);
   DimensionElementInsert(sDimVersionMeasure, '', 'All Version Measures', 'C');
+EndIf;
+If(DimensionElementExists(sDimDiffRecord, 'All Diff Records') = 0);
+  DimensionElementInsert(sDimDiffRecord, '', 'All Diff Records', 'C');
+EndIf;
+If(DimensionElementExists(sDimDiffRecord, '__Template.DiffRecord') = 0);
+  DimensionElementInsert(sDimDiffRecord, '', '__Template.DiffRecord', 'N');
+  DimensionElementComponentAdd(sDimDiffRecord, 'All Diff Records', '__Template.DiffRecord', 1);
+EndIf;
+If(DimensionElementExists(sDimDiffMeasure, 'All Diff Measures') = 0);
+  DimensionElementInsert(sDimDiffMeasure, '', 'All Diff Measures', 'C');
 EndIf;
 
 # Create control-dimension attributes.
@@ -104,6 +123,10 @@ AttrInsert(sDimConfigKey, '', 'DefaultValue', 'S');
 AttrInsert(sDimConfigKey, '', 'Description', 'S');
 
 AttrInsert(sDimVersionMeasure, '', 'ValueType', 'S');
+AttrInsert(sDimDiffRecord, '', 'VersionId', 'S');
+AttrInsert(sDimDiffRecord, '', 'DimensionCode', 'S');
+AttrInsert(sDimDiffRecord, '', 'ChangeType', 'S');
+AttrInsert(sDimDiffMeasure, '', 'ValueType', 'S');
 
 # Populate status dimension from the parameter string.
 sRemaining = sStatusList;
@@ -236,6 +259,50 @@ If(DimensionElementExists(sDimVersionMeasure, 'Notes') = 0);
   DimensionElementInsert(sDimVersionMeasure, '', 'Notes', 'N');
   DimensionElementComponentAdd(sDimVersionMeasure, 'All Version Measures', 'Notes', 1);
 EndIf;
+If(DimensionElementExists(sDimDiffMeasure, 'VersionId') = 0);
+  DimensionElementInsert(sDimDiffMeasure, '', 'VersionId', 'N');
+  DimensionElementComponentAdd(sDimDiffMeasure, 'All Diff Measures', 'VersionId', 1);
+EndIf;
+If(DimensionElementExists(sDimDiffMeasure, 'DimensionCode') = 0);
+  DimensionElementInsert(sDimDiffMeasure, '', 'DimensionCode', 'N');
+  DimensionElementComponentAdd(sDimDiffMeasure, 'All Diff Measures', 'DimensionCode', 1);
+EndIf;
+If(DimensionElementExists(sDimDiffMeasure, 'ChangeType') = 0);
+  DimensionElementInsert(sDimDiffMeasure, '', 'ChangeType', 'N');
+  DimensionElementComponentAdd(sDimDiffMeasure, 'All Diff Measures', 'ChangeType', 1);
+EndIf;
+If(DimensionElementExists(sDimDiffMeasure, 'ObjectType') = 0);
+  DimensionElementInsert(sDimDiffMeasure, '', 'ObjectType', 'N');
+  DimensionElementComponentAdd(sDimDiffMeasure, 'All Diff Measures', 'ObjectType', 1);
+EndIf;
+If(DimensionElementExists(sDimDiffMeasure, 'ObjectName') = 0);
+  DimensionElementInsert(sDimDiffMeasure, '', 'ObjectName', 'N');
+  DimensionElementComponentAdd(sDimDiffMeasure, 'All Diff Measures', 'ObjectName', 1);
+EndIf;
+If(DimensionElementExists(sDimDiffMeasure, 'ParentName') = 0);
+  DimensionElementInsert(sDimDiffMeasure, '', 'ParentName', 'N');
+  DimensionElementComponentAdd(sDimDiffMeasure, 'All Diff Measures', 'ParentName', 1);
+EndIf;
+If(DimensionElementExists(sDimDiffMeasure, 'AttributeName') = 0);
+  DimensionElementInsert(sDimDiffMeasure, '', 'AttributeName', 'N');
+  DimensionElementComponentAdd(sDimDiffMeasure, 'All Diff Measures', 'AttributeName', 1);
+EndIf;
+If(DimensionElementExists(sDimDiffMeasure, 'OldValue') = 0);
+  DimensionElementInsert(sDimDiffMeasure, '', 'OldValue', 'N');
+  DimensionElementComponentAdd(sDimDiffMeasure, 'All Diff Measures', 'OldValue', 1);
+EndIf;
+If(DimensionElementExists(sDimDiffMeasure, 'NewValue') = 0);
+  DimensionElementInsert(sDimDiffMeasure, '', 'NewValue', 'N');
+  DimensionElementComponentAdd(sDimDiffMeasure, 'All Diff Measures', 'NewValue', 1);
+EndIf;
+If(DimensionElementExists(sDimDiffMeasure, 'Severity') = 0);
+  DimensionElementInsert(sDimDiffMeasure, '', 'Severity', 'N');
+  DimensionElementComponentAdd(sDimDiffMeasure, 'All Diff Measures', 'Severity', 1);
+EndIf;
+If(DimensionElementExists(sDimDiffMeasure, 'DetectedAt') = 0);
+  DimensionElementInsert(sDimDiffMeasure, '', 'DetectedAt', 'N');
+  DimensionElementComponentAdd(sDimDiffMeasure, 'All Diff Measures', 'DetectedAt', 1);
+EndIf;
 
 AttrPutS('String', sDimVersionMeasure, 'DimensionCode', 'ValueType');
 AttrPutS('String', sDimVersionMeasure, 'Status', 'ValueType');
@@ -254,6 +321,17 @@ AttrPutS('String', sDimVersionMeasure, 'LockReason', 'ValueType');
 AttrPutS('String', sDimVersionMeasure, 'ApprovalState', 'ValueType');
 AttrPutS('Numeric', sDimVersionMeasure, 'LastEventId', 'ValueType');
 AttrPutS('String', sDimVersionMeasure, 'Notes', 'ValueType');
+AttrPutS('String', sDimDiffMeasure, 'VersionId', 'ValueType');
+AttrPutS('String', sDimDiffMeasure, 'DimensionCode', 'ValueType');
+AttrPutS('String', sDimDiffMeasure, 'ChangeType', 'ValueType');
+AttrPutS('String', sDimDiffMeasure, 'ObjectType', 'ValueType');
+AttrPutS('String', sDimDiffMeasure, 'ObjectName', 'ValueType');
+AttrPutS('String', sDimDiffMeasure, 'ParentName', 'ValueType');
+AttrPutS('String', sDimDiffMeasure, 'AttributeName', 'ValueType');
+AttrPutS('String', sDimDiffMeasure, 'OldValue', 'ValueType');
+AttrPutS('String', sDimDiffMeasure, 'NewValue', 'ValueType');
+AttrPutS('String', sDimDiffMeasure, 'Severity', 'ValueType');
+AttrPutS('String', sDimDiffMeasure, 'DetectedAt', 'ValueType');
 
 # Create cubes after all dimensions required by their grain exist.
 If(CubeExists(sCubeConfig) = 0);
@@ -261,6 +339,9 @@ If(CubeExists(sCubeConfig) = 0);
 EndIf;
 If(CubeExists(sCubeVersion) = 0);
   CubeCreate(sCubeVersion, sDimVersion, sDimVersionMeasure);
+EndIf;
+If(CubeExists(sCubeDiff) = 0);
+  CubeCreate(sCubeDiff, sDimDiffRecord, sDimDiffMeasure);
 EndIf;
 
 # Seed a template config row used when onboarding new managed dimensions.

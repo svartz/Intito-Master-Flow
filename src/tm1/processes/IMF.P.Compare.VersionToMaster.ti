@@ -1,0 +1,73 @@
+# Intito MasterFlow compare work version to master
+# Purpose: Orchestrate a comparison between the current work dimension and its master.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pVersionId      Existing work version
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sDimensionCode = Trim(pDimensionCode);
+sVersionId = Trim(pVersionId);
+
+sDimDimension = sPrefix | '.D.Dimension';
+sDimVersion = sPrefix | '.D.Version';
+sCubeVersion = sPrefix | '.C.Version';
+
+If(sDimensionCode @= '');
+  ProcessBreak;
+EndIf;
+If(sVersionId @= '');
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimDimension, sDimensionCode) = 0);
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimVersion, sVersionId) = 0);
+  ProcessBreak;
+EndIf;
+
+sMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));
+If(sMasterDimension @= '');
+  sMasterDimension = sDimensionCode;
+EndIf;
+sWorkDimension = Trim(CellGetS(sCubeVersion, sVersionId, 'WorkDimension'));
+
+If(DimensionExists(sMasterDimension) = 0);
+  ProcessBreak;
+EndIf;
+If(sWorkDimension @= '');
+  ProcessBreak;
+EndIf;
+If(DimensionExists(sWorkDimension) = 0);
+  ProcessBreak;
+EndIf;
+
+ExecuteProcess(sPrefix | '.P.Compare.Elements',
+  'pPrefix', sPrefix,
+  'pDimensionCode', sDimensionCode,
+  'pVersionId', sVersionId,
+  'pMasterDimension', sMasterDimension,
+  'pWorkDimension', sWorkDimension);
+
+ExecuteProcess(sPrefix | '.P.Compare.Relations',
+  'pPrefix', sPrefix,
+  'pDimensionCode', sDimensionCode,
+  'pVersionId', sVersionId,
+  'pMasterDimension', sMasterDimension,
+  'pWorkDimension', sWorkDimension);
+
+ExecuteProcess(sPrefix | '.P.Compare.Attributes',
+  'pPrefix', sPrefix,
+  'pDimensionCode', sDimensionCode,
+  'pVersionId', sVersionId,
+  'pMasterDimension', sMasterDimension,
+  'pWorkDimension', sWorkDimension);
+
+AttrPutS('ImpactAnalyzed', sDimVersion, sVersionId, 'Status');
+CellPutS('ImpactAnalyzed', sCubeVersion, sVersionId, 'Status');
+CellPutS('Version compared to master via diff engine.', sCubeVersion, sVersionId, 'Notes');

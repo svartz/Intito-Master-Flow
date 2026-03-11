@@ -1,0 +1,31 @@
+# Intito MasterFlow compare attributes
+# Purpose: Detect attribute and alias differences between a work dimension and master dimension.
+#
+# Parameters:
+#   pPrefix          Default 'IMF'
+#   pDimensionCode   Managed dimension code
+#   pVersionId       Existing work version
+#   pMasterDimension Existing master dimension
+#   pWorkDimension   Existing work dimension
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sDimensionCode = Trim(pDimensionCode);
+sVersionId = Trim(pVersionId);
+sMasterDimension = Trim(pMasterDimension);
+sWorkDimension = Trim(pWorkDimension);
+
+If((sDimensionCode @= '') % (sVersionId @= ''));
+  ProcessBreak;
+EndIf;
+If((DimensionExists(sMasterDimension) = 0) % (DimensionExists(sWorkDimension) = 0));
+  ProcessBreak;
+EndIf;
+
+# Placeholder for attribute compare loop:
+# 1. compare attribute definitions
+# 2. compare attribute values and aliases per element
+# 3. write one record per attribute delta to IMF.C.Diff
