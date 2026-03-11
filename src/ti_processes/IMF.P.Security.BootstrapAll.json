@@ -1,0 +1,37 @@
+{
+    "Name":  "IMF.P.Security.BootstrapAll",
+    "Purpose":  "Bootstrap the IMF security model for a target environment.",
+    "Code@Code.link":  "IMF.P.Security.BootstrapAll.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pEnvironment",
+                           "Prompt":  "Environment",
+                           "Value":  "DEV",
+                           "Description":  "Parameter pEnvironment"
+                       },
+                       {
+                           "Name":  "pCreateIfExistsBehavior",
+                           "Prompt":  "Create If Exists Behavior",
+                           "Value":  "SKIP",
+                           "Description":  "Parameter pCreateIfExistsBehavior"
+                       },
+                       {
+                           "Name":  "pExportFolder",
+                           "Prompt":  "Export Folder",
+                           "Value":  "docs/security",
+                           "Description":  "Parameter pExportFolder"
+                       }
+                   ],
+    "Sections":  {
+                     "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsCreateBehavior = Upper(Trim(pCreateIfExistsBehavior));\r\nsExportFolder = Trim(pExportFolder);\r\nIf(sEnvironment @= \u0027\u0027); sEnvironment = \u0027DEV\u0027; EndIf;\r\nExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027BOOTSTRAP_START\u0027, \u0027pObjectType\u0027, \u0027SECURITY_MODEL\u0027, \u0027pObjectName\u0027, \u0027IMF\u0027, \u0027pStatus\u0027, \u0027INFO\u0027, \u0027pMessage\u0027, \u0027Security bootstrap started.\u0027);\r\nExecuteProcess(\u0027IMF.P.Security.CreateGroups\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);\r\nExecuteProcess(\u0027IMF.P.Security.ApplyModel\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pLogOnly\u0027, \u0027N\u0027);\r\nExecuteProcess(\u0027IMF.P.Security.ValidateGroups\u0027, \u0027pEnvironment\u0027, sEnvironment);\r\nExecuteProcess(\u0027IMF.P.Security.ValidateObjectSecurity\u0027, \u0027pEnvironment\u0027, sEnvironment);\r\nExecuteProcess(\u0027IMF.P.Security.ExportProcessMatrix\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pOutputFile\u0027, sExportFolder | \u0027/IMF_Process_Security_Matrix.csv\u0027);\r\nExecuteProcess(\u0027IMF.P.Security.ExportSecurityMatrix\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pOutputFile\u0027, sExportFolder | \u0027/IMF_Security_Matrix.csv\u0027);",
+                     "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
+                     "Data":  "# No Data tab logic in this scaffold.",
+                     "Epilog":  "# No Epilog tab logic beyond logging for this scaffold."
+                 },
+    "Tags":  [
+                 "IMF",
+                 "Security",
+                 "Bootstrap",
+                 "EnvironmentAware"
+             ]
+}

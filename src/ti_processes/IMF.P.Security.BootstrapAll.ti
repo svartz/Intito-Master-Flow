@@ -1,0 +1,44 @@
+# IMF.P.Security.BootstrapAll
+# Purpose: Bootstrap the IMF security model for a target environment.
+# Sources:
+# - IMF security model and documentation
+# - TM1 native security control objects
+# - IMF.P.Security.LogBootstrap
+# Parameters:
+# - pEnvironment: Parameter pEnvironment Default 'DEV'.
+# - pCreateIfExistsBehavior: Parameter pCreateIfExistsBehavior Default 'SKIP'.
+# - pExportFolder: Parameter pExportFolder Default 'docs/security'.
+# Prolog:
+# - Validate parameters and execute the process-specific security workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave a deterministic log trail and clearly surface all TODOs.
+
+#region prolog
+sEnvironment = Upper(Trim(pEnvironment));
+sCreateBehavior = Upper(Trim(pCreateIfExistsBehavior));
+sExportFolder = Trim(pExportFolder);
+If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
+ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'BOOTSTRAP_START', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'Security bootstrap started.');
+ExecuteProcess('IMF.P.Security.CreateGroups', 'pEnvironment', sEnvironment, 'pCreateIfExistsBehavior', sCreateBehavior);
+ExecuteProcess('IMF.P.Security.ApplyModel', 'pEnvironment', sEnvironment, 'pLogOnly', 'N');
+ExecuteProcess('IMF.P.Security.ValidateGroups', 'pEnvironment', sEnvironment);
+ExecuteProcess('IMF.P.Security.ValidateObjectSecurity', 'pEnvironment', sEnvironment);
+ExecuteProcess('IMF.P.Security.ExportProcessMatrix', 'pEnvironment', sEnvironment, 'pOutputFile', sExportFolder | '/IMF_Process_Security_Matrix.csv');
+ExecuteProcess('IMF.P.Security.ExportSecurityMatrix', 'pEnvironment', sEnvironment, 'pOutputFile', sExportFolder | '/IMF_Security_Matrix.csv');
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond logging for this scaffold.
+#endregion

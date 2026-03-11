@@ -1,0 +1,44 @@
+# IMF.P.Security.SetDimensionAccess
+# Purpose: Apply or log a single dimension-security assignment for an IMF group.
+# Sources:
+# - IMF security model and documentation
+# - TM1 native security control objects
+# - IMF.P.Security.LogBootstrap
+# Parameters:
+# - pEnvironment: Parameter pEnvironment Default 'DEV'.
+# - pDimensionName: Parameter pDimensionName
+# - pGroupName: Parameter pGroupName
+# - pAccess: Parameter pAccess Default 'READ'.
+# - pLogOnly: Parameter pLogOnly Default 'N'.
+# Prolog:
+# - Validate parameters and execute the process-specific security workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave a deterministic log trail and clearly surface all TODOs.
+
+#region prolog
+sEnvironment = Upper(Trim(pEnvironment));
+sDimensionName = Trim(pDimensionName);
+sGroupName = Trim(pGroupName);
+sAccess = Upper(Trim(pAccess));
+sLogOnly = Upper(Trim(pLogOnly));
+If((sDimensionName @= '') % (sGroupName @= '')); ProcessBreak; EndIf;
+# TODO: Confirm }DimensionSecurity dimension order and class resolution before enabling native writes.
+# CellPutS(sAccess, '}DimensionSecurity', sGroupName, sDimensionName);
+ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'SET_DIMENSION_ACCESS', 'pObjectType', 'DIMENSION', 'pObjectName', sDimensionName, 'pStatus', If(sLogOnly @= 'Y', 'INFO', 'TODO'), 'pMessage', 'Group=' | sGroupName | '; access=' | sAccess | '; logOnly=' | sLogOnly);
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond logging for this scaffold.
+#endregion

@@ -1,0 +1,12 @@
+Process,IMF_Admin,IMF_Developer,IMF_Operator,IMF_Approver,IMF_Editor,IMF_Viewer,IMF_Auditor,IMF_Service,Notes
+IMF.P.Security.BootstrapAll,EXECUTE,NONE,NONE,NONE,NONE,NONE,NONE,EXECUTE,Service execution optional for automated bootstrap
+IMF.P.Security.CreateGroups,EXECUTE,NONE,NONE,NONE,NONE,NONE,NONE,EXECUTE,Group provisioning restricted to admin or automation
+IMF.P.Security.CreateSingleGroup,EXECUTE,NONE,NONE,NONE,NONE,NONE,NONE,EXECUTE,Environment-specific IAM integration expected
+IMF.P.Security.ApplyModel,EXECUTE,DEV_ONLY,NONE,NONE,NONE,NONE,READ,NONE,Developer execution only in DEV if delegated
+IMF.P.Security.SetCubeAccess,EXECUTE,DEV_ONLY,NONE,NONE,NONE,NONE,READ,NONE,Direct object-security assignment is privileged
+IMF.P.Security.SetDimensionAccess,EXECUTE,DEV_ONLY,NONE,NONE,NONE,NONE,READ,NONE,Direct object-security assignment is privileged
+IMF.P.Security.ExportProcessMatrix,EXECUTE,READ,READ,READ,READ,READ,READ,EXECUTE,Export is safe for review and automation
+IMF.P.Security.ExportSecurityMatrix,EXECUTE,READ,READ,READ,READ,READ,READ,EXECUTE,Export is safe for review and automation
+IMF.P.Security.ValidateGroups,EXECUTE,READ,READ,READ,NONE,NONE,READ,EXECUTE,Validation can be automated and audited
+IMF.P.Security.ValidateObjectSecurity,EXECUTE,READ,READ,READ,NONE,NONE,READ,EXECUTE,Validation can be automated and audited
+IMF.P.Security.LogBootstrap,EXECUTE,EXECUTE,EXECUTE,EXECUTE,EXECUTE,EXECUTE,EXECUTE,EXECUTE,Logging helper process only

@@ -1,0 +1,39 @@
+# IMF.P.Security.ApplyModel
+# Purpose: Apply the cube and dimension security model for IMF objects.
+# Sources:
+# - IMF security model and documentation
+# - TM1 native security control objects
+# - IMF.P.Security.LogBootstrap
+# Parameters:
+# - pEnvironment: Parameter pEnvironment Default 'DEV'.
+# - pLogOnly: Parameter pLogOnly Default 'N'.
+# Prolog:
+# - Validate parameters and execute the process-specific security workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave a deterministic log trail and clearly surface all TODOs.
+
+#region prolog
+sEnvironment = Upper(Trim(pEnvironment));
+sLogOnly = Upper(Trim(pLogOnly));
+ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.Config', 'pGroupName', 'IMF_Admin', 'pAccess', 'WRITE', 'pLogOnly', sLogOnly);
+ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.Version', 'pGroupName', 'IMF_Operator', 'pAccess', 'WRITE', 'pLogOnly', sLogOnly);
+ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.Impact', 'pGroupName', 'IMF_Auditor', 'pAccess', 'READ', 'pLogOnly', sLogOnly);
+ExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pDimensionName', 'IMF.D.Version', 'pGroupName', 'IMF_Admin', 'pAccess', 'WRITE', 'pLogOnly', sLogOnly);
+ExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pDimensionName', 'WorkDimensions', 'pGroupName', 'IMF_Editor', 'pAccess', If(sEnvironment @= 'PROD', 'READ', 'WRITE'), 'pLogOnly', sLogOnly);
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond logging for this scaffold.
+#endregion

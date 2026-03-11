@@ -1,0 +1,49 @@
+{
+    "Name":  "IMF.P.Security.SetCubeAccess",
+    "Purpose":  "Apply or log a single cube-security assignment for an IMF group.",
+    "Code@Code.link":  "IMF.P.Security.SetCubeAccess.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pEnvironment",
+                           "Prompt":  "Environment",
+                           "Value":  "DEV",
+                           "Description":  "Parameter pEnvironment"
+                       },
+                       {
+                           "Name":  "pCubeName",
+                           "Prompt":  "Cube Name",
+                           "Value":  "",
+                           "Description":  "Parameter pCubeName"
+                       },
+                       {
+                           "Name":  "pGroupName",
+                           "Prompt":  "Group Name",
+                           "Value":  "",
+                           "Description":  "Parameter pGroupName"
+                       },
+                       {
+                           "Name":  "pAccess",
+                           "Prompt":  "Access",
+                           "Value":  "READ",
+                           "Description":  "Parameter pAccess"
+                       },
+                       {
+                           "Name":  "pLogOnly",
+                           "Prompt":  "Log Only",
+                           "Value":  "N",
+                           "Description":  "Parameter pLogOnly"
+                       }
+                   ],
+    "Sections":  {
+                     "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsCubeName = Trim(pCubeName);\r\nsGroupName = Trim(pGroupName);\r\nsAccess = Upper(Trim(pAccess));\r\nsLogOnly = Upper(Trim(pLogOnly));\r\nIf((sCubeName @= \u0027\u0027) % (sGroupName @= \u0027\u0027)); ProcessBreak; EndIf;\r\n# TODO: Confirm }CubeSecurity dimension order before enabling native writes.\r\n# CellPutS(sAccess, \u0027}CubeSecurity\u0027, sGroupName, sCubeName);\r\nExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027SET_CUBE_ACCESS\u0027, \u0027pObjectType\u0027, \u0027CUBE\u0027, \u0027pObjectName\u0027, sCubeName, \u0027pStatus\u0027, If(sLogOnly @= \u0027Y\u0027, \u0027INFO\u0027, \u0027TODO\u0027), \u0027pMessage\u0027, \u0027Group=\u0027 | sGroupName | \u0027; access=\u0027 | sAccess | \u0027; logOnly=\u0027 | sLogOnly);",
+                     "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
+                     "Data":  "# No Data tab logic in this scaffold.",
+                     "Epilog":  "# No Epilog tab logic beyond logging for this scaffold."
+                 },
+    "Tags":  [
+                 "IMF",
+                 "Security",
+                 "CubeSecurity",
+                 "EnvironmentAware"
+             ]
+}

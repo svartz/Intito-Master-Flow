@@ -1,0 +1,42 @@
+# IMF.P.Security.LogBootstrap
+# Purpose: Write deterministic log output for IMF security bootstrap and validation activities.
+# Sources:
+# - IMF security model and documentation
+# - TM1 native security control objects
+# - IMF.P.Security.LogBootstrap
+# Parameters:
+# - pEnvironment: Parameter pEnvironment Default 'DEV'.
+# - pAction: Parameter pAction
+# - pObjectType: Parameter pObjectType
+# - pObjectName: Parameter pObjectName
+# - pStatus: Parameter pStatus Default 'INFO'.
+# - pMessage: Parameter pMessage
+# Prolog:
+# - Validate parameters and execute the process-specific security workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave a deterministic log trail and clearly surface all TODOs.
+
+#region prolog
+sEnvironment = Upper(Trim(pEnvironment));
+sStatus = Upper(Trim(pStatus));
+If(sStatus @= ''); sStatus = 'INFO'; EndIf;
+sLogLine = '[IMF_SECURITY][' | sEnvironment | '][' | sStatus | '][' | Trim(pAction) | '][' | Trim(pObjectType) | '][' | Trim(pObjectName) | '] ' | Trim(pMessage);
+LogOutput('INFO', sLogLine);
+# TODO: Mirror the same log line into IMF.C.EventLog once the target cube grain is finalized.
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond logging for this scaffold.
+#endregion

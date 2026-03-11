@@ -1,0 +1,55 @@
+{
+    "Name":  "IMF.P.Security.LogBootstrap",
+    "Purpose":  "Write deterministic log output for IMF security bootstrap and validation activities.",
+    "Code@Code.link":  "IMF.P.Security.LogBootstrap.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pEnvironment",
+                           "Prompt":  "Environment",
+                           "Value":  "DEV",
+                           "Description":  "Parameter pEnvironment"
+                       },
+                       {
+                           "Name":  "pAction",
+                           "Prompt":  "Action",
+                           "Value":  "",
+                           "Description":  "Parameter pAction"
+                       },
+                       {
+                           "Name":  "pObjectType",
+                           "Prompt":  "Object Type",
+                           "Value":  "",
+                           "Description":  "Parameter pObjectType"
+                       },
+                       {
+                           "Name":  "pObjectName",
+                           "Prompt":  "Object Name",
+                           "Value":  "",
+                           "Description":  "Parameter pObjectName"
+                       },
+                       {
+                           "Name":  "pStatus",
+                           "Prompt":  "Status",
+                           "Value":  "INFO",
+                           "Description":  "Parameter pStatus"
+                       },
+                       {
+                           "Name":  "pMessage",
+                           "Prompt":  "Message",
+                           "Value":  "",
+                           "Description":  "Parameter pMessage"
+                       }
+                   ],
+    "Sections":  {
+                     "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsStatus = Upper(Trim(pStatus));\r\nIf(sStatus @= \u0027\u0027); sStatus = \u0027INFO\u0027; EndIf;\r\nsLogLine = \u0027[IMF_SECURITY][\u0027 | sEnvironment | \u0027][\u0027 | sStatus | \u0027][\u0027 | Trim(pAction) | \u0027][\u0027 | Trim(pObjectType) | \u0027][\u0027 | Trim(pObjectName) | \u0027] \u0027 | Trim(pMessage);\r\nLogOutput(\u0027INFO\u0027, sLogLine);\r\n# TODO: Mirror the same log line into IMF.C.EventLog once the target cube grain is finalized.",
+                     "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
+                     "Data":  "# No Data tab logic in this scaffold.",
+                     "Epilog":  "# No Epilog tab logic beyond logging for this scaffold."
+                 },
+    "Tags":  [
+                 "IMF",
+                 "Security",
+                 "Logging",
+                 "EnvironmentAware"
+             ]
+}

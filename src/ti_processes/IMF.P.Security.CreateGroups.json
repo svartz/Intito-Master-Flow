@@ -1,0 +1,31 @@
+{
+    "Name":  "IMF.P.Security.CreateGroups",
+    "Purpose":  "Provision or validate the required IMF security groups.",
+    "Code@Code.link":  "IMF.P.Security.CreateGroups.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pEnvironment",
+                           "Prompt":  "Environment",
+                           "Value":  "DEV",
+                           "Description":  "Parameter pEnvironment"
+                       },
+                       {
+                           "Name":  "pCreateIfExistsBehavior",
+                           "Prompt":  "Create If Exists Behavior",
+                           "Value":  "SKIP",
+                           "Description":  "Parameter pCreateIfExistsBehavior"
+                       }
+                   ],
+    "Sections":  {
+                     "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsCreateBehavior = Upper(Trim(pCreateIfExistsBehavior));\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Admin\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Developer\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Operator\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Approver\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Editor\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Viewer\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Auditor\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);\r\nExecuteProcess(\u0027IMF.P.Security.CreateSingleGroup\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pGroupName\u0027, \u0027IMF_Service\u0027, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior);",
+                     "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
+                     "Data":  "# No Data tab logic in this scaffold.",
+                     "Epilog":  "# No Epilog tab logic beyond logging for this scaffold."
+                 },
+    "Tags":  [
+                 "IMF",
+                 "Security",
+                 "Groups",
+                 "EnvironmentAware"
+             ]
+}

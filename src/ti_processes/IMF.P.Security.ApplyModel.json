@@ -1,0 +1,31 @@
+{
+    "Name":  "IMF.P.Security.ApplyModel",
+    "Purpose":  "Apply the cube and dimension security model for IMF objects.",
+    "Code@Code.link":  "IMF.P.Security.ApplyModel.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pEnvironment",
+                           "Prompt":  "Environment",
+                           "Value":  "DEV",
+                           "Description":  "Parameter pEnvironment"
+                       },
+                       {
+                           "Name":  "pLogOnly",
+                           "Prompt":  "Log Only",
+                           "Value":  "N",
+                           "Description":  "Parameter pLogOnly"
+                       }
+                   ],
+    "Sections":  {
+                     "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsLogOnly = Upper(Trim(pLogOnly));\r\nExecuteProcess(\u0027IMF.P.Security.SetCubeAccess\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pCubeName\u0027, \u0027IMF.C.Config\u0027, \u0027pGroupName\u0027, \u0027IMF_Admin\u0027, \u0027pAccess\u0027, \u0027WRITE\u0027, \u0027pLogOnly\u0027, sLogOnly);\r\nExecuteProcess(\u0027IMF.P.Security.SetCubeAccess\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pCubeName\u0027, \u0027IMF.C.Version\u0027, \u0027pGroupName\u0027, \u0027IMF_Operator\u0027, \u0027pAccess\u0027, \u0027WRITE\u0027, \u0027pLogOnly\u0027, sLogOnly);\r\nExecuteProcess(\u0027IMF.P.Security.SetCubeAccess\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pCubeName\u0027, \u0027IMF.C.Impact\u0027, \u0027pGroupName\u0027, \u0027IMF_Auditor\u0027, \u0027pAccess\u0027, \u0027READ\u0027, \u0027pLogOnly\u0027, sLogOnly);\r\nExecuteProcess(\u0027IMF.P.Security.SetDimensionAccess\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pDimensionName\u0027, \u0027IMF.D.Version\u0027, \u0027pGroupName\u0027, \u0027IMF_Admin\u0027, \u0027pAccess\u0027, \u0027WRITE\u0027, \u0027pLogOnly\u0027, sLogOnly);\r\nExecuteProcess(\u0027IMF.P.Security.SetDimensionAccess\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pDimensionName\u0027, \u0027WorkDimensions\u0027, \u0027pGroupName\u0027, \u0027IMF_Editor\u0027, \u0027pAccess\u0027, If(sEnvironment @= \u0027PROD\u0027, \u0027READ\u0027, \u0027WRITE\u0027), \u0027pLogOnly\u0027, sLogOnly);",
+                     "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
+                     "Data":  "# No Data tab logic in this scaffold.",
+                     "Epilog":  "# No Epilog tab logic beyond logging for this scaffold."
+                 },
+    "Tags":  [
+                 "IMF",
+                 "Security",
+                 "ObjectSecurity",
+                 "EnvironmentAware"
+             ]
+}

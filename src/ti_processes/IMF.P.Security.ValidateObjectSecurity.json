@@ -1,0 +1,25 @@
+{
+    "Name":  "IMF.P.Security.ValidateObjectSecurity",
+    "Purpose":  "Validate that expected cube and dimension security assignments have been applied.",
+    "Code@Code.link":  "IMF.P.Security.ValidateObjectSecurity.ti",
+    "Parameters":  [
+                       {
+                           "Name":  "pEnvironment",
+                           "Prompt":  "Environment",
+                           "Value":  "DEV",
+                           "Description":  "Parameter pEnvironment"
+                       }
+                   ],
+    "Sections":  {
+                     "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nIf(sEnvironment @= \u0027\u0027); sEnvironment = \u0027DEV\u0027; EndIf;\r\n# TODO: Implement environment-specific security behavior for IMF.P.Security.ValidateObjectSecurity.\r\nExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027IMF.P.Security.ValidateObjectSecurity\u0027, \u0027pObjectType\u0027, \u0027SECURITY_PROCESS\u0027, \u0027pObjectName\u0027, \u0027IMF.P.Security.ValidateObjectSecurity\u0027, \u0027pStatus\u0027, \u0027TODO\u0027, \u0027pMessage\u0027, \u0027TODO: Complete process logic for IMF.P.Security.ValidateObjectSecurity.\u0027);",
+                     "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
+                     "Data":  "# No Data tab logic in this scaffold.",
+                     "Epilog":  "# No Epilog tab logic beyond logging for this scaffold."
+                 },
+    "Tags":  [
+                 "IMF",
+                 "Security",
+                 "Validation",
+                 "EnvironmentAware"
+             ]
+}
