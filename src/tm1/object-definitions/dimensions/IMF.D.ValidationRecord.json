@@ -1,0 +1,16 @@
+{
+  "name": "IMF.D.ValidationRecord",
+  "kind": "supporting-control-dimension",
+  "purpose": "Synthetic ids for validation findings created during technical and business checks.",
+  "hierarchy": {
+    "root": "All Validation Records",
+    "seedElements": [
+      { "name": "__Template.ValidationRecord", "type": "N", "parent": "All Validation Records", "weight": 1 }
+    ]
+  },
+  "attributes": [
+    { "name": "VersionId", "type": "string", "required": false },
+    { "name": "DimensionCode", "type": "string", "required": false },
+    { "name": "ValidationType", "type": "string", "required": false }
+  ]
+}

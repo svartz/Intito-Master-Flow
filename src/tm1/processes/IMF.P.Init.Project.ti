@@ -18,9 +18,12 @@ sDimConfigKey = sPrefix | '.D.ConfigKey';
 sDimVersionMeasure = sPrefix | '.D.VersionMeasure';
 sDimDiffRecord = sPrefix | '.D.DiffRecord';
 sDimDiffMeasure = sPrefix | '.D.DiffMeasure';
+sDimValidationRecord = sPrefix | '.D.ValidationRecord';
+sDimValidationMeasure = sPrefix | '.D.ValidationMeasure';
 sCubeConfig = sPrefix | '.C.Config';
 sCubeVersion = sPrefix | '.C.Version';
 sCubeDiff = sPrefix | '.C.Diff';
+sCubeValidation = sPrefix | '.C.Validation';
 
 sStatusList = Trim(pStatusCsv);
 If(sStatusList @= '');
@@ -48,6 +51,12 @@ If(DimensionExists(sDimDiffRecord) = 0);
 EndIf;
 If(DimensionExists(sDimDiffMeasure) = 0);
   DimensionCreate(sDimDiffMeasure);
+EndIf;
+If(DimensionExists(sDimValidationRecord) = 0);
+  DimensionCreate(sDimValidationRecord);
+EndIf;
+If(DimensionExists(sDimValidationMeasure) = 0);
+  DimensionCreate(sDimValidationMeasure);
 EndIf;
 
 # Create root and template elements used by the control model.
@@ -88,6 +97,16 @@ EndIf;
 If(DimensionElementExists(sDimDiffMeasure, 'All Diff Measures') = 0);
   DimensionElementInsert(sDimDiffMeasure, '', 'All Diff Measures', 'C');
 EndIf;
+If(DimensionElementExists(sDimValidationRecord, 'All Validation Records') = 0);
+  DimensionElementInsert(sDimValidationRecord, '', 'All Validation Records', 'C');
+EndIf;
+If(DimensionElementExists(sDimValidationRecord, '__Template.ValidationRecord') = 0);
+  DimensionElementInsert(sDimValidationRecord, '', '__Template.ValidationRecord', 'N');
+  DimensionElementComponentAdd(sDimValidationRecord, 'All Validation Records', '__Template.ValidationRecord', 1);
+EndIf;
+If(DimensionElementExists(sDimValidationMeasure, 'All Validation Measures') = 0);
+  DimensionElementInsert(sDimValidationMeasure, '', 'All Validation Measures', 'C');
+EndIf;
 
 # Create control-dimension attributes.
 AttrInsert(sDimDimension, '', 'MasterDimensionName', 'S');
@@ -127,6 +146,10 @@ AttrInsert(sDimDiffRecord, '', 'VersionId', 'S');
 AttrInsert(sDimDiffRecord, '', 'DimensionCode', 'S');
 AttrInsert(sDimDiffRecord, '', 'ChangeType', 'S');
 AttrInsert(sDimDiffMeasure, '', 'ValueType', 'S');
+AttrInsert(sDimValidationRecord, '', 'VersionId', 'S');
+AttrInsert(sDimValidationRecord, '', 'DimensionCode', 'S');
+AttrInsert(sDimValidationRecord, '', 'ValidationType', 'S');
+AttrInsert(sDimValidationMeasure, '', 'ValueType', 'S');
 
 # Populate status dimension from the parameter string.
 sRemaining = sStatusList;
@@ -303,6 +326,42 @@ If(DimensionElementExists(sDimDiffMeasure, 'DetectedAt') = 0);
   DimensionElementInsert(sDimDiffMeasure, '', 'DetectedAt', 'N');
   DimensionElementComponentAdd(sDimDiffMeasure, 'All Diff Measures', 'DetectedAt', 1);
 EndIf;
+If(DimensionElementExists(sDimValidationMeasure, 'VersionId') = 0);
+  DimensionElementInsert(sDimValidationMeasure, '', 'VersionId', 'N');
+  DimensionElementComponentAdd(sDimValidationMeasure, 'All Validation Measures', 'VersionId', 1);
+EndIf;
+If(DimensionElementExists(sDimValidationMeasure, 'DimensionCode') = 0);
+  DimensionElementInsert(sDimValidationMeasure, '', 'DimensionCode', 'N');
+  DimensionElementComponentAdd(sDimValidationMeasure, 'All Validation Measures', 'DimensionCode', 1);
+EndIf;
+If(DimensionElementExists(sDimValidationMeasure, 'ValidationType') = 0);
+  DimensionElementInsert(sDimValidationMeasure, '', 'ValidationType', 'N');
+  DimensionElementComponentAdd(sDimValidationMeasure, 'All Validation Measures', 'ValidationType', 1);
+EndIf;
+If(DimensionElementExists(sDimValidationMeasure, 'RuleCode') = 0);
+  DimensionElementInsert(sDimValidationMeasure, '', 'RuleCode', 'N');
+  DimensionElementComponentAdd(sDimValidationMeasure, 'All Validation Measures', 'RuleCode', 1);
+EndIf;
+If(DimensionElementExists(sDimValidationMeasure, 'ObjectName') = 0);
+  DimensionElementInsert(sDimValidationMeasure, '', 'ObjectName', 'N');
+  DimensionElementComponentAdd(sDimValidationMeasure, 'All Validation Measures', 'ObjectName', 1);
+EndIf;
+If(DimensionElementExists(sDimValidationMeasure, 'AttributeName') = 0);
+  DimensionElementInsert(sDimValidationMeasure, '', 'AttributeName', 'N');
+  DimensionElementComponentAdd(sDimValidationMeasure, 'All Validation Measures', 'AttributeName', 1);
+EndIf;
+If(DimensionElementExists(sDimValidationMeasure, 'Severity') = 0);
+  DimensionElementInsert(sDimValidationMeasure, '', 'Severity', 'N');
+  DimensionElementComponentAdd(sDimValidationMeasure, 'All Validation Measures', 'Severity', 1);
+EndIf;
+If(DimensionElementExists(sDimValidationMeasure, 'Message') = 0);
+  DimensionElementInsert(sDimValidationMeasure, '', 'Message', 'N');
+  DimensionElementComponentAdd(sDimValidationMeasure, 'All Validation Measures', 'Message', 1);
+EndIf;
+If(DimensionElementExists(sDimValidationMeasure, 'DetectedAt') = 0);
+  DimensionElementInsert(sDimValidationMeasure, '', 'DetectedAt', 'N');
+  DimensionElementComponentAdd(sDimValidationMeasure, 'All Validation Measures', 'DetectedAt', 1);
+EndIf;
 
 AttrPutS('String', sDimVersionMeasure, 'DimensionCode', 'ValueType');
 AttrPutS('String', sDimVersionMeasure, 'Status', 'ValueType');
@@ -332,6 +391,15 @@ AttrPutS('String', sDimDiffMeasure, 'OldValue', 'ValueType');
 AttrPutS('String', sDimDiffMeasure, 'NewValue', 'ValueType');
 AttrPutS('String', sDimDiffMeasure, 'Severity', 'ValueType');
 AttrPutS('String', sDimDiffMeasure, 'DetectedAt', 'ValueType');
+AttrPutS('String', sDimValidationMeasure, 'VersionId', 'ValueType');
+AttrPutS('String', sDimValidationMeasure, 'DimensionCode', 'ValueType');
+AttrPutS('String', sDimValidationMeasure, 'ValidationType', 'ValueType');
+AttrPutS('String', sDimValidationMeasure, 'RuleCode', 'ValueType');
+AttrPutS('String', sDimValidationMeasure, 'ObjectName', 'ValueType');
+AttrPutS('String', sDimValidationMeasure, 'AttributeName', 'ValueType');
+AttrPutS('String', sDimValidationMeasure, 'Severity', 'ValueType');
+AttrPutS('String', sDimValidationMeasure, 'Message', 'ValueType');
+AttrPutS('String', sDimValidationMeasure, 'DetectedAt', 'ValueType');
 
 # Create cubes after all dimensions required by their grain exist.
 If(CubeExists(sCubeConfig) = 0);
@@ -342,6 +410,9 @@ If(CubeExists(sCubeVersion) = 0);
 EndIf;
 If(CubeExists(sCubeDiff) = 0);
   CubeCreate(sCubeDiff, sDimDiffRecord, sDimDiffMeasure);
+EndIf;
+If(CubeExists(sCubeValidation) = 0);
+  CubeCreate(sCubeValidation, sDimValidationRecord, sDimValidationMeasure);
 EndIf;
 
 # Seed a template config row used when onboarding new managed dimensions.

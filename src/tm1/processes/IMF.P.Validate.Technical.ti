@@ -1,0 +1,46 @@
+# Intito MasterFlow technical validation
+# Purpose: Run technical validation checks against a work version.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pVersionId      Existing work version
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sDimensionCode = Trim(pDimensionCode);
+sVersionId = Trim(pVersionId);
+
+sDimVersion = sPrefix | '.D.Version';
+sCubeVersion = sPrefix | '.C.Version';
+
+If(sDimensionCode @= '');
+  ProcessBreak;
+EndIf;
+If(sVersionId @= '');
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimVersion, sVersionId) = 0);
+  ProcessBreak;
+EndIf;
+If(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);
+  ProcessBreak;
+EndIf;
+
+ExecuteProcess(sPrefix | '.P.Validate.Attributes',
+  'pPrefix', sPrefix,
+  'pDimensionCode', sDimensionCode,
+  'pVersionId', sVersionId);
+
+# Placeholder for remaining technical checks:
+# 1. duplicate keys
+# 2. invalid hierarchies
+# 3. orphan elements
+# 4. alias collisions
+
+AttrPutS('Validated', sDimVersion, sVersionId, 'Status');
+CellPutS('Validated', sCubeVersion, sVersionId, 'Status');
+CellPutS('Technical validation executed for work version.', sCubeVersion, sVersionId, 'Notes');

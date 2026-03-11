@@ -1,0 +1,12 @@
+{
+  "name": "IMF.C.Validation",
+  "kind": "control-cube",
+  "purpose": "Stores technical and business validation findings for work versions.",
+  "dimensions": [
+    "IMF.D.ValidationRecord",
+    "IMF.D.ValidationMeasure"
+  ],
+  "cellTypes": {
+    "default": "string"
+  }
+}

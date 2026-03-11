@@ -1,0 +1,38 @@
+# Intito MasterFlow business validation
+# Purpose: Run business-rule validation checks against a work version.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pVersionId      Existing work version
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sDimensionCode = Trim(pDimensionCode);
+sVersionId = Trim(pVersionId);
+
+sDimVersion = sPrefix | '.D.Version';
+sCubeVersion = sPrefix | '.C.Version';
+
+If(sDimensionCode @= '');
+  ProcessBreak;
+EndIf;
+If(sVersionId @= '');
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimVersion, sVersionId) = 0);
+  ProcessBreak;
+EndIf;
+If(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);
+  ProcessBreak;
+EndIf;
+
+# Placeholder for business validation checks:
+# 1. required business rollups
+# 2. required publish approvals
+# 3. business-owned attribute completeness
+
+CellPutS('Business validation executed for work version.', sCubeVersion, sVersionId, 'Notes');
