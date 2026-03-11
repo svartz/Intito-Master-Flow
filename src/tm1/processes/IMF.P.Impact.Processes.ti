@@ -1,0 +1,17 @@
+# Intito MasterFlow impact analysis for TI processes
+# Purpose: Evaluate process dependencies affected by a version diff.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pVersionId      Existing work version
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+# Placeholder:
+# 1. scan TI processes for dimension, subset, and attribute references
+# 2. classify direct and indirect breakage
+# 3. write impact findings to IMF.C.Impact

@@ -1,0 +1,21 @@
+{
+  "name": "IMF.D.ImpactMeasure",
+  "kind": "supporting-control-dimension",
+  "purpose": "Measures stored for each impact analysis result.",
+  "hierarchy": {
+    "root": "All Impact Measures",
+    "seedElements": [
+      { "name": "VersionId", "type": "N", "parent": "All Impact Measures", "weight": 1 },
+      { "name": "DimensionCode", "type": "N", "parent": "All Impact Measures", "weight": 1 },
+      { "name": "ImpactDomain", "type": "N", "parent": "All Impact Measures", "weight": 1 },
+      { "name": "ObjectType", "type": "N", "parent": "All Impact Measures", "weight": 1 },
+      { "name": "ObjectName", "type": "N", "parent": "All Impact Measures", "weight": 1 },
+      { "name": "Severity", "type": "N", "parent": "All Impact Measures", "weight": 1 },
+      { "name": "Message", "type": "N", "parent": "All Impact Measures", "weight": 1 },
+      { "name": "DetectedAt", "type": "N", "parent": "All Impact Measures", "weight": 1 }
+    ]
+  },
+  "attributes": [
+    { "name": "ValueType", "type": "string", "required": true }
+  ]
+}

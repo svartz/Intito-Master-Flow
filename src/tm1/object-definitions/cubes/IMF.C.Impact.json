@@ -1,0 +1,12 @@
+{
+  "name": "IMF.C.Impact",
+  "kind": "control-cube",
+  "purpose": "Stores impact analysis findings by domain for a work version.",
+  "dimensions": [
+    "IMF.D.ImpactRecord",
+    "IMF.D.ImpactMeasure"
+  ],
+  "cellTypes": {
+    "default": "string"
+  }
+}

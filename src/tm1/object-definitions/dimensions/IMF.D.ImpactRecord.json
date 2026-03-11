@@ -1,0 +1,16 @@
+{
+  "name": "IMF.D.ImpactRecord",
+  "kind": "supporting-control-dimension",
+  "purpose": "Synthetic ids for impact records created during impact analysis.",
+  "hierarchy": {
+    "root": "All Impact Records",
+    "seedElements": [
+      { "name": "__Template.ImpactRecord", "type": "N", "parent": "All Impact Records", "weight": 1 }
+    ]
+  },
+  "attributes": [
+    { "name": "VersionId", "type": "string", "required": false },
+    { "name": "DimensionCode", "type": "string", "required": false },
+    { "name": "ImpactDomain", "type": "string", "required": false }
+  ]
+}

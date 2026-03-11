@@ -20,10 +20,13 @@ sDimDiffRecord = sPrefix | '.D.DiffRecord';
 sDimDiffMeasure = sPrefix | '.D.DiffMeasure';
 sDimValidationRecord = sPrefix | '.D.ValidationRecord';
 sDimValidationMeasure = sPrefix | '.D.ValidationMeasure';
+sDimImpactRecord = sPrefix | '.D.ImpactRecord';
+sDimImpactMeasure = sPrefix | '.D.ImpactMeasure';
 sCubeConfig = sPrefix | '.C.Config';
 sCubeVersion = sPrefix | '.C.Version';
 sCubeDiff = sPrefix | '.C.Diff';
 sCubeValidation = sPrefix | '.C.Validation';
+sCubeImpact = sPrefix | '.C.Impact';
 
 sStatusList = Trim(pStatusCsv);
 If(sStatusList @= '');
@@ -57,6 +60,12 @@ If(DimensionExists(sDimValidationRecord) = 0);
 EndIf;
 If(DimensionExists(sDimValidationMeasure) = 0);
   DimensionCreate(sDimValidationMeasure);
+EndIf;
+If(DimensionExists(sDimImpactRecord) = 0);
+  DimensionCreate(sDimImpactRecord);
+EndIf;
+If(DimensionExists(sDimImpactMeasure) = 0);
+  DimensionCreate(sDimImpactMeasure);
 EndIf;
 
 # Create root and template elements used by the control model.
@@ -107,6 +116,16 @@ EndIf;
 If(DimensionElementExists(sDimValidationMeasure, 'All Validation Measures') = 0);
   DimensionElementInsert(sDimValidationMeasure, '', 'All Validation Measures', 'C');
 EndIf;
+If(DimensionElementExists(sDimImpactRecord, 'All Impact Records') = 0);
+  DimensionElementInsert(sDimImpactRecord, '', 'All Impact Records', 'C');
+EndIf;
+If(DimensionElementExists(sDimImpactRecord, '__Template.ImpactRecord') = 0);
+  DimensionElementInsert(sDimImpactRecord, '', '__Template.ImpactRecord', 'N');
+  DimensionElementComponentAdd(sDimImpactRecord, 'All Impact Records', '__Template.ImpactRecord', 1);
+EndIf;
+If(DimensionElementExists(sDimImpactMeasure, 'All Impact Measures') = 0);
+  DimensionElementInsert(sDimImpactMeasure, '', 'All Impact Measures', 'C');
+EndIf;
 
 # Create control-dimension attributes.
 AttrInsert(sDimDimension, '', 'MasterDimensionName', 'S');
@@ -150,6 +169,10 @@ AttrInsert(sDimValidationRecord, '', 'VersionId', 'S');
 AttrInsert(sDimValidationRecord, '', 'DimensionCode', 'S');
 AttrInsert(sDimValidationRecord, '', 'ValidationType', 'S');
 AttrInsert(sDimValidationMeasure, '', 'ValueType', 'S');
+AttrInsert(sDimImpactRecord, '', 'VersionId', 'S');
+AttrInsert(sDimImpactRecord, '', 'DimensionCode', 'S');
+AttrInsert(sDimImpactRecord, '', 'ImpactDomain', 'S');
+AttrInsert(sDimImpactMeasure, '', 'ValueType', 'S');
 
 # Populate status dimension from the parameter string.
 sRemaining = sStatusList;
@@ -362,6 +385,38 @@ If(DimensionElementExists(sDimValidationMeasure, 'DetectedAt') = 0);
   DimensionElementInsert(sDimValidationMeasure, '', 'DetectedAt', 'N');
   DimensionElementComponentAdd(sDimValidationMeasure, 'All Validation Measures', 'DetectedAt', 1);
 EndIf;
+If(DimensionElementExists(sDimImpactMeasure, 'VersionId') = 0);
+  DimensionElementInsert(sDimImpactMeasure, '', 'VersionId', 'N');
+  DimensionElementComponentAdd(sDimImpactMeasure, 'All Impact Measures', 'VersionId', 1);
+EndIf;
+If(DimensionElementExists(sDimImpactMeasure, 'DimensionCode') = 0);
+  DimensionElementInsert(sDimImpactMeasure, '', 'DimensionCode', 'N');
+  DimensionElementComponentAdd(sDimImpactMeasure, 'All Impact Measures', 'DimensionCode', 1);
+EndIf;
+If(DimensionElementExists(sDimImpactMeasure, 'ImpactDomain') = 0);
+  DimensionElementInsert(sDimImpactMeasure, '', 'ImpactDomain', 'N');
+  DimensionElementComponentAdd(sDimImpactMeasure, 'All Impact Measures', 'ImpactDomain', 1);
+EndIf;
+If(DimensionElementExists(sDimImpactMeasure, 'ObjectType') = 0);
+  DimensionElementInsert(sDimImpactMeasure, '', 'ObjectType', 'N');
+  DimensionElementComponentAdd(sDimImpactMeasure, 'All Impact Measures', 'ObjectType', 1);
+EndIf;
+If(DimensionElementExists(sDimImpactMeasure, 'ObjectName') = 0);
+  DimensionElementInsert(sDimImpactMeasure, '', 'ObjectName', 'N');
+  DimensionElementComponentAdd(sDimImpactMeasure, 'All Impact Measures', 'ObjectName', 1);
+EndIf;
+If(DimensionElementExists(sDimImpactMeasure, 'Severity') = 0);
+  DimensionElementInsert(sDimImpactMeasure, '', 'Severity', 'N');
+  DimensionElementComponentAdd(sDimImpactMeasure, 'All Impact Measures', 'Severity', 1);
+EndIf;
+If(DimensionElementExists(sDimImpactMeasure, 'Message') = 0);
+  DimensionElementInsert(sDimImpactMeasure, '', 'Message', 'N');
+  DimensionElementComponentAdd(sDimImpactMeasure, 'All Impact Measures', 'Message', 1);
+EndIf;
+If(DimensionElementExists(sDimImpactMeasure, 'DetectedAt') = 0);
+  DimensionElementInsert(sDimImpactMeasure, '', 'DetectedAt', 'N');
+  DimensionElementComponentAdd(sDimImpactMeasure, 'All Impact Measures', 'DetectedAt', 1);
+EndIf;
 
 AttrPutS('String', sDimVersionMeasure, 'DimensionCode', 'ValueType');
 AttrPutS('String', sDimVersionMeasure, 'Status', 'ValueType');
@@ -400,6 +455,14 @@ AttrPutS('String', sDimValidationMeasure, 'AttributeName', 'ValueType');
 AttrPutS('String', sDimValidationMeasure, 'Severity', 'ValueType');
 AttrPutS('String', sDimValidationMeasure, 'Message', 'ValueType');
 AttrPutS('String', sDimValidationMeasure, 'DetectedAt', 'ValueType');
+AttrPutS('String', sDimImpactMeasure, 'VersionId', 'ValueType');
+AttrPutS('String', sDimImpactMeasure, 'DimensionCode', 'ValueType');
+AttrPutS('String', sDimImpactMeasure, 'ImpactDomain', 'ValueType');
+AttrPutS('String', sDimImpactMeasure, 'ObjectType', 'ValueType');
+AttrPutS('String', sDimImpactMeasure, 'ObjectName', 'ValueType');
+AttrPutS('String', sDimImpactMeasure, 'Severity', 'ValueType');
+AttrPutS('String', sDimImpactMeasure, 'Message', 'ValueType');
+AttrPutS('String', sDimImpactMeasure, 'DetectedAt', 'ValueType');
 
 # Create cubes after all dimensions required by their grain exist.
 If(CubeExists(sCubeConfig) = 0);
@@ -413,6 +476,9 @@ If(CubeExists(sCubeDiff) = 0);
 EndIf;
 If(CubeExists(sCubeValidation) = 0);
   CubeCreate(sCubeValidation, sDimValidationRecord, sDimValidationMeasure);
+EndIf;
+If(CubeExists(sCubeImpact) = 0);
+  CubeCreate(sCubeImpact, sDimImpactRecord, sDimImpactMeasure);
 EndIf;
 
 # Seed a template config row used when onboarding new managed dimensions.

@@ -1,0 +1,42 @@
+# Intito MasterFlow impact analysis orchestrator
+# Purpose: Run all impact analysis domains for a work version.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pVersionId      Existing work version
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sDimensionCode = Trim(pDimensionCode);
+sVersionId = Trim(pVersionId);
+
+sDimVersion = sPrefix | '.D.Version';
+sCubeVersion = sPrefix | '.C.Version';
+
+If(sDimensionCode @= '');
+  ProcessBreak;
+EndIf;
+If(sVersionId @= '');
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimVersion, sVersionId) = 0);
+  ProcessBreak;
+EndIf;
+If(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);
+  ProcessBreak;
+EndIf;
+
+ExecuteProcess(sPrefix | '.P.Impact.Cubes', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
+ExecuteProcess(sPrefix | '.P.Impact.Views', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
+ExecuteProcess(sPrefix | '.P.Impact.Subsets', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
+ExecuteProcess(sPrefix | '.P.Impact.Processes', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
+ExecuteProcess(sPrefix | '.P.Impact.Security', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
+ExecuteProcess(sPrefix | '.P.Impact.Integrations', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
+
+AttrPutS('ImpactAnalyzed', sDimVersion, sVersionId, 'Status');
+CellPutS('ImpactAnalyzed', sCubeVersion, sVersionId, 'Status');
+CellPutS('Impact analysis executed across all configured domains.', sCubeVersion, sVersionId, 'Notes');

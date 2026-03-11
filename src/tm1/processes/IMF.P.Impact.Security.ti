@@ -1,0 +1,17 @@
+# Intito MasterFlow impact analysis for security
+# Purpose: Evaluate security object dependencies affected by a version diff.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pVersionId      Existing work version
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+# Placeholder:
+# 1. inspect cell security, dimension security, and approval artefacts
+# 2. identify broken element-level permissions
+# 3. write impact findings to IMF.C.Impact

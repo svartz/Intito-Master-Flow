@@ -1,0 +1,17 @@
+# Intito MasterFlow impact analysis for integrations
+# Purpose: Evaluate integration contracts affected by a version diff.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pVersionId      Existing work version
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+# Placeholder:
+# 1. inspect export/import contracts and downstream interface assumptions
+# 2. classify changes to keys, paths, and required attributes
+# 3. write impact findings to IMF.C.Impact

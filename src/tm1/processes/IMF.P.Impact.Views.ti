@@ -1,0 +1,17 @@
+# Intito MasterFlow impact analysis for views
+# Purpose: Evaluate view dependencies affected by a version diff.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pVersionId      Existing work version
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+# Placeholder:
+# 1. scan public and private views referencing the dimension
+# 2. classify broken element references and hierarchy moves
+# 3. write impact findings to IMF.C.Impact

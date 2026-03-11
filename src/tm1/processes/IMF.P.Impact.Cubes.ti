@@ -1,0 +1,17 @@
+# Intito MasterFlow impact analysis for cubes
+# Purpose: Evaluate cube dependencies affected by a version diff.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pVersionId      Existing work version
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+# Placeholder:
+# 1. read IMF.C.Diff for the version
+# 2. identify cubes using the managed dimension
+# 3. write impact findings to IMF.C.Impact
