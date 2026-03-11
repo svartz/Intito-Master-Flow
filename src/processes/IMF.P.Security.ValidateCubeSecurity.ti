@@ -1,0 +1,40 @@
+# IMF.P.Security.ValidateCubeSecurity
+# Purpose: Validate cube-level IMF security assignments.
+# Sources:
+# - IMF security control model
+# - IMF.C.Version ownership metadata where applicable
+# - TM1 native security control objects where applicable
+# Parameters:
+# - pEnvironment: Parameter pEnvironment Default 'DEV'.
+# - pLogToCube: Parameter pLogToCube Default 'Y'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Audit.log'.
+# - pOutputFile: Parameter pOutputFile Default 'docs/security/IMF_Security_Matrix.csv'.
+# Prolog:
+# - Execute the process-specific security hardening workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave a deterministic log trail and clearly surface all TODOs.
+
+#region prolog
+sEnvironment = Upper(Trim(pEnvironment));
+sOutputFile = Trim(pOutputFile);
+If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
+ExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_CUBE_SECURITY', 'pObjectType', 'CUBE', 'pObjectName', 'IMF_MODEL', 'pStatus', 'INFO', 'pMessage', 'Validating cube security.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+# TODO: Read effective access from }CubeSecurity and compare against the documented IMF cube matrix.
+# TODO: Write any mismatches to the shared security matrix export.
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond logging for this scaffold.
+#endregion

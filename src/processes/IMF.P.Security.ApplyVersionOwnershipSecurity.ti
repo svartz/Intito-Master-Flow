@@ -1,0 +1,46 @@
+# IMF.P.Security.ApplyVersionOwnershipSecurity
+# Purpose: Apply ownership-based security controls for IMF work versions.
+# Sources:
+# - IMF security control model
+# - IMF.C.Version ownership metadata where applicable
+# - TM1 native security control objects where applicable
+# Parameters:
+# - pEnvironment: Parameter pEnvironment Default 'DEV'.
+# - pLogToCube: Parameter pLogToCube Default 'Y'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Audit.log'.
+# - pVersionId: Parameter pVersionId Default ''.
+# - pOwner: Parameter pOwner Default ''.
+# - pStatus: Parameter pStatus Default ''.
+# Prolog:
+# - Execute the process-specific security hardening workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave a deterministic log trail and clearly surface all TODOs.
+
+#region prolog
+sEnvironment = Upper(Trim(pEnvironment));
+sVersionId = Trim(pVersionId);
+sOwner = Trim(pOwner);
+sStatus = Upper(Trim(pStatus));
+If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
+ExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_VERSION_OWNERSHIP_START', 'pObjectType', 'VERSION', 'pObjectName', sVersionId, 'pStatus', 'INFO', 'pMessage', 'Applying version ownership rules.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+# TODO: Resolve owner-to-group mapping for editor access on the target version.
+# TODO: Apply ownership controls to work-dimension and version metadata access surfaces.
+# TODO: In PROD, block any developer bypass path that is only acceptable in DEV.
+ExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_VERSION_OWNERSHIP_END', 'pObjectType', 'VERSION', 'pObjectName', sVersionId, 'pStatus', 'INFO', 'pMessage', 'Version ownership rules prepared.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond logging for this scaffold.
+#endregion

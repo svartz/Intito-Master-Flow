@@ -1,0 +1,47 @@
+# IMF.P.Security.ApplyElementSecurity
+# Purpose: Apply element-level security rules for IMF managed work and archive versions.
+# Sources:
+# - IMF security control model
+# - IMF.C.Version ownership metadata where applicable
+# - TM1 native security control objects where applicable
+# Parameters:
+# - pEnvironment: Parameter pEnvironment Default 'DEV'.
+# - pLogToCube: Parameter pLogToCube Default 'Y'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Audit.log'.
+# - pDimensionName: Parameter pDimensionName Default ''.
+# - pVersionId: Parameter pVersionId Default ''.
+# - pRoleFilter: Parameter pRoleFilter Default ''.
+# Prolog:
+# - Execute the process-specific security hardening workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave a deterministic log trail and clearly surface all TODOs.
+
+#region prolog
+sEnvironment = Upper(Trim(pEnvironment));
+sDimensionName = Trim(pDimensionName);
+sVersionId = Trim(pVersionId);
+sRoleFilter = Upper(Trim(pRoleFilter));
+If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
+ExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_ELEMENT_SECURITY_START', 'pObjectType', 'DIMENSION', 'pObjectName', sDimensionName, 'pStatus', 'INFO', 'pMessage', 'Applying element security rules.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+# TODO: Resolve the managed work or archive hierarchy and identify the corresponding }ElementSecurity_<Dimension> cube.
+# TODO: Set READ or NONE for IMF_Viewer on draft work versions unless explicit exception rules exist.
+# TODO: Set READ for IMF_Approver and WRITE for authorized owner/editor scope only.
+# TODO: Confirm native writeback pattern to }ElementSecurity_<Dimension> in the target environment.
+ExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_ELEMENT_SECURITY_END', 'pObjectType', 'DIMENSION', 'pObjectName', sDimensionName, 'pStatus', 'INFO', 'pMessage', 'Element security rules prepared.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond logging for this scaffold.
+#endregion

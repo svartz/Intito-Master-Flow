@@ -1,20 +1,16 @@
 Category,Process,IMF_Admin,IMF_Developer,IMF_Operator,IMF_Approver,IMF_Editor,IMF_Viewer,IMF_Auditor,IMF_Service,Notes
-Security processes,IMF.P.Security.BootstrapAll,EXECUTE,NONE,NONE,NONE,NONE,NONE,NONE,EXECUTE,Bootstrap reserved for Admin or automation.
-Security processes,IMF.P.Security.CreateGroups,EXECUTE,NONE,NONE,NONE,NONE,NONE,NONE,EXECUTE,Group provisioning reserved for Admin or automation.
-Security processes,IMF.P.Security.CreateSingleGroup,EXECUTE,NONE,NONE,NONE,NONE,NONE,NONE,EXECUTE,Environment-specific IAM integration expected.
-Security processes,IMF.P.Security.ApplyModel,EXECUTE,DEV_ONLY,NONE,NONE,NONE,NONE,READ,NONE,Developer execution only in DEV if delegated.
-Security processes,IMF.P.Security.SetCubeAccess,EXECUTE,DEV_ONLY,NONE,NONE,NONE,NONE,READ,NONE,Direct object-security assignment is privileged.
-Security processes,IMF.P.Security.SetDimensionAccess,EXECUTE,DEV_ONLY,NONE,NONE,NONE,NONE,READ,NONE,Direct object-security assignment is privileged.
-Security processes,IMF.P.Security.ExportProcessMatrix,EXECUTE,READ,READ,READ,READ,READ,READ,EXECUTE,Export is safe for review and automation.
-Security processes,IMF.P.Security.ExportSecurityMatrix,EXECUTE,READ,READ,READ,READ,READ,READ,EXECUTE,Export is safe for review and automation.
-Security processes,IMF.P.Security.ValidateGroups,EXECUTE,READ,READ,READ,NONE,NONE,READ,EXECUTE,Validation can be automated and audited.
-Security processes,IMF.P.Security.ValidateObjectSecurity,EXECUTE,READ,READ,READ,NONE,NONE,READ,EXECUTE,Validation can be automated and audited.
-Security processes,IMF.P.Security.LogBootstrap,EXECUTE,EXECUTE,EXECUTE,EXECUTE,EXECUTE,EXECUTE,EXECUTE,EXECUTE,Logging helper process only.
-Version processes,IMF.P.Version.*,EXECUTE,EXECUTE,EXECUTE,READ,WRITE,NONE,READ,EXECUTE,Category-level execution guidance.
-Compare processes,IMF.P.Compare.*,EXECUTE,EXECUTE,EXECUTE,READ,READ,NONE,READ,EXECUTE,Category-level execution guidance.
-Validation processes,IMF.P.Validate.*,EXECUTE,EXECUTE,EXECUTE,READ,READ,NONE,READ,EXECUTE,Category-level execution guidance.
-Impact processes,IMF.P.Impact.*,EXECUTE,EXECUTE,EXECUTE,READ,READ,NONE,READ,EXECUTE,Category-level execution guidance.
-Commit processes,IMF.P.Commit.*,EXECUTE,READ,EXECUTE,READ,NONE,NONE,READ,EXECUTE,Category-level execution guidance.
-Rollback processes,IMF.P.Rollback.*,EXECUTE,READ,EXECUTE,READ,NONE,NONE,READ,EXECUTE,Category-level execution guidance.
-Export processes,IMF.P.Export.*,EXECUTE,EXECUTE,EXECUTE,READ,READ,READ,READ,EXECUTE,Category-level execution guidance.
-Import processes,IMF.P.Import.*,EXECUTE,EXECUTE,EXECUTE,READ,WRITE,NONE,READ,EXECUTE,Category-level execution guidance.
+Security hardening,IMF.P.Security.ApplyElementSecurity,EXECUTE,DEV_ONLY,EXECUTE,READ,NONE,NONE,READ,EXECUTE,Applies element-level security controls.
+Security hardening,IMF.P.Security.ValidateElementSecurity,EXECUTE,READ,READ,READ,NONE,NONE,READ,EXECUTE,Validates element-level access.
+Security hardening,IMF.P.Security.ApplyVersionOwnershipSecurity,EXECUTE,DEV_ONLY,EXECUTE,READ,NONE,NONE,READ,EXECUTE,Applies ownership controls.
+Security hardening,IMF.P.Security.ValidateVersionOwnership,EXECUTE,READ,READ,READ,NONE,NONE,READ,EXECUTE,Validates ownership enforcement.
+Security hardening,IMF.P.Security.ApplyDimensionMasking,EXECUTE,DEV_ONLY,NONE,NONE,NONE,NONE,READ,EXECUTE,Applies masking to sensitive dimensions.
+Security hardening,IMF.P.Security.ValidateDimensionMasking,EXECUTE,READ,READ,READ,NONE,NONE,READ,EXECUTE,Validates masking outcomes.
+Security hardening,IMF.P.Security.LogSecurityEvent,EXECUTE,EXECUTE,EXECUTE,EXECUTE,EXECUTE,EXECUTE,EXECUTE,EXECUTE,Audit logging helper.
+Security hardening,IMF.P.Security.ExportSecurityAudit,EXECUTE,READ,READ,READ,NONE,NONE,READ,EXECUTE,Exports security audit trail.
+Security hardening,IMF.P.Security.ValidateCubeSecurity,EXECUTE,READ,READ,READ,NONE,NONE,READ,EXECUTE,Validates cube access.
+Security hardening,IMF.P.Security.ValidateDimensionSecurity,EXECUTE,READ,READ,READ,NONE,NONE,READ,EXECUTE,Validates dimension access.
+Security hardening,IMF.P.Security.ValidateFullModel,EXECUTE,READ,READ,READ,NONE,NONE,READ,EXECUTE,Runs full validation suite.
+Security hardening,IMF.P.Security.TestAccessEditor,EXECUTE,READ,READ,NONE,NONE,NONE,READ,EXECUTE,Regression test for editor restrictions.
+Security hardening,IMF.P.Security.TestAccessViewer,EXECUTE,READ,READ,NONE,NONE,NONE,READ,EXECUTE,Regression test for viewer restrictions.
+Security hardening,IMF.P.Security.TestAccessApprover,EXECUTE,READ,READ,NONE,NONE,NONE,READ,EXECUTE,Regression test for approver restrictions.
+Security hardening,IMF.P.Security.RunSecurityRegressionSuite,EXECUTE,READ,READ,READ,NONE,NONE,READ,EXECUTE,Runs all supported regression tests.

@@ -1,0 +1,54 @@
+{
+  "Name": "IMF.P.Security.ApplyElementSecurity",
+  "Purpose": "Apply element-level security rules for IMF managed work and archive versions.",
+  "Code@Code.link": "IMF.P.Security.ApplyElementSecurity.ti",
+  "Parameters": [
+    {
+      "Name": "pEnvironment",
+      "Prompt": "Environment",
+      "Value": "DEV",
+      "Description": "Parameter pEnvironment"
+    },
+    {
+      "Name": "pLogToCube",
+      "Prompt": "LogToCube",
+      "Value": "Y",
+      "Description": "Parameter pLogToCube"
+    },
+    {
+      "Name": "pLogFile",
+      "Prompt": "LogFile",
+      "Value": "docs/security/IMF_Security_Audit.log",
+      "Description": "Parameter pLogFile"
+    },
+    {
+      "Name": "pDimensionName",
+      "Prompt": "DimensionName",
+      "Value": "",
+      "Description": "Parameter pDimensionName"
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "VersionId",
+      "Value": "",
+      "Description": "Parameter pVersionId"
+    },
+    {
+      "Name": "pRoleFilter",
+      "Prompt": "RoleFilter",
+      "Value": "",
+      "Description": "Parameter pRoleFilter"
+    }
+  ],
+  "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsDimensionName = Trim(pDimensionName);\nsVersionId = Trim(pVersionId);\nsRoleFilter = Upper(Trim(pRoleFilter));\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_ELEMENT_SECURITY_START', 'pObjectType', 'DIMENSION', 'pObjectName', sDimensionName, 'pStatus', 'INFO', 'pMessage', 'Applying element security rules.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\n# TODO: Resolve the managed work or archive hierarchy and identify the corresponding }ElementSecurity_<Dimension> cube.\n# TODO: Set READ or NONE for IMF_Viewer on draft work versions unless explicit exception rules exist.\n# TODO: Set READ for IMF_Approver and WRITE for authorized owner/editor scope only.\n# TODO: Confirm native writeback pattern to }ElementSecurity_<Dimension> in the target environment.\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_ELEMENT_SECURITY_END', 'pObjectType', 'DIMENSION', 'pObjectName', sDimensionName, 'pStatus', 'INFO', 'pMessage', 'Element security rules prepared.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);",
+  "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "tags": [
+    "IMF",
+    "Security",
+    "Hardening",
+    "TM1",
+    "PAW",
+    "v12",
+    "ElementSecurity"
+  ]
+}

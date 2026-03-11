@@ -1,16 +1,16 @@
 # IMF.P.Security.ApplyModel
-# Purpose: Apply the cube and dimension security model for IMF objects.
+# Purpose: Apply the IMF security model including cube, dimension, masking, ownership, and element rules.
 # Sources:
-# - IMF security model and documentation
-# - TM1 native security control objects
-# - IMF.P.Security.LogBootstrap
+# - IMF security control model
+# - IMF.C.Version ownership metadata where applicable
+# - TM1 native security control objects where applicable
 # Parameters:
 # - pEnvironment: Parameter pEnvironment Default 'DEV'.
-# - pLogOnly: Parameter pLogOnly Default 'N'.
 # - pLogToCube: Parameter pLogToCube Default 'Y'.
-# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Bootstrap.log'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Audit.log'.
+# - pLogOnly: Parameter pLogOnly Default 'N'.
 # Prolog:
-# - Validate parameters and execute the process-specific security workflow.
+# - Execute the process-specific security hardening workflow.
 # Metadata:
 # - No metadata datasource is required in this scaffold.
 # Data:
@@ -21,15 +21,14 @@
 #region prolog
 sEnvironment = Upper(Trim(pEnvironment));
 sLogOnly = Upper(Trim(pLogOnly));
-sLogToCube = Upper(Trim(pLogToCube));
-sLogFile = Trim(pLogFile);
-ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.Config', 'pGroupName', 'IMF_Admin', 'pAccess', 'WRITE', 'pLogOnly', sLogOnly, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
-ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.Config', 'pGroupName', 'IMF_Developer', 'pAccess', 'READ', 'pLogOnly', sLogOnly, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
-ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.Version', 'pGroupName', 'IMF_Operator', 'pAccess', 'WRITE', 'pLogOnly', sLogOnly, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
-ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.PublishHistory', 'pGroupName', 'IMF_Developer', 'pAccess', 'READ', 'pLogOnly', sLogOnly, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
-ExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pDimensionName', 'IMF.D.*', 'pGroupName', 'IMF_Admin', 'pAccess', 'WRITE', 'pLogOnly', sLogOnly, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
-ExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pDimensionName', '_WRK_*', 'pGroupName', 'IMF_Editor', 'pAccess', 'WRITE', 'pLogOnly', sLogOnly, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
-ExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pDimensionName', '_ARC_*', 'pGroupName', 'IMF_Viewer', 'pAccess', 'NONE', 'pLogOnly', sLogOnly, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
+ExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_MODEL_START', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'Applying IMF security model.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pLogOnly', sLogOnly, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+ExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pLogOnly', sLogOnly, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+ExecuteProcess('IMF.P.Security.ApplyDimensionMasking', 'pEnvironment', sEnvironment, 'pDimensionName', '', 'pRoleFilter', '', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+ExecuteProcess('IMF.P.Security.ApplyVersionOwnershipSecurity', 'pEnvironment', sEnvironment, 'pVersionId', '', 'pOwner', '', 'pStatus', '', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+ExecuteProcess('IMF.P.Security.ApplyElementSecurity', 'pEnvironment', sEnvironment, 'pDimensionName', '', 'pVersionId', '', 'pRoleFilter', '', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+ExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_MODEL_END', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'IMF security model applied.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
 #endregion
 
 #region metadata

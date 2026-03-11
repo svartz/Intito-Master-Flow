@@ -1,18 +1,16 @@
 ObjectType,ObjectName,Group,ExpectedAccess,ActualAccess,Status,Comment
-CUBE,IMF.C.Config,IMF_Admin,WRITE,TODO,PendingValidation,Developer WRITE only in DEV is handled by environment policy.
-CUBE,IMF.C.Config,IMF_Developer,READ,TODO,PendingValidation,Base model from security_2 prompt.
-CUBE,IMF.C.Version,IMF_Operator,WRITE,TODO,PendingValidation,Operational workflow access.
-CUBE,IMF.C.Diff,IMF_Auditor,READ,TODO,PendingValidation,Audit transparency.
-CUBE,IMF.C.Validation,IMF_Auditor,READ,TODO,PendingValidation,Audit transparency.
-CUBE,IMF.C.Impact,IMF_Auditor,READ,TODO,PendingValidation,Audit transparency.
+CUBE,IMF.C.Config,IMF_Admin,WRITE,TODO,PendingValidation,Platform configuration cube.
+CUBE,IMF.C.Version,IMF_Operator,WRITE,TODO,PendingValidation,Version operations remain operator-enabled.
 CUBE,IMF.C.EventLog,IMF_Auditor,READ,TODO,PendingValidation,Audit transparency.
-CUBE,IMF.C.ChangeLog,IMF_Auditor,READ,TODO,PendingValidation,Audit transparency.
-CUBE,IMF.C.PublishHistory,IMF_Developer,READ,TODO,PendingValidation,Read-only by design.
-DIMENSION,IMF.D.*,IMF_Admin,WRITE,TODO,PendingValidation,Control dimensions.
-DIMENSION,IMF.D.*,IMF_Viewer,READ,TODO,PendingValidation,Control dimensions.
-DIMENSION,ManagedMasterDimensions,IMF_Admin,ADMIN,TODO,PendingValidation,Managed master dimensions.
-DIMENSION,ManagedMasterDimensions,IMF_Developer,READ,TODO,PendingValidation,Managed master dimensions.
-DIMENSION,_WRK_*,IMF_Editor,WRITE,TODO,PendingValidation,Work dimensions.
-DIMENSION,_WRK_*,IMF_Viewer,NONE,TODO,PendingValidation,Work dimensions.
-DIMENSION,_ARC_*,IMF_Editor,NONE,TODO,PendingValidation,Archive dimensions.
-DIMENSION,_ARC_*,IMF_Auditor,READ,TODO,PendingValidation,Archive dimensions.
+DIMENSION,IMF.D.Run,IMF_Viewer,NONE,TODO,PendingValidation,Dimension masking hides operational dimensions.
+DIMENSION,IMF.D.ChangeType,IMF_Viewer,NONE,TODO,PendingValidation,Dimension masking hides operational dimensions.
+DIMENSION,IMF.D.ImpactType,IMF_Viewer,NONE,TODO,PendingValidation,Dimension masking hides operational dimensions.
+ELEMENT,ManagedWorkDimensions,IMF_Editor,WRITE,TODO,PendingValidation,Editors only on owned or delegated work versions.
+ELEMENT,ManagedWorkDimensions,IMF_Approver,READ,TODO,PendingValidation,Approvers remain read-only.
+ELEMENT,ManagedWorkDimensions,IMF_Viewer,NONE,TODO,PendingValidation,Viewers do not see draft work versions by default.
+VERSION,IMF.C.Version.Owner,IMF_Editor,OWNED_ONLY,TODO,PendingValidation,Editors may only modify owned or delegated versions.
+VERSION,IMF.C.Version.Owner,IMF_Operator,WRITE,TODO,PendingValidation,Operators may modify any version.
+VERSION,IMF.C.Version.Owner,IMF_Approver,READ_ONLY,TODO,PendingValidation,Approvers cannot modify versions.
+REGRESSION,IMF.P.Security.TestAccessEditor,IMF_Editor,PASS,TODO,PendingValidation,Editor must not publish.
+REGRESSION,IMF.P.Security.TestAccessViewer,IMF_Viewer,PASS,TODO,PendingValidation,Viewer must not modify dimensions.
+REGRESSION,IMF.P.Security.TestAccessApprover,IMF_Approver,PASS,TODO,PendingValidation,Approver must not edit versions.

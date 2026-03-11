@@ -1,0 +1,43 @@
+{
+  "Name": "IMF.P.Security.ValidateFullModel",
+  "Purpose": "Run the full IMF security validation suite including ownership, masking, cube, dimension, and element checks.",
+  "Code@Code.link": "IMF.P.Security.ValidateFullModel.ti",
+  "Parameters": [
+    {
+      "Name": "pEnvironment",
+      "Prompt": "Environment",
+      "Value": "DEV",
+      "Description": "Parameter pEnvironment"
+    },
+    {
+      "Name": "pLogToCube",
+      "Prompt": "LogToCube",
+      "Value": "Y",
+      "Description": "Parameter pLogToCube"
+    },
+    {
+      "Name": "pLogFile",
+      "Prompt": "LogFile",
+      "Value": "docs/security/IMF_Security_Audit.log",
+      "Description": "Parameter pLogFile"
+    },
+    {
+      "Name": "pOutputFile",
+      "Prompt": "OutputFile",
+      "Value": "docs/security/IMF_Security_Matrix.csv",
+      "Description": "Parameter pOutputFile"
+    }
+  ],
+  "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsOutputFile = Trim(pOutputFile);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_FULL_MODEL_START', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'Starting full security validation.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.ValidateGroups', 'pEnvironment', sEnvironment, 'pStrictMode', 'N', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.ValidateCubeSecurity', 'pEnvironment', sEnvironment, 'pOutputFile', sOutputFile, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.ValidateDimensionSecurity', 'pEnvironment', sEnvironment, 'pOutputFile', sOutputFile, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.ValidateDimensionMasking', 'pEnvironment', sEnvironment, 'pOutputFile', sOutputFile, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.ValidateElementSecurity', 'pEnvironment', sEnvironment, 'pDimensionName', '', 'pOutputFile', sOutputFile, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.ValidateVersionOwnership', 'pEnvironment', sEnvironment, 'pVersionId', '', 'pOutputFile', sOutputFile, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_FULL_MODEL_END', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'Completed full security validation.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);",
+  "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "tags": [
+    "IMF",
+    "Security",
+    "Hardening",
+    "TM1",
+    "PAW",
+    "v12",
+    "Validation",
+    "Suite"
+  ]
+}

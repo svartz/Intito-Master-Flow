@@ -1,0 +1,39 @@
+# IMF.P.Security.TestAccessViewer
+# Purpose: Test that viewers cannot modify dimensions or view draft work versions unless explicitly permitted.
+# Sources:
+# - IMF security control model
+# - IMF.C.Version ownership metadata where applicable
+# - TM1 native security control objects where applicable
+# Parameters:
+# - pEnvironment: Parameter pEnvironment Default 'DEV'.
+# - pLogToCube: Parameter pLogToCube Default 'Y'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Audit.log'.
+# - pExpectedOutcome: Parameter pExpectedOutcome Default 'PASS'.
+# Prolog:
+# - Execute the process-specific security hardening workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave a deterministic log trail and clearly surface all TODOs.
+
+#region prolog
+sEnvironment = Upper(Trim(pEnvironment));
+If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
+ExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'TEST_ACCESS_VIEWER', 'pObjectType', 'REGRESSION', 'pObjectName', 'IMF_Viewer', 'pStatus', 'INFO', 'pMessage', 'Running viewer access regression test.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+# TODO: Execute a controlled viewer-session simulation in the target environment.
+# TODO: Verify viewer cannot modify dimensions and cannot see draft work versions by default.
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond logging for this scaffold.
+#endregion

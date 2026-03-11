@@ -1,0 +1,40 @@
+# IMF.P.Security.ValidateDimensionMasking
+# Purpose: Validate masking and visibility rules for sensitive IMF dimensions.
+# Sources:
+# - IMF security control model
+# - IMF.C.Version ownership metadata where applicable
+# - TM1 native security control objects where applicable
+# Parameters:
+# - pEnvironment: Parameter pEnvironment Default 'DEV'.
+# - pLogToCube: Parameter pLogToCube Default 'Y'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Audit.log'.
+# - pOutputFile: Parameter pOutputFile Default 'docs/security/IMF_Security_Matrix.csv'.
+# Prolog:
+# - Execute the process-specific security hardening workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave a deterministic log trail and clearly surface all TODOs.
+
+#region prolog
+sEnvironment = Upper(Trim(pEnvironment));
+sOutputFile = Trim(pOutputFile);
+If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
+ExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_DIMENSION_MASKING', 'pObjectType', 'DIMENSION', 'pObjectName', 'SENSITIVE_DIMENSIONS', 'pStatus', 'INFO', 'pMessage', 'Validating dimension masking.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+# TODO: Verify expected NONE or READ outcomes for IMF.D.Run, IMF.D.ChangeType, and IMF.D.ImpactType.
+# TODO: Export mismatches using the shared security-matrix format.
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond logging for this scaffold.
+#endregion

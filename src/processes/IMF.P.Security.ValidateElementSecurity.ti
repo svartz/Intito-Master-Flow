@@ -1,0 +1,42 @@
+# IMF.P.Security.ValidateElementSecurity
+# Purpose: Validate that element-level security rules exist for IMF managed work and archive dimensions.
+# Sources:
+# - IMF security control model
+# - IMF.C.Version ownership metadata where applicable
+# - TM1 native security control objects where applicable
+# Parameters:
+# - pEnvironment: Parameter pEnvironment Default 'DEV'.
+# - pLogToCube: Parameter pLogToCube Default 'Y'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Audit.log'.
+# - pDimensionName: Parameter pDimensionName Default ''.
+# - pOutputFile: Parameter pOutputFile Default 'docs/security/IMF_Security_Matrix.csv'.
+# Prolog:
+# - Execute the process-specific security hardening workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave a deterministic log trail and clearly surface all TODOs.
+
+#region prolog
+sEnvironment = Upper(Trim(pEnvironment));
+sDimensionName = Trim(pDimensionName);
+sOutputFile = Trim(pOutputFile);
+If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
+ExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_ELEMENT_SECURITY', 'pObjectType', 'DIMENSION', 'pObjectName', sDimensionName, 'pStatus', 'INFO', 'pMessage', 'Validating element security.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+# TODO: Read effective assignments from }ElementSecurity_<Dimension> and compare against ownership and status rules.
+# TODO: Export mismatches using ObjectType,ObjectName,Group,ExpectedAccess,ActualAccess,Status,Comment.
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond logging for this scaffold.
+#endregion

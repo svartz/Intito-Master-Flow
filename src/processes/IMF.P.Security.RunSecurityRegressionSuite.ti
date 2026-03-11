@@ -1,0 +1,41 @@
+# IMF.P.Security.RunSecurityRegressionSuite
+# Purpose: Run the IMF security regression test suite across core roles and environment-specific hardening controls.
+# Sources:
+# - IMF security control model
+# - IMF.C.Version ownership metadata where applicable
+# - TM1 native security control objects where applicable
+# Parameters:
+# - pEnvironment: Parameter pEnvironment Default 'DEV'.
+# - pLogToCube: Parameter pLogToCube Default 'Y'.
+# - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Audit.log'.
+# Prolog:
+# - Execute the process-specific security hardening workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave a deterministic log trail and clearly surface all TODOs.
+
+#region prolog
+sEnvironment = Upper(Trim(pEnvironment));
+If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
+ExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'RUN_REGRESSION_SUITE_START', 'pObjectType', 'REGRESSION', 'pObjectName', 'IMF_SECURITY', 'pStatus', 'INFO', 'pMessage', 'Starting security regression suite.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+ExecuteProcess('IMF.P.Security.TestAccessEditor', 'pEnvironment', sEnvironment, 'pExpectedOutcome', 'PASS', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+ExecuteProcess('IMF.P.Security.TestAccessViewer', 'pEnvironment', sEnvironment, 'pExpectedOutcome', 'PASS', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+ExecuteProcess('IMF.P.Security.TestAccessApprover', 'pEnvironment', sEnvironment, 'pExpectedOutcome', 'PASS', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+# TODO: Add a developer-in-PROD bypass regression check once impersonation or automated session switching is available.
+ExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'RUN_REGRESSION_SUITE_END', 'pObjectType', 'REGRESSION', 'pObjectName', 'IMF_SECURITY', 'pStatus', 'INFO', 'pMessage', 'Completed security regression suite.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond logging for this scaffold.
+#endregion

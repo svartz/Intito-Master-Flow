@@ -1,52 +1,48 @@
 {
-    "Name":  "IMF.P.Security.BootstrapAll",
-    "Purpose":  "Bootstrap the IMF security model for a target environment.",
-    "Code@Code.link":  "IMF.P.Security.BootstrapAll.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pEnvironment",
-                           "Prompt":  "Environment",
-                           "Value":  "DEV",
-                           "Description":  "Parameter pEnvironment"
-                       },
-                       {
-                           "Name":  "pCreateIfExistsBehavior",
-                           "Prompt":  "Create If Exists Behavior",
-                           "Value":  "SKIP",
-                           "Description":  "Parameter pCreateIfExistsBehavior"
-                       },
-                       {
-                           "Name":  "pStrictMode",
-                           "Prompt":  "Strict Mode",
-                           "Value":  "N",
-                           "Description":  "Parameter pStrictMode"
-                       },
-                       {
-                           "Name":  "pLogToCube",
-                           "Prompt":  "Log To Cube",
-                           "Value":  "Y",
-                           "Description":  "Parameter pLogToCube"
-                       },
-                       {
-                           "Name":  "pLogFile",
-                           "Prompt":  "Log File",
-                           "Value":  "docs/security/IMF_Security_Bootstrap.log",
-                           "Description":  "Parameter pLogFile"
-                       }
-                   ],
-    "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsCreateBehavior = Upper(Trim(pCreateIfExistsBehavior));\r\nsStrictMode = Upper(Trim(pStrictMode));\r\nsLogToCube = Upper(Trim(pLogToCube));\r\nsLogFile = Trim(pLogFile);\r\nIf(sEnvironment @= \u0027\u0027); sEnvironment = \u0027DEV\u0027; EndIf;\r\nIf(sCreateBehavior @= \u0027\u0027); sCreateBehavior = \u0027SKIP\u0027; EndIf;\r\nIf(sStrictMode @= \u0027\u0027); sStrictMode = \u0027N\u0027; EndIf;\r\nExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027BOOTSTRAP_START\u0027, \u0027pObjectType\u0027, \u0027SECURITY_MODEL\u0027, \u0027pObjectName\u0027, \u0027IMF\u0027, \u0027pStatus\u0027, \u0027INFO\u0027, \u0027pMessage\u0027, \u0027Security bootstrap started.\u0027, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nExecuteProcess(\u0027IMF.P.Security.CreateGroups\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pCreateIfExistsBehavior\u0027, sCreateBehavior, \u0027pStrictMode\u0027, sStrictMode, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nExecuteProcess(\u0027IMF.P.Security.ApplyModel\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pLogOnly\u0027, \u0027N\u0027, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nExecuteProcess(\u0027IMF.P.Security.ValidateGroups\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pStrictMode\u0027, sStrictMode, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nExecuteProcess(\u0027IMF.P.Security.ValidateObjectSecurity\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pOutputFile\u0027, \u0027docs/security/IMF_Security_Matrix.csv\u0027, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nExecuteProcess(\u0027IMF.P.Security.ExportProcessMatrix\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pOutputFile\u0027, \u0027docs/security/IMF_Process_Security_Matrix.csv\u0027, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nExecuteProcess(\u0027IMF.P.Security.ExportSecurityMatrix\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pOutputFile\u0027, \u0027docs/security/IMF_Security_Matrix.csv\u0027, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027BOOTSTRAP_END\u0027, \u0027pObjectType\u0027, \u0027SECURITY_MODEL\u0027, \u0027pObjectName\u0027, \u0027IMF\u0027, \u0027pStatus\u0027, \u0027INFO\u0027, \u0027pMessage\u0027, \u0027Security bootstrap completed.\u0027, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);",
-    "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
-    "tags":  [
-                 "IMF",
-                 "Security",
-                 "TM1",
-                 "PAW",
-                 "v12",
-                 "Bootstrap"
-             ],
-    "environmentScope":  [
-                             "DEV",
-                             "TEST",
-                             "PROD"
-                         ]
+  "Name": "IMF.P.Security.BootstrapAll",
+  "Purpose": "Bootstrap the IMF security model and run hardening validation for a target environment.",
+  "Code@Code.link": "IMF.P.Security.BootstrapAll.ti",
+  "Parameters": [
+    {
+      "Name": "pEnvironment",
+      "Prompt": "Environment",
+      "Value": "DEV",
+      "Description": "Parameter pEnvironment"
+    },
+    {
+      "Name": "pCreateIfExistsBehavior",
+      "Prompt": "CreateIfExistsBehavior",
+      "Value": "SKIP",
+      "Description": "Parameter pCreateIfExistsBehavior"
+    },
+    {
+      "Name": "pStrictMode",
+      "Prompt": "StrictMode",
+      "Value": "N",
+      "Description": "Parameter pStrictMode"
+    },
+    {
+      "Name": "pLogToCube",
+      "Prompt": "LogToCube",
+      "Value": "Y",
+      "Description": "Parameter pLogToCube"
+    },
+    {
+      "Name": "pLogFile",
+      "Prompt": "LogFile",
+      "Value": "docs/security/IMF_Security_Bootstrap.log",
+      "Description": "Parameter pLogFile"
+    }
+  ],
+  "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsCreateBehavior = Upper(Trim(pCreateIfExistsBehavior));\nsStrictMode = Upper(Trim(pStrictMode));\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nIf(sCreateBehavior @= ''); sCreateBehavior = 'SKIP'; EndIf;\nIf(sStrictMode @= ''); sStrictMode = 'N'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'BOOTSTRAP_START', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'Security bootstrap started.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.CreateGroups', 'pEnvironment', sEnvironment, 'pCreateIfExistsBehavior', sCreateBehavior, 'pStrictMode', sStrictMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.ApplyModel', 'pEnvironment', sEnvironment, 'pLogOnly', 'N', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.ValidateFullModel', 'pEnvironment', sEnvironment, 'pOutputFile', 'docs/security/IMF_Security_Matrix.csv', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.ExportProcessMatrix', 'pEnvironment', sEnvironment, 'pOutputFile', 'docs/security/IMF_Process_Security_Matrix.csv', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.ExportSecurityMatrix', 'pEnvironment', sEnvironment, 'pOutputFile', 'docs/security/IMF_Security_Matrix.csv', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.ExportSecurityAudit', 'pEnvironment', sEnvironment, 'pOutputFile', 'docs/security/IMF_Security_Audit.csv', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.RunSecurityRegressionSuite', 'pEnvironment', sEnvironment, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'BOOTSTRAP_END', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'Security bootstrap completed.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);",
+  "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "tags": [
+    "IMF",
+    "Security",
+    "Hardening",
+    "TM1",
+    "PAW",
+    "v12",
+    "Orchestration"
+  ]
 }

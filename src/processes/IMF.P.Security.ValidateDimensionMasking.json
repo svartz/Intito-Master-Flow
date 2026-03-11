@@ -1,0 +1,43 @@
+{
+  "Name": "IMF.P.Security.ValidateDimensionMasking",
+  "Purpose": "Validate masking and visibility rules for sensitive IMF dimensions.",
+  "Code@Code.link": "IMF.P.Security.ValidateDimensionMasking.ti",
+  "Parameters": [
+    {
+      "Name": "pEnvironment",
+      "Prompt": "Environment",
+      "Value": "DEV",
+      "Description": "Parameter pEnvironment"
+    },
+    {
+      "Name": "pLogToCube",
+      "Prompt": "LogToCube",
+      "Value": "Y",
+      "Description": "Parameter pLogToCube"
+    },
+    {
+      "Name": "pLogFile",
+      "Prompt": "LogFile",
+      "Value": "docs/security/IMF_Security_Audit.log",
+      "Description": "Parameter pLogFile"
+    },
+    {
+      "Name": "pOutputFile",
+      "Prompt": "OutputFile",
+      "Value": "docs/security/IMF_Security_Matrix.csv",
+      "Description": "Parameter pOutputFile"
+    }
+  ],
+  "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsOutputFile = Trim(pOutputFile);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_DIMENSION_MASKING', 'pObjectType', 'DIMENSION', 'pObjectName', 'SENSITIVE_DIMENSIONS', 'pStatus', 'INFO', 'pMessage', 'Validating dimension masking.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\n# TODO: Verify expected NONE or READ outcomes for IMF.D.Run, IMF.D.ChangeType, and IMF.D.ImpactType.\n# TODO: Export mismatches using the shared security-matrix format.",
+  "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "tags": [
+    "IMF",
+    "Security",
+    "Hardening",
+    "TM1",
+    "PAW",
+    "v12",
+    "Masking",
+    "Validation"
+  ]
+}
