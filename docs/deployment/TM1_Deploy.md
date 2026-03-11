@@ -11,7 +11,7 @@ This repository includes a conservative deploy utility for TM1 / Planning Analyt
 - validate local sources before any remote deploy
 - require explicit `--execute` for changes against TM1
 - support CI/CD and local operator use
-- deploy the v12 process artifacts under `src/tm1/processes`
+- deploy the v12 process artifacts under `src/processes`
 
 ## Current scope
 
@@ -20,7 +20,7 @@ Implemented:
 - validates paired process artifacts (`*.json` + linked `*.ti`)
 - parses TI regions: `prolog`, `metadata`, `data`, `epilog`
 - deploys processes to TM1 through the REST API
-- validates custom object-definition JSON structure under `src/tm1/object-definitions`
+- validates custom object-definition JSON structure under `src/object-definitions`
 
 Not yet implemented:
 
@@ -122,4 +122,4 @@ For GitHub Actions or another runner:
 
 ## Important limitation
 
-The repository's dimension and cube JSON files under `src/tm1/object-definitions` are custom IMF definitions, not native TM1 REST payloads. The deploy script validates them for structure but does not yet transform and publish them as TM1 objects.
+The repository's dimension and cube JSON files under `src/object-definitions` are custom IMF definitions, not native TM1 REST payloads. The deploy script validates them for structure but does not yet transform and publish them as TM1 objects.

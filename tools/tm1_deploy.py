@@ -8,7 +8,7 @@ This script is intentionally conservative:
 - support either basic auth or a caller-provided Authorization header
 
 Current deployment scope:
-- deploys processes from src/tm1/processes
+- deploys processes from src/processes
 - validates custom object-definition JSON files, but does not compile them
   into native TM1 dimensions or cubes yet
 """
@@ -129,9 +129,9 @@ def load_config(config_path: Path, repo_root: Path) -> Config:
     authorization_header = str(cfg("authorization_header", "IMF_TM1_AUTHORIZATION_HEADER", ""))
     verify_ssl = env_bool("IMF_TM1_VERIFY_SSL", bool(file_config.get("verify_ssl", True)))
     timeout_s = env_int("IMF_TM1_TIMEOUT_S", int(file_config.get("timeout_s", 60)))
-    process_root = repo_root / str(cfg("process_root", "IMF_TM1_PROCESS_ROOT", "src/tm1/processes"))
+    process_root = repo_root / str(cfg("process_root", "IMF_TM1_PROCESS_ROOT", "src/processes"))
     object_definition_root = repo_root / str(
-        cfg("object_definition_root", "IMF_TM1_OBJECT_DEFINITION_ROOT", "src/tm1/object-definitions")
+        cfg("object_definition_root", "IMF_TM1_OBJECT_DEFINITION_ROOT", "src/object-definitions")
     )
     deploy_processes = env_bool(
         "IMF_TM1_DEPLOY_PROCESSES",

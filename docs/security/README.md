@@ -19,4 +19,4 @@ DEV allows broader developer rights. TEST is near-production. PROD applies stric
 Group creation may be external to TM1. The package does not fake successful creation.
 
 ## Source-control package
-The corresponding TI processes live in src/tm1/processes/ and are delivered as both .ti and .json artefacts.
+The corresponding TI processes live in src/processes/ and are delivered as both .ti and .json artefacts.
