@@ -1,0 +1,43 @@
+# IMF.P.Commit.Finalize
+# Purpose: Finalize publish state, notes, and lifecycle metadata after master replacement.
+# Sources:
+# - IMF control metadata and TM1 native objects where applicable
+# Parameters:
+# - pPrefix: Parameter pPrefix Default 'IMF'.
+# - pDimensionCode: Parameter pDimensionCode Default ''.
+# - pVersionId: Parameter pVersionId Default ''.
+# - pPublishedBy: Parameter pPublishedBy Default ''.
+# Prolog:
+# - Execute the process-specific workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave deterministic side effects only where supported.
+
+#region prolog
+sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;
+sDimensionCode = Trim(pDimensionCode); sVersionId = Trim(pVersionId); sPublishedBy = Trim(pPublishedBy);
+If(sPublishedBy @= ''); sPublishedBy = 'SYSTEM'; EndIf;
+sCubeVersion = sPrefix | '.C.Version'; sDimVersion = sPrefix | '.D.Version';
+sPublishedAt = TIMST(NOW, '\Y-\m-\d \h:\i:\s');
+CellPutS('Published', sCubeVersion, sVersionId, 'Status');
+CellPutS(sPublishedAt, sCubeVersion, sVersionId, 'PublishedAt');
+CellPutS(sPublishedBy, sCubeVersion, sVersionId, 'PublishedBy');
+AttrPutS('Published', sDimVersion, sVersionId, 'Status');
+AttrPutS(sPublishedAt, sDimVersion, sVersionId, 'PublishedAt');
+AttrPutS(sPublishedBy, sDimVersion, sVersionId, 'PublishedBy');
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond process orchestration in this scaffold.
+#endregion

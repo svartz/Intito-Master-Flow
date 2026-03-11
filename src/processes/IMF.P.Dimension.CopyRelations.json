@@ -1,0 +1,63 @@
+{
+  "Name": "IMF.P.Dimension.CopyRelations",
+  "name": "IMF.P.Dimension.CopyRelations",
+  "Purpose": "Copy parent-child relations and consolidation weights between dimensions.",
+  "purpose": "Copy parent-child relations and consolidation weights between dimensions.",
+  "Code@Code.link": "IMF.P.Dimension.CopyRelations.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF",
+      "Description": "Parameter pPrefix"
+    },
+    {
+      "Name": "pSourceDimension",
+      "Prompt": "SourceDimension",
+      "Value": "",
+      "Description": "Parameter pSourceDimension"
+    },
+    {
+      "Name": "pTargetDimension",
+      "Prompt": "TargetDimension",
+      "Value": "",
+      "Description": "Parameter pTargetDimension"
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF",
+      "Description": "Parameter pPrefix"
+    },
+    {
+      "Name": "pSourceDimension",
+      "Prompt": "SourceDimension",
+      "Value": "",
+      "Description": "Parameter pSourceDimension"
+    },
+    {
+      "Name": "pTargetDimension",
+      "Prompt": "TargetDimension",
+      "Value": "",
+      "Description": "Parameter pTargetDimension"
+    }
+  ],
+  "Prolog": "sSourceDimension = Trim(pSourceDimension); sTargetDimension = Trim(pTargetDimension);\nIf((sSourceDimension @= '') % (sTargetDimension @= '')); ProcessBreak; EndIf;\nIf((DimensionExists(sSourceDimension) = 0) % (DimensionExists(sTargetDimension) = 0)); ProcessBreak; EndIf;\n# TODO: Traverse consolidations in the source dimension and replay them with weights on the target dimension.\n# TODO: Preserve hierarchy-specific ordering where the target environment relies on insertion order.",
+  "prolog": "sSourceDimension = Trim(pSourceDimension); sTargetDimension = Trim(pTargetDimension);\nIf((sSourceDimension @= '') % (sTargetDimension @= '')); ProcessBreak; EndIf;\nIf((DimensionExists(sSourceDimension) = 0) % (DimensionExists(sTargetDimension) = 0)); ProcessBreak; EndIf;\n# TODO: Traverse consolidations in the source dimension and replay them with weights on the target dimension.\n# TODO: Preserve hierarchy-specific ordering where the target environment relies on insertion order.",
+  "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Versioning"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
+}

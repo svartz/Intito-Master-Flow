@@ -1,0 +1,51 @@
+{
+  "Name": "IMF.P.Dimension.Create",
+  "name": "IMF.P.Dimension.Create",
+  "Purpose": "Create a target dimension shell for IMF copy and publish workflows.",
+  "purpose": "Create a target dimension shell for IMF copy and publish workflows.",
+  "Code@Code.link": "IMF.P.Dimension.Create.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF",
+      "Description": "Parameter pPrefix"
+    },
+    {
+      "Name": "pTargetDimension",
+      "Prompt": "TargetDimension",
+      "Value": "",
+      "Description": "Parameter pTargetDimension"
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF",
+      "Description": "Parameter pPrefix"
+    },
+    {
+      "Name": "pTargetDimension",
+      "Prompt": "TargetDimension",
+      "Value": "",
+      "Description": "Parameter pTargetDimension"
+    }
+  ],
+  "Prolog": "sTargetDimension = Trim(pTargetDimension);\nIf(sTargetDimension @= ''); ProcessBreak; EndIf;\nIf(DimensionExists(sTargetDimension) = 0); DimensionCreate(sTargetDimension); EndIf;",
+  "prolog": "sTargetDimension = Trim(pTargetDimension);\nIf(sTargetDimension @= ''); ProcessBreak; EndIf;\nIf(DimensionExists(sTargetDimension) = 0); DimensionCreate(sTargetDimension); EndIf;",
+  "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Versioning"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
+}

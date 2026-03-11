@@ -1,26 +1,67 @@
 {
-    "Name":  "IMF.P.Export.JSON.ParentChild",
-    "Code@Code.link":  "IMF.P.Export.JSON.ParentChild.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pPrefix",
-                           "Prompt":  "Prefix",
-                           "Value":  "IMF"
-                       },
-                       {
-                           "Name":  "pDimensionCode",
-                           "Prompt":  "Dimension Code",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pVersionId",
-                           "Prompt":  "Version Id",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pFilePath",
-                           "Prompt":  "File Path",
-                           "Value":  ""
-                       }
-                   ]
+  "Name": "IMF.P.Export.JSON.ParentChild",
+  "name": "IMF.P.Export.JSON.ParentChild",
+  "Purpose": "Export a managed dimension or version in parent-child JSON shape.",
+  "purpose": "Export a managed dimension or version in parent-child JSON shape.",
+  "Code@Code.link": "IMF.P.Export.JSON.ParentChild.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    },
+    {
+      "Name": "pFilePath",
+      "Prompt": "File Path",
+      "Value": ""
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    },
+    {
+      "Name": "pFilePath",
+      "Prompt": "File Path",
+      "Value": ""
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\n# Placeholder:\n# 1. resolve source dimension from version or master\n# 2. flatten hierarchy to parent-child records\n# 3. serialize JSON to pFilePath",
+  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\n# Placeholder:\n# 1. resolve source dimension from version or master\n# 2. flatten hierarchy to parent-child records\n# 3. serialize JSON to pFilePath",
+  "Metadata": "",
+  "metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Export"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }

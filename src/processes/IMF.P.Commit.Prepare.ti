@@ -1,0 +1,38 @@
+# IMF.P.Commit.Prepare
+# Purpose: Prepare a work version for publish by validating blockers and lock state.
+# Sources:
+# - IMF control metadata and TM1 native objects where applicable
+# Parameters:
+# - pPrefix: Parameter pPrefix Default 'IMF'.
+# - pDimensionCode: Parameter pDimensionCode Default ''.
+# - pVersionId: Parameter pVersionId Default ''.
+# Prolog:
+# - Execute the process-specific workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave deterministic side effects only where supported.
+
+#region prolog
+sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;
+sDimensionCode = Trim(pDimensionCode); sVersionId = Trim(pVersionId);
+If((sDimensionCode @= '') % (sVersionId @= '')); ProcessBreak; EndIf;
+ExecuteProcess(sPrefix | '.P.Validate.Technical', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
+ExecuteProcess(sPrefix | '.P.Validate.Business', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
+ExecuteProcess(sPrefix | '.P.Impact.RunAll', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
+# TODO: Abort on blocker-level impact results once blocker severity is materialized in IMF.C.Impact.
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond process orchestration in this scaffold.
+#endregion

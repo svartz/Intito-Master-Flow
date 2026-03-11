@@ -1,6 +1,8 @@
 {
   "Name": "IMF.P.Security.BootstrapAll",
+  "name": "IMF.P.Security.BootstrapAll",
   "Purpose": "Bootstrap the IMF security model and run hardening validation for a target environment.",
+  "purpose": "Bootstrap the IMF security model and run hardening validation for a target environment.",
   "Code@Code.link": "IMF.P.Security.BootstrapAll.ti",
   "Parameters": [
     {
@@ -34,8 +36,42 @@
       "Description": "Parameter pLogFile"
     }
   ],
+  "parameters": [
+    {
+      "Name": "pEnvironment",
+      "Prompt": "Environment",
+      "Value": "DEV",
+      "Description": "Parameter pEnvironment"
+    },
+    {
+      "Name": "pCreateIfExistsBehavior",
+      "Prompt": "CreateIfExistsBehavior",
+      "Value": "SKIP",
+      "Description": "Parameter pCreateIfExistsBehavior"
+    },
+    {
+      "Name": "pStrictMode",
+      "Prompt": "StrictMode",
+      "Value": "N",
+      "Description": "Parameter pStrictMode"
+    },
+    {
+      "Name": "pLogToCube",
+      "Prompt": "LogToCube",
+      "Value": "Y",
+      "Description": "Parameter pLogToCube"
+    },
+    {
+      "Name": "pLogFile",
+      "Prompt": "LogFile",
+      "Value": "docs/security/IMF_Security_Bootstrap.log",
+      "Description": "Parameter pLogFile"
+    }
+  ],
   "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsCreateBehavior = Upper(Trim(pCreateIfExistsBehavior));\nsStrictMode = Upper(Trim(pStrictMode));\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nIf(sCreateBehavior @= ''); sCreateBehavior = 'SKIP'; EndIf;\nIf(sStrictMode @= ''); sStrictMode = 'N'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'BOOTSTRAP_START', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'Security bootstrap started.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.CreateGroups', 'pEnvironment', sEnvironment, 'pCreateIfExistsBehavior', sCreateBehavior, 'pStrictMode', sStrictMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.ApplyModel', 'pEnvironment', sEnvironment, 'pLogOnly', 'N', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.ValidateFullModel', 'pEnvironment', sEnvironment, 'pOutputFile', 'docs/security/IMF_Security_Matrix.csv', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.ExportProcessMatrix', 'pEnvironment', sEnvironment, 'pOutputFile', 'docs/security/IMF_Process_Security_Matrix.csv', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.ExportSecurityMatrix', 'pEnvironment', sEnvironment, 'pOutputFile', 'docs/security/IMF_Security_Matrix.csv', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.ExportSecurityAudit', 'pEnvironment', sEnvironment, 'pOutputFile', 'docs/security/IMF_Security_Audit.csv', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.RunSecurityRegressionSuite', 'pEnvironment', sEnvironment, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'BOOTSTRAP_END', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'Security bootstrap completed.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);",
+  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsCreateBehavior = Upper(Trim(pCreateIfExistsBehavior));\nsStrictMode = Upper(Trim(pStrictMode));\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nIf(sCreateBehavior @= ''); sCreateBehavior = 'SKIP'; EndIf;\nIf(sStrictMode @= ''); sStrictMode = 'N'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'BOOTSTRAP_START', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'Security bootstrap started.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.CreateGroups', 'pEnvironment', sEnvironment, 'pCreateIfExistsBehavior', sCreateBehavior, 'pStrictMode', sStrictMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.ApplyModel', 'pEnvironment', sEnvironment, 'pLogOnly', 'N', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.ValidateFullModel', 'pEnvironment', sEnvironment, 'pOutputFile', 'docs/security/IMF_Security_Matrix.csv', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.ExportProcessMatrix', 'pEnvironment', sEnvironment, 'pOutputFile', 'docs/security/IMF_Process_Security_Matrix.csv', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.ExportSecurityMatrix', 'pEnvironment', sEnvironment, 'pOutputFile', 'docs/security/IMF_Security_Matrix.csv', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.ExportSecurityAudit', 'pEnvironment', sEnvironment, 'pOutputFile', 'docs/security/IMF_Security_Audit.csv', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.RunSecurityRegressionSuite', 'pEnvironment', sEnvironment, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'BOOTSTRAP_END', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'Security bootstrap completed.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "Security",
@@ -44,5 +80,10 @@
     "PAW",
     "v12",
     "Orchestration"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
   ]
 }

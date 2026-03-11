@@ -1,0 +1,63 @@
+{
+  "Name": "IMF.P.Attribute.Compare",
+  "name": "IMF.P.Attribute.Compare",
+  "Purpose": "Compare attribute values and aliases between a work version and its master dimension.",
+  "purpose": "Compare attribute values and aliases between a work version and its master dimension.",
+  "Code@Code.link": "IMF.P.Attribute.Compare.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF",
+      "Description": "Parameter pPrefix"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "DimensionCode",
+      "Value": "",
+      "Description": "Parameter pDimensionCode"
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "VersionId",
+      "Value": "",
+      "Description": "Parameter pVersionId"
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF",
+      "Description": "Parameter pPrefix"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "DimensionCode",
+      "Value": "",
+      "Description": "Parameter pDimensionCode"
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "VersionId",
+      "Value": "",
+      "Description": "Parameter pVersionId"
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;\nsDimensionCode = Trim(pDimensionCode); sVersionId = Trim(pVersionId);\nIf((sDimensionCode @= '') % (sVersionId @= '')); ProcessBreak; EndIf;\nExecuteProcess(sPrefix | '.P.Compare.Attributes', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);",
+  "prolog": "sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;\nsDimensionCode = Trim(pDimensionCode); sVersionId = Trim(pVersionId);\nIf((sDimensionCode @= '') % (sVersionId @= '')); ProcessBreak; EndIf;\nExecuteProcess(sPrefix | '.P.Compare.Attributes', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);",
+  "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Validation"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
+}

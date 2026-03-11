@@ -57,9 +57,9 @@ If(DimensionExists(sMasterDimension) = 0);
   ProcessBreak;
 EndIf;
 
-If(DimensionExists(sWorkDimension) = 0);
-  DimensionCreate(sWorkDimension);
-EndIf;
+ExecuteProcess(sPrefix | '.P.Dimension.Create',
+  'pPrefix', sPrefix,
+  'pTargetDimension', sWorkDimension);
 
 ExecuteProcess(sPrefix | '.P.Dimension.CopyAll',
   'pPrefix', sPrefix,

@@ -1,21 +1,57 @@
 {
-    "Name":  "IMF.P.Impact.Cubes",
-    "Code@Code.link":  "IMF.P.Impact.Cubes.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pPrefix",
-                           "Prompt":  "Prefix",
-                           "Value":  "IMF"
-                       },
-                       {
-                           "Name":  "pDimensionCode",
-                           "Prompt":  "Dimension Code",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pVersionId",
-                           "Prompt":  "Version Id",
-                           "Value":  ""
-                       }
-                   ]
+  "Name": "IMF.P.Impact.Cubes",
+  "name": "IMF.P.Impact.Cubes",
+  "Purpose": "Evaluate cube dependencies affected by a version diff.",
+  "purpose": "Evaluate cube dependencies affected by a version diff.",
+  "Code@Code.link": "IMF.P.Impact.Cubes.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\n# Placeholder:\n# 1. read IMF.C.Diff for the version\n# 2. identify cubes using the managed dimension\n# 3. write impact findings to IMF.C.Impact",
+  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\n# Placeholder:\n# 1. read IMF.C.Diff for the version\n# 2. identify cubes using the managed dimension\n# 3. write impact findings to IMF.C.Impact",
+  "Metadata": "",
+  "metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Impact"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }

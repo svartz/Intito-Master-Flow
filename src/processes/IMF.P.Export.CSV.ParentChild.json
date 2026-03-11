@@ -1,26 +1,67 @@
 {
-    "Name":  "IMF.P.Export.CSV.ParentChild",
-    "Code@Code.link":  "IMF.P.Export.CSV.ParentChild.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pPrefix",
-                           "Prompt":  "Prefix",
-                           "Value":  "IMF"
-                       },
-                       {
-                           "Name":  "pDimensionCode",
-                           "Prompt":  "Dimension Code",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pVersionId",
-                           "Prompt":  "Version Id",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pFilePath",
-                           "Prompt":  "File Path",
-                           "Value":  ""
-                       }
-                   ]
+  "Name": "IMF.P.Export.CSV.ParentChild",
+  "name": "IMF.P.Export.CSV.ParentChild",
+  "Purpose": "Export a managed dimension or version in parent-child CSV shape.",
+  "purpose": "Export a managed dimension or version in parent-child CSV shape.",
+  "Code@Code.link": "IMF.P.Export.CSV.ParentChild.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    },
+    {
+      "Name": "pFilePath",
+      "Prompt": "File Path",
+      "Value": ""
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    },
+    {
+      "Name": "pFilePath",
+      "Prompt": "File Path",
+      "Value": ""
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\n# Placeholder:\n# 1. resolve source dimension from version or master\n# 2. flatten hierarchy to parent-child rows\n# 3. write CSV file to pFilePath",
+  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\n# Placeholder:\n# 1. resolve source dimension from version or master\n# 2. flatten hierarchy to parent-child rows\n# 3. write CSV file to pFilePath",
+  "Metadata": "",
+  "metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Export"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }

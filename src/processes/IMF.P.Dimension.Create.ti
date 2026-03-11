@@ -1,0 +1,33 @@
+# IMF.P.Dimension.Create
+# Purpose: Create a target dimension shell for IMF copy and publish workflows.
+# Sources:
+# - IMF control metadata and TM1 native objects where applicable
+# Parameters:
+# - pPrefix: Parameter pPrefix Default 'IMF'.
+# - pTargetDimension: Parameter pTargetDimension Default ''.
+# Prolog:
+# - Execute the process-specific workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave deterministic side effects only where supported.
+
+#region prolog
+sTargetDimension = Trim(pTargetDimension);
+If(sTargetDimension @= ''); ProcessBreak; EndIf;
+If(DimensionExists(sTargetDimension) = 0); DimensionCreate(sTargetDimension); EndIf;
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond process orchestration in this scaffold.
+#endregion

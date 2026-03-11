@@ -52,12 +52,7 @@ If(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);
   ProcessBreak;
 EndIf;
 
-ExecuteProcess(sPrefix | '.P.Validate.Technical',
-  'pPrefix', sPrefix,
-  'pDimensionCode', sDimensionCode,
-  'pVersionId', sVersionId);
-
-ExecuteProcess(sPrefix | '.P.Impact.RunAll',
+ExecuteProcess(sPrefix | '.P.Commit.Prepare',
   'pPrefix', sPrefix,
   'pDimensionCode', sDimensionCode,
   'pVersionId', sVersionId);
@@ -88,6 +83,20 @@ AttrPutS(sPublishedBy, sDimVersion, sVersionId, 'PublishedBy');
 CellPutS('Published', sCubeVersion, sVersionId, 'Status');
 CellPutS(sPublishedAt, sCubeVersion, sVersionId, 'PublishedAt');
 CellPutS(sPublishedBy, sCubeVersion, sVersionId, 'PublishedBy');
+ExecuteProcess(sPrefix | '.P.Commit.Finalize',
+  'pPrefix', sPrefix,
+  'pDimensionCode', sDimensionCode,
+  'pVersionId', sVersionId,
+  'pPublishedBy', sPublishedBy);
+
+ExecuteProcess(sPrefix | '.P.Log.Event',
+  'pPrefix', sPrefix,
+  'pSeverity', 'INFO',
+  'pObjectType', 'VERSION',
+  'pObjectName', sVersionId,
+  'pMessage', 'Publish workflow executed for work dimension ' | sWorkDimension | '.',
+  'pRunId', sVersionId);
+
 CellPutS('Publish workflow executed for work dimension ' | sWorkDimension | '.', sCubeVersion, sVersionId, 'Notes');
 #endregion
 

@@ -1,21 +1,56 @@
 {
-    "Name":  "IMF.P.Attribute.CopyDefinitions",
-    "Code@Code.link":  "IMF.P.Attribute.CopyDefinitions.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pPrefix",
-                           "Prompt":  "Prefix",
-                           "Value":  "IMF"
-                       },
-                       {
-                           "Name":  "pSourceDimension",
-                           "Prompt":  "Source Dimension",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pTargetDimension",
-                           "Prompt":  "Target Dimension",
-                           "Value":  ""
-                       }
-                   ]
+  "Name": "IMF.P.Attribute.CopyDefinitions",
+  "name": "IMF.P.Attribute.CopyDefinitions",
+  "Purpose": "Create the source dimension's attribute definitions on the target dimension.",
+  "purpose": "Create the source dimension's attribute definitions on the target dimension.",
+  "Code@Code.link": "IMF.P.Attribute.CopyDefinitions.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pSourceDimension",
+      "Prompt": "Source Dimension",
+      "Value": ""
+    },
+    {
+      "Name": "pTargetDimension",
+      "Prompt": "Target Dimension",
+      "Value": ""
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pSourceDimension",
+      "Prompt": "Source Dimension",
+      "Value": ""
+    },
+    {
+      "Name": "pTargetDimension",
+      "Prompt": "Target Dimension",
+      "Value": ""
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsSourceDimension = Trim(pSourceDimension);\nsTargetDimension = Trim(pTargetDimension);\n\nIf(sSourceDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(sTargetDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sSourceDimension) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sTargetDimension) = 0);\n  ProcessBreak;\nEndIf;\n\nsSourceAttrCube = '}ElementAttributes_' | sSourceDimension;\nsTargetAttrCube = '}ElementAttributes_' | sTargetDimension;\n\nIf(CubeExists(sSourceAttrCube) = 0);\n  ProcessBreak;\nEndIf;\n\n# The exact list of attribute elements is read from the }ElementAttributes dimension.\n# This scaffold prepares the copy boundary and is intentionally conservative until\n# tested against a live TM1 model.\n\nIf(CubeExists(sTargetAttrCube) = 0);\n  # The attribute cube is created automatically when the first attribute is added.\nEndIf;\n\n# Placeholder for attribute-definition loop:\n# 1. enumerate attribute names from the source attribute dimension\n# 2. inspect each attribute type\n# 3. create missing attributes on the target dimension",
+  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsSourceDimension = Trim(pSourceDimension);\nsTargetDimension = Trim(pTargetDimension);\n\nIf(sSourceDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(sTargetDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sSourceDimension) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sTargetDimension) = 0);\n  ProcessBreak;\nEndIf;\n\nsSourceAttrCube = '}ElementAttributes_' | sSourceDimension;\nsTargetAttrCube = '}ElementAttributes_' | sTargetDimension;\n\nIf(CubeExists(sSourceAttrCube) = 0);\n  ProcessBreak;\nEndIf;\n\n# The exact list of attribute elements is read from the }ElementAttributes dimension.\n# This scaffold prepares the copy boundary and is intentionally conservative until\n# tested against a live TM1 model.\n\nIf(CubeExists(sTargetAttrCube) = 0);\n  # The attribute cube is created automatically when the first attribute is added.\nEndIf;\n\n# Placeholder for attribute-definition loop:\n# 1. enumerate attribute names from the source attribute dimension\n# 2. inspect each attribute type\n# 3. create missing attributes on the target dimension",
+  "Metadata": "",
+  "metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }

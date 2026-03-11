@@ -1,0 +1,75 @@
+{
+  "Name": "IMF.P.Commit.Finalize",
+  "name": "IMF.P.Commit.Finalize",
+  "Purpose": "Finalize publish state, notes, and lifecycle metadata after master replacement.",
+  "purpose": "Finalize publish state, notes, and lifecycle metadata after master replacement.",
+  "Code@Code.link": "IMF.P.Commit.Finalize.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF",
+      "Description": "Parameter pPrefix"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "DimensionCode",
+      "Value": "",
+      "Description": "Parameter pDimensionCode"
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "VersionId",
+      "Value": "",
+      "Description": "Parameter pVersionId"
+    },
+    {
+      "Name": "pPublishedBy",
+      "Prompt": "PublishedBy",
+      "Value": "",
+      "Description": "Parameter pPublishedBy"
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF",
+      "Description": "Parameter pPrefix"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "DimensionCode",
+      "Value": "",
+      "Description": "Parameter pDimensionCode"
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "VersionId",
+      "Value": "",
+      "Description": "Parameter pVersionId"
+    },
+    {
+      "Name": "pPublishedBy",
+      "Prompt": "PublishedBy",
+      "Value": "",
+      "Description": "Parameter pPublishedBy"
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;\nsDimensionCode = Trim(pDimensionCode); sVersionId = Trim(pVersionId); sPublishedBy = Trim(pPublishedBy);\nIf(sPublishedBy @= ''); sPublishedBy = 'SYSTEM'; EndIf;\nsCubeVersion = sPrefix | '.C.Version'; sDimVersion = sPrefix | '.D.Version';\nsPublishedAt = TIMST(NOW, '\\Y-\\m-\\d \\h:\\i:\\s');\nCellPutS('Published', sCubeVersion, sVersionId, 'Status');\nCellPutS(sPublishedAt, sCubeVersion, sVersionId, 'PublishedAt');\nCellPutS(sPublishedBy, sCubeVersion, sVersionId, 'PublishedBy');\nAttrPutS('Published', sDimVersion, sVersionId, 'Status');\nAttrPutS(sPublishedAt, sDimVersion, sVersionId, 'PublishedAt');\nAttrPutS(sPublishedBy, sDimVersion, sVersionId, 'PublishedBy');",
+  "prolog": "sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;\nsDimensionCode = Trim(pDimensionCode); sVersionId = Trim(pVersionId); sPublishedBy = Trim(pPublishedBy);\nIf(sPublishedBy @= ''); sPublishedBy = 'SYSTEM'; EndIf;\nsCubeVersion = sPrefix | '.C.Version'; sDimVersion = sPrefix | '.D.Version';\nsPublishedAt = TIMST(NOW, '\\Y-\\m-\\d \\h:\\i:\\s');\nCellPutS('Published', sCubeVersion, sVersionId, 'Status');\nCellPutS(sPublishedAt, sCubeVersion, sVersionId, 'PublishedAt');\nCellPutS(sPublishedBy, sCubeVersion, sVersionId, 'PublishedBy');\nAttrPutS('Published', sDimVersion, sVersionId, 'Status');\nAttrPutS(sPublishedAt, sDimVersion, sVersionId, 'PublishedAt');\nAttrPutS(sPublishedBy, sDimVersion, sVersionId, 'PublishedBy');",
+  "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Publish"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
+}

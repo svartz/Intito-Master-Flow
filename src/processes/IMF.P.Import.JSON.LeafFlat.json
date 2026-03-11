@@ -1,26 +1,67 @@
 {
-    "Name":  "IMF.P.Import.JSON.LeafFlat",
-    "Code@Code.link":  "IMF.P.Import.JSON.LeafFlat.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pPrefix",
-                           "Prompt":  "Prefix",
-                           "Value":  "IMF"
-                       },
-                       {
-                           "Name":  "pDimensionCode",
-                           "Prompt":  "Dimension Code",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pVersionId",
-                           "Prompt":  "Version Id",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pFilePath",
-                           "Prompt":  "File Path",
-                           "Value":  ""
-                       }
-                   ]
+  "Name": "IMF.P.Import.JSON.LeafFlat",
+  "name": "IMF.P.Import.JSON.LeafFlat",
+  "Purpose": "Import flat JSON leaf rows into a managed dimension or work version.",
+  "purpose": "Import flat JSON leaf rows into a managed dimension or work version.",
+  "Code@Code.link": "IMF.P.Import.JSON.LeafFlat.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    },
+    {
+      "Name": "pFilePath",
+      "Prompt": "File Path",
+      "Value": ""
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    },
+    {
+      "Name": "pFilePath",
+      "Prompt": "File Path",
+      "Value": ""
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\n# Placeholder:\n# 1. resolve target dimension from version or master\n# 2. deserialize leaf JSON payload\n# 3. apply element and attribute updates to target dimension",
+  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\n# Placeholder:\n# 1. resolve target dimension from version or master\n# 2. deserialize leaf JSON payload\n# 3. apply element and attribute updates to target dimension",
+  "Metadata": "",
+  "metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Import"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }

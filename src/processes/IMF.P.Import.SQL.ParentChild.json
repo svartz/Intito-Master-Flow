@@ -1,26 +1,67 @@
 {
-    "Name":  "IMF.P.Import.SQL.ParentChild",
-    "Code@Code.link":  "IMF.P.Import.SQL.ParentChild.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pPrefix",
-                           "Prompt":  "Prefix",
-                           "Value":  "IMF"
-                       },
-                       {
-                           "Name":  "pDimensionCode",
-                           "Prompt":  "Dimension Code",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pVersionId",
-                           "Prompt":  "Version Id",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pSourceQuery",
-                           "Prompt":  "Source Query",
-                           "Value":  ""
-                       }
-                   ]
+  "Name": "IMF.P.Import.SQL.ParentChild",
+  "name": "IMF.P.Import.SQL.ParentChild",
+  "Purpose": "Import SQL parent-child rows into a managed dimension or work version.",
+  "purpose": "Import SQL parent-child rows into a managed dimension or work version.",
+  "Code@Code.link": "IMF.P.Import.SQL.ParentChild.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    },
+    {
+      "Name": "pSourceQuery",
+      "Prompt": "Source Query",
+      "Value": ""
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    },
+    {
+      "Name": "pSourceQuery",
+      "Prompt": "Source Query",
+      "Value": ""
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\n# Placeholder:\n# 1. resolve target dimension from version or master\n# 2. read parent-child records from pSourceQuery\n# 3. apply structure updates to target dimension",
+  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\n# Placeholder:\n# 1. resolve target dimension from version or master\n# 2. read parent-child records from pSourceQuery\n# 3. apply structure updates to target dimension",
+  "Metadata": "",
+  "metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Import"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }

@@ -1,0 +1,44 @@
+# IMF.P.Version.Delete
+# Purpose: Delete a draft work version safely after lock and status validation.
+# Sources:
+# - IMF control metadata and TM1 native objects where applicable
+# Parameters:
+# - pPrefix: Parameter pPrefix Default 'IMF'.
+# - pDimensionCode: Parameter pDimensionCode Default ''.
+# - pVersionId: Parameter pVersionId Default ''.
+# - pDeletedBy: Parameter pDeletedBy Default ''.
+# Prolog:
+# - Execute the process-specific workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave deterministic side effects only where supported.
+
+#region prolog
+sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;
+sDimensionCode = Trim(pDimensionCode); sVersionId = Trim(pVersionId); sDeletedBy = Trim(pDeletedBy);
+If(sDeletedBy @= ''); sDeletedBy = 'SYSTEM'; EndIf;
+sDimVersion = sPrefix | '.D.Version'; sCubeVersion = sPrefix | '.C.Version';
+If((sDimensionCode @= '') % (sVersionId @= '')); ProcessBreak; EndIf;
+If(DimensionElementExists(sDimVersion, sVersionId) = 0); ProcessBreak; EndIf;
+If(CellGetS(sCubeVersion, sVersionId, 'Status') @= 'Published'); ProcessBreak; EndIf;
+If(CellGetS(sCubeVersion, sVersionId, 'IsLocked') @= 'Y'); ProcessBreak; EndIf;
+sWorkDimension = Trim(CellGetS(sCubeVersion, sVersionId, 'WorkDimension'));
+If((sWorkDimension @<> '') & (DimensionExists(sWorkDimension) = 1)); DimensionDestroy(sWorkDimension); EndIf;
+DimensionElementDelete(sDimVersion, sVersionId);
+# TODO: Remove corresponding control-cube intersections once target cube cleanup contract is finalized.
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond process orchestration in this scaffold.
+#endregion

@@ -1,64 +1,112 @@
 {
-    "Name":  "IMF.P.Security.SetCubeAccess",
-    "Purpose":  "Apply or log a single cube-security assignment for an IMF group.",
-    "Code@Code.link":  "IMF.P.Security.SetCubeAccess.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pEnvironment",
-                           "Prompt":  "Environment",
-                           "Value":  "DEV",
-                           "Description":  "Parameter pEnvironment"
-                       },
-                       {
-                           "Name":  "pCubeName",
-                           "Prompt":  "Cube Name",
-                           "Value":  "",
-                           "Description":  "Parameter pCubeName"
-                       },
-                       {
-                           "Name":  "pGroupName",
-                           "Prompt":  "Group Name",
-                           "Value":  "",
-                           "Description":  "Parameter pGroupName"
-                       },
-                       {
-                           "Name":  "pAccess",
-                           "Prompt":  "Access",
-                           "Value":  "READ",
-                           "Description":  "Parameter pAccess"
-                       },
-                       {
-                           "Name":  "pLogOnly",
-                           "Prompt":  "Log Only",
-                           "Value":  "N",
-                           "Description":  "Parameter pLogOnly"
-                       },
-                       {
-                           "Name":  "pLogToCube",
-                           "Prompt":  "Log To Cube",
-                           "Value":  "Y",
-                           "Description":  "Parameter pLogToCube"
-                       },
-                       {
-                           "Name":  "pLogFile",
-                           "Prompt":  "Log File",
-                           "Value":  "docs/security/IMF_Security_Bootstrap.log",
-                           "Description":  "Parameter pLogFile"
-                       }
-                   ],
-    "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsCubeName = Trim(pCubeName);\r\nsGroupName = Trim(pGroupName);\r\nsAccess = Upper(Trim(pAccess));\r\nsLogOnly = Upper(Trim(pLogOnly));\r\nsLogToCube = Upper(Trim(pLogToCube));\r\nsLogFile = Trim(pLogFile);\r\nIf((sCubeName @= \u0027\u0027) % (sGroupName @= \u0027\u0027)); ProcessBreak; EndIf;\r\n# TODO: Confirm }CubeSecurity dimension order in the target TM1 environment before enabling native writes.\r\nIf(sLogOnly @= \u0027N\u0027);\r\n  # CellPutS(sAccess, \u0027}CubeSecurity\u0027, sGroupName, sCubeName);\r\n  ExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027SET_CUBE_ACCESS\u0027, \u0027pObjectType\u0027, \u0027CUBE\u0027, \u0027pObjectName\u0027, sCubeName, \u0027pStatus\u0027, \u0027TODO\u0027, \u0027pMessage\u0027, \u0027TODO: Native }CubeSecurity write must be validated before activation. Group=\u0027 | sGroupName | \u0027; expected=\u0027 | sAccess, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nElse;\r\n  ExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027SET_CUBE_ACCESS\u0027, \u0027pObjectType\u0027, \u0027CUBE\u0027, \u0027pObjectName\u0027, sCubeName, \u0027pStatus\u0027, \u0027INFO\u0027, \u0027pMessage\u0027, \u0027Log-only cube assignment. Group=\u0027 | sGroupName | \u0027; expected=\u0027 | sAccess, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nEndIf;",
-    "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
-    "tags":  [
-                 "IMF",
-                 "Security",
-                 "TM1",
-                 "PAW",
-                 "v12",
-                 "CubeSecurity"
-             ],
-    "environmentScope":  [
-                             "DEV",
-                             "TEST",
-                             "PROD"
-                         ]
+  "Name": "IMF.P.Security.SetCubeAccess",
+  "name": "IMF.P.Security.SetCubeAccess",
+  "Purpose": "Apply or log a single cube-security assignment for an IMF group.",
+  "purpose": "Apply or log a single cube-security assignment for an IMF group.",
+  "Code@Code.link": "IMF.P.Security.SetCubeAccess.ti",
+  "Parameters": [
+    {
+      "Name": "pEnvironment",
+      "Prompt": "Environment",
+      "Value": "DEV",
+      "Description": "Parameter pEnvironment"
+    },
+    {
+      "Name": "pCubeName",
+      "Prompt": "Cube Name",
+      "Value": "",
+      "Description": "Parameter pCubeName"
+    },
+    {
+      "Name": "pGroupName",
+      "Prompt": "Group Name",
+      "Value": "",
+      "Description": "Parameter pGroupName"
+    },
+    {
+      "Name": "pAccess",
+      "Prompt": "Access",
+      "Value": "READ",
+      "Description": "Parameter pAccess"
+    },
+    {
+      "Name": "pLogOnly",
+      "Prompt": "Log Only",
+      "Value": "N",
+      "Description": "Parameter pLogOnly"
+    },
+    {
+      "Name": "pLogToCube",
+      "Prompt": "Log To Cube",
+      "Value": "Y",
+      "Description": "Parameter pLogToCube"
+    },
+    {
+      "Name": "pLogFile",
+      "Prompt": "Log File",
+      "Value": "docs/security/IMF_Security_Bootstrap.log",
+      "Description": "Parameter pLogFile"
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pEnvironment",
+      "Prompt": "Environment",
+      "Value": "DEV",
+      "Description": "Parameter pEnvironment"
+    },
+    {
+      "Name": "pCubeName",
+      "Prompt": "Cube Name",
+      "Value": "",
+      "Description": "Parameter pCubeName"
+    },
+    {
+      "Name": "pGroupName",
+      "Prompt": "Group Name",
+      "Value": "",
+      "Description": "Parameter pGroupName"
+    },
+    {
+      "Name": "pAccess",
+      "Prompt": "Access",
+      "Value": "READ",
+      "Description": "Parameter pAccess"
+    },
+    {
+      "Name": "pLogOnly",
+      "Prompt": "Log Only",
+      "Value": "N",
+      "Description": "Parameter pLogOnly"
+    },
+    {
+      "Name": "pLogToCube",
+      "Prompt": "Log To Cube",
+      "Value": "Y",
+      "Description": "Parameter pLogToCube"
+    },
+    {
+      "Name": "pLogFile",
+      "Prompt": "Log File",
+      "Value": "docs/security/IMF_Security_Bootstrap.log",
+      "Description": "Parameter pLogFile"
+    }
+  ],
+  "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsCubeName = Trim(pCubeName);\nsGroupName = Trim(pGroupName);\nsAccess = Upper(Trim(pAccess));\nsLogOnly = Upper(Trim(pLogOnly));\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf((sCubeName @= '') % (sGroupName @= '')); ProcessBreak; EndIf;\n# TODO: Confirm }CubeSecurity dimension order in the target TM1 environment before enabling native writes.\nIf(sLogOnly @= 'N');\n  # CellPutS(sAccess, '}CubeSecurity', sGroupName, sCubeName);\n  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'SET_CUBE_ACCESS', 'pObjectType', 'CUBE', 'pObjectName', sCubeName, 'pStatus', 'TODO', 'pMessage', 'TODO: Native }CubeSecurity write must be validated before activation. Group=' | sGroupName | '; expected=' | sAccess, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nElse;\n  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'SET_CUBE_ACCESS', 'pObjectType', 'CUBE', 'pObjectName', sCubeName, 'pStatus', 'INFO', 'pMessage', 'Log-only cube assignment. Group=' | sGroupName | '; expected=' | sAccess, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nEndIf;",
+  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsCubeName = Trim(pCubeName);\nsGroupName = Trim(pGroupName);\nsAccess = Upper(Trim(pAccess));\nsLogOnly = Upper(Trim(pLogOnly));\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf((sCubeName @= '') % (sGroupName @= '')); ProcessBreak; EndIf;\n# TODO: Confirm }CubeSecurity dimension order in the target TM1 environment before enabling native writes.\nIf(sLogOnly @= 'N');\n  # CellPutS(sAccess, '}CubeSecurity', sGroupName, sCubeName);\n  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'SET_CUBE_ACCESS', 'pObjectType', 'CUBE', 'pObjectName', sCubeName, 'pStatus', 'TODO', 'pMessage', 'TODO: Native }CubeSecurity write must be validated before activation. Group=' | sGroupName | '; expected=' | sAccess, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nElse;\n  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'SET_CUBE_ACCESS', 'pObjectType', 'CUBE', 'pObjectName', sCubeName, 'pStatus', 'INFO', 'pMessage', 'Log-only cube assignment. Group=' | sGroupName | '; expected=' | sAccess, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nEndIf;",
+  "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "tags": [
+    "IMF",
+    "Security",
+    "TM1",
+    "PAW",
+    "v12",
+    "CubeSecurity"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }

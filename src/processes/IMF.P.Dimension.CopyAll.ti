@@ -38,12 +38,13 @@ If(DimensionExists(sSourceDimension) = 0);
   ProcessBreak;
 EndIf;
 
-If(DimensionExists(sTargetDimension) = 0);
-  DimensionCreate(sTargetDimension);
-EndIf;
+ExecuteProcess(sPrefix | '.P.Dimension.Create',
+  'pPrefix', sPrefix,
+  'pTargetDimension', sTargetDimension);
 
-# Recreate the target dimension shell before rebuilding structure from the source.
-DimensionDeleteAllElements(sTargetDimension);
+ExecuteProcess(sPrefix | '.P.Dimension.Clear',
+  'pPrefix', sPrefix,
+  'pTargetDimension', sTargetDimension);
 
 # The detailed element and consolidation traversal is environment-specific in TM1
 # and is therefore isolated here as the orchestration entry point.
@@ -58,11 +59,11 @@ ExecuteProcess(sPrefix | '.P.Attribute.CopyValues',
   'pSourceDimension', sSourceDimension,
   'pTargetDimension', sTargetDimension);
 
-# Placeholder for subsequent hierarchy walk:
-# 1. create source elements in target
-# 2. reapply parent-child relations
-# 3. reapply weights
-# 4. preserve aliases already materialized via attribute copy
+# TODO: Replay leaf and consolidated element creation before relation copy in a live TM1 environment.
+ExecuteProcess(sPrefix | '.P.Dimension.CopyRelations',
+  'pPrefix', sPrefix,
+  'pSourceDimension', sSourceDimension,
+  'pTargetDimension', sTargetDimension);
 
 If(sIncludeData @= 'Y');
   # Reserved for future cube-data synchronization logic.

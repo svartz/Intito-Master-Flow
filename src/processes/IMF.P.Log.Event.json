@@ -1,0 +1,99 @@
+{
+  "Name": "IMF.P.Log.Event",
+  "name": "IMF.P.Log.Event",
+  "Purpose": "Write operational IMF event log entries to control cubes or fallback logs.",
+  "purpose": "Write operational IMF event log entries to control cubes or fallback logs.",
+  "Code@Code.link": "IMF.P.Log.Event.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF",
+      "Description": "Parameter pPrefix"
+    },
+    {
+      "Name": "pSeverity",
+      "Prompt": "Severity",
+      "Value": "INFO",
+      "Description": "Parameter pSeverity"
+    },
+    {
+      "Name": "pObjectType",
+      "Prompt": "ObjectType",
+      "Value": "",
+      "Description": "Parameter pObjectType"
+    },
+    {
+      "Name": "pObjectName",
+      "Prompt": "ObjectName",
+      "Value": "",
+      "Description": "Parameter pObjectName"
+    },
+    {
+      "Name": "pMessage",
+      "Prompt": "Message",
+      "Value": "",
+      "Description": "Parameter pMessage"
+    },
+    {
+      "Name": "pRunId",
+      "Prompt": "RunId",
+      "Value": "",
+      "Description": "Parameter pRunId"
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF",
+      "Description": "Parameter pPrefix"
+    },
+    {
+      "Name": "pSeverity",
+      "Prompt": "Severity",
+      "Value": "INFO",
+      "Description": "Parameter pSeverity"
+    },
+    {
+      "Name": "pObjectType",
+      "Prompt": "ObjectType",
+      "Value": "",
+      "Description": "Parameter pObjectType"
+    },
+    {
+      "Name": "pObjectName",
+      "Prompt": "ObjectName",
+      "Value": "",
+      "Description": "Parameter pObjectName"
+    },
+    {
+      "Name": "pMessage",
+      "Prompt": "Message",
+      "Value": "",
+      "Description": "Parameter pMessage"
+    },
+    {
+      "Name": "pRunId",
+      "Prompt": "RunId",
+      "Value": "",
+      "Description": "Parameter pRunId"
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;\nsSeverity = Upper(Trim(pSeverity)); sObjectType = Trim(pObjectType); sObjectName = Trim(pObjectName); sMessage = Trim(pMessage); sRunId = Trim(pRunId);\nIf(sSeverity @= ''); sSeverity = 'INFO'; EndIf;\nLogOutput('INFO', 'IMF.EVENT|' | sSeverity | '|' | sRunId | '|' | sObjectType | '|' | sObjectName | '|' | sMessage);\n# TODO: Persist into IMF.C.EventLog when the cube structure and coordinates are finalized.",
+  "prolog": "sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;\nsSeverity = Upper(Trim(pSeverity)); sObjectType = Trim(pObjectType); sObjectName = Trim(pObjectName); sMessage = Trim(pMessage); sRunId = Trim(pRunId);\nIf(sSeverity @= ''); sSeverity = 'INFO'; EndIf;\nLogOutput('INFO', 'IMF.EVENT|' | sSeverity | '|' | sRunId | '|' | sObjectType | '|' | sObjectName | '|' | sMessage);\n# TODO: Persist into IMF.C.EventLog when the cube structure and coordinates are finalized.",
+  "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Validation"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
+}

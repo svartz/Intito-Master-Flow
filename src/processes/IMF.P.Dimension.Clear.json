@@ -1,0 +1,51 @@
+{
+  "Name": "IMF.P.Dimension.Clear",
+  "name": "IMF.P.Dimension.Clear",
+  "Purpose": "Clear all elements from a target dimension before rebuild.",
+  "purpose": "Clear all elements from a target dimension before rebuild.",
+  "Code@Code.link": "IMF.P.Dimension.Clear.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF",
+      "Description": "Parameter pPrefix"
+    },
+    {
+      "Name": "pTargetDimension",
+      "Prompt": "TargetDimension",
+      "Value": "",
+      "Description": "Parameter pTargetDimension"
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF",
+      "Description": "Parameter pPrefix"
+    },
+    {
+      "Name": "pTargetDimension",
+      "Prompt": "TargetDimension",
+      "Value": "",
+      "Description": "Parameter pTargetDimension"
+    }
+  ],
+  "Prolog": "sTargetDimension = Trim(pTargetDimension);\nIf((sTargetDimension @= '') % (DimensionExists(sTargetDimension) = 0)); ProcessBreak; EndIf;\nDimensionDeleteAllElements(sTargetDimension);",
+  "prolog": "sTargetDimension = Trim(pTargetDimension);\nIf((sTargetDimension @= '') % (DimensionExists(sTargetDimension) = 0)); ProcessBreak; EndIf;\nDimensionDeleteAllElements(sTargetDimension);",
+  "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Versioning"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
+}

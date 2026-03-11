@@ -1,46 +1,76 @@
 {
-    "Name":  "IMF.P.Security.ValidateGroups",
-    "Purpose":  "Validate that all required IMF security groups exist or are clearly flagged as TODO.",
-    "Code@Code.link":  "IMF.P.Security.ValidateGroups.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pEnvironment",
-                           "Prompt":  "Environment",
-                           "Value":  "DEV",
-                           "Description":  "Parameter pEnvironment"
-                       },
-                       {
-                           "Name":  "pStrictMode",
-                           "Prompt":  "Strict Mode",
-                           "Value":  "N",
-                           "Description":  "Parameter pStrictMode"
-                       },
-                       {
-                           "Name":  "pLogToCube",
-                           "Prompt":  "Log To Cube",
-                           "Value":  "Y",
-                           "Description":  "Parameter pLogToCube"
-                       },
-                       {
-                           "Name":  "pLogFile",
-                           "Prompt":  "Log File",
-                           "Value":  "docs/security/IMF_Security_Bootstrap.log",
-                           "Description":  "Parameter pLogFile"
-                       }
-                   ],
-    "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsStrictMode = Upper(Trim(pStrictMode));\r\nsLogToCube = Upper(Trim(pLogToCube));\r\nsLogFile = Trim(pLogFile);\r\nIf(sEnvironment @= \u0027\u0027); sEnvironment = \u0027DEV\u0027; EndIf;\r\nIf(sStrictMode @= \u0027\u0027); sStrictMode = \u0027N\u0027; EndIf;\r\n# TODO: Implement native group existence checks against the target TM1 security provider or external IAM source.\r\nExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027VALIDATE_GROUPS\u0027, \u0027pObjectType\u0027, \u0027GROUP_SET\u0027, \u0027pObjectName\u0027, \u0027IMF\u0027, \u0027pStatus\u0027, If(sStrictMode @= \u0027Y\u0027, \u0027ERROR\u0027, \u0027WARN\u0027), \u0027pMessage\u0027, \u0027TODO: Validate required IMF groups against the real security store.\u0027, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);\r\nIf(sStrictMode @= \u0027Y\u0027); ProcessBreak; EndIf;",
-    "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
-    "tags":  [
-                 "IMF",
-                 "Security",
-                 "TM1",
-                 "PAW",
-                 "v12",
-                 "Validation"
-             ],
-    "environmentScope":  [
-                             "DEV",
-                             "TEST",
-                             "PROD"
-                         ]
+  "Name": "IMF.P.Security.ValidateGroups",
+  "name": "IMF.P.Security.ValidateGroups",
+  "Purpose": "Validate that all required IMF security groups exist or are clearly flagged as TODO.",
+  "purpose": "Validate that all required IMF security groups exist or are clearly flagged as TODO.",
+  "Code@Code.link": "IMF.P.Security.ValidateGroups.ti",
+  "Parameters": [
+    {
+      "Name": "pEnvironment",
+      "Prompt": "Environment",
+      "Value": "DEV",
+      "Description": "Parameter pEnvironment"
+    },
+    {
+      "Name": "pStrictMode",
+      "Prompt": "Strict Mode",
+      "Value": "N",
+      "Description": "Parameter pStrictMode"
+    },
+    {
+      "Name": "pLogToCube",
+      "Prompt": "Log To Cube",
+      "Value": "Y",
+      "Description": "Parameter pLogToCube"
+    },
+    {
+      "Name": "pLogFile",
+      "Prompt": "Log File",
+      "Value": "docs/security/IMF_Security_Bootstrap.log",
+      "Description": "Parameter pLogFile"
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pEnvironment",
+      "Prompt": "Environment",
+      "Value": "DEV",
+      "Description": "Parameter pEnvironment"
+    },
+    {
+      "Name": "pStrictMode",
+      "Prompt": "Strict Mode",
+      "Value": "N",
+      "Description": "Parameter pStrictMode"
+    },
+    {
+      "Name": "pLogToCube",
+      "Prompt": "Log To Cube",
+      "Value": "Y",
+      "Description": "Parameter pLogToCube"
+    },
+    {
+      "Name": "pLogFile",
+      "Prompt": "Log File",
+      "Value": "docs/security/IMF_Security_Bootstrap.log",
+      "Description": "Parameter pLogFile"
+    }
+  ],
+  "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsStrictMode = Upper(Trim(pStrictMode));\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nIf(sStrictMode @= ''); sStrictMode = 'N'; EndIf;\n# TODO: Implement native group existence checks against the target TM1 security provider or external IAM source.\nExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_GROUPS', 'pObjectType', 'GROUP_SET', 'pObjectName', 'IMF', 'pStatus', If(sStrictMode @= 'Y', 'ERROR', 'WARN'), 'pMessage', 'TODO: Validate required IMF groups against the real security store.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nIf(sStrictMode @= 'Y'); ProcessBreak; EndIf;",
+  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsStrictMode = Upper(Trim(pStrictMode));\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nIf(sStrictMode @= ''); sStrictMode = 'N'; EndIf;\n# TODO: Implement native group existence checks against the target TM1 security provider or external IAM source.\nExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_GROUPS', 'pObjectType', 'GROUP_SET', 'pObjectName', 'IMF', 'pStatus', If(sStrictMode @= 'Y', 'ERROR', 'WARN'), 'pMessage', 'TODO: Validate required IMF groups against the real security store.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nIf(sStrictMode @= 'Y'); ProcessBreak; EndIf;",
+  "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "tags": [
+    "IMF",
+    "Security",
+    "TM1",
+    "PAW",
+    "v12",
+    "Validation"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }

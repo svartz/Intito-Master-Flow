@@ -1,21 +1,57 @@
 {
-    "Name":  "IMF.P.Version.Unlock",
-    "Code@Code.link":  "IMF.P.Version.Unlock.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pPrefix",
-                           "Prompt":  "Prefix",
-                           "Value":  "IMF"
-                       },
-                       {
-                           "Name":  "pVersionId",
-                           "Prompt":  "Version Id",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pUnlockedBy",
-                           "Prompt":  "Unlocked By",
-                           "Value":  ""
-                       }
-                   ]
+  "Name": "IMF.P.Version.Unlock",
+  "name": "IMF.P.Version.Unlock",
+  "Purpose": "Release a previously locked work version.",
+  "purpose": "Release a previously locked work version.",
+  "Code@Code.link": "IMF.P.Version.Unlock.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    },
+    {
+      "Name": "pUnlockedBy",
+      "Prompt": "Unlocked By",
+      "Value": ""
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    },
+    {
+      "Name": "pUnlockedBy",
+      "Prompt": "Unlocked By",
+      "Value": ""
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsVersionId = Trim(pVersionId);\nsUnlockedBy = Trim(pUnlockedBy);\n\nIf(sUnlockedBy @= '');\n  sUnlockedBy = 'SYSTEM';\nEndIf;\n\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\nIf(Upper(Trim(CellGetS(sCubeVersion, sVersionId, 'IsLocked'))) @<> 'Y');\n  ProcessBreak;\nEndIf;\n\nCellPutS('N', sCubeVersion, sVersionId, 'IsLocked');\nCellPutS('', sCubeVersion, sVersionId, 'LockedBy');\nCellPutS('', sCubeVersion, sVersionId, 'LockedAt');\nCellPutS('', sCubeVersion, sVersionId, 'LockReason');\n\nAttrPutS('N', sDimVersion, sVersionId, 'IsLocked');\nAttrPutS('', sDimVersion, sVersionId, 'LockedBy');\nAttrPutS('', sDimVersion, sVersionId, 'LockedAt');\n\nCellPutS('Unlocked by ' | sUnlockedBy | ' at ' | TIMST(NOW, '\\Y-\\m-\\d \\h:\\i:\\s'), sCubeVersion, sVersionId, 'Notes');",
+  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsVersionId = Trim(pVersionId);\nsUnlockedBy = Trim(pUnlockedBy);\n\nIf(sUnlockedBy @= '');\n  sUnlockedBy = 'SYSTEM';\nEndIf;\n\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\nIf(Upper(Trim(CellGetS(sCubeVersion, sVersionId, 'IsLocked'))) @<> 'Y');\n  ProcessBreak;\nEndIf;\n\nCellPutS('N', sCubeVersion, sVersionId, 'IsLocked');\nCellPutS('', sCubeVersion, sVersionId, 'LockedBy');\nCellPutS('', sCubeVersion, sVersionId, 'LockedAt');\nCellPutS('', sCubeVersion, sVersionId, 'LockReason');\n\nAttrPutS('N', sDimVersion, sVersionId, 'IsLocked');\nAttrPutS('', sDimVersion, sVersionId, 'LockedBy');\nAttrPutS('', sDimVersion, sVersionId, 'LockedAt');\n\nCellPutS('Unlocked by ' | sUnlockedBy | ' at ' | TIMST(NOW, '\\Y-\\m-\\d \\h:\\i:\\s'), sCubeVersion, sVersionId, 'Notes');",
+  "Metadata": "",
+  "metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Versioning"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }

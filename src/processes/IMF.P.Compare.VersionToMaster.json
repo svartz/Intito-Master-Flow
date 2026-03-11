@@ -1,21 +1,57 @@
 {
-    "Name":  "IMF.P.Compare.VersionToMaster",
-    "Code@Code.link":  "IMF.P.Compare.VersionToMaster.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pPrefix",
-                           "Prompt":  "Prefix",
-                           "Value":  "IMF"
-                       },
-                       {
-                           "Name":  "pDimensionCode",
-                           "Prompt":  "Dimension Code",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pVersionId",
-                           "Prompt":  "Version Id",
-                           "Value":  ""
-                       }
-                   ]
+  "Name": "IMF.P.Compare.VersionToMaster",
+  "name": "IMF.P.Compare.VersionToMaster",
+  "Purpose": "Orchestrate a comparison between the current work dimension and its master.",
+  "purpose": "Orchestrate a comparison between the current work dimension and its master.",
+  "Code@Code.link": "IMF.P.Compare.VersionToMaster.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\n\nsDimDimension = sPrefix | '.D.Dimension';\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(sDimensionCode @= '');\n  ProcessBreak;\nEndIf;\nIf(sVersionId @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimDimension, sDimensionCode) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\n\nsMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));\nIf(sMasterDimension @= '');\n  sMasterDimension = sDimensionCode;\nEndIf;\nsWorkDimension = Trim(CellGetS(sCubeVersion, sVersionId, 'WorkDimension'));\n\nIf(DimensionExists(sMasterDimension) = 0);\n  ProcessBreak;\nEndIf;\nIf(sWorkDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sWorkDimension) = 0);\n  ProcessBreak;\nEndIf;\n\nExecuteProcess(sPrefix | '.P.Compare.Elements',\n  'pPrefix', sPrefix,\n  'pDimensionCode', sDimensionCode,\n  'pVersionId', sVersionId,\n  'pMasterDimension', sMasterDimension,\n  'pWorkDimension', sWorkDimension);\n\nExecuteProcess(sPrefix | '.P.Compare.Relations',\n  'pPrefix', sPrefix,\n  'pDimensionCode', sDimensionCode,\n  'pVersionId', sVersionId,\n  'pMasterDimension', sMasterDimension,\n  'pWorkDimension', sWorkDimension);\n\nExecuteProcess(sPrefix | '.P.Compare.Attributes',\n  'pPrefix', sPrefix,\n  'pDimensionCode', sDimensionCode,\n  'pVersionId', sVersionId,\n  'pMasterDimension', sMasterDimension,\n  'pWorkDimension', sWorkDimension);\n\nAttrPutS('ImpactAnalyzed', sDimVersion, sVersionId, 'Status');\nCellPutS('ImpactAnalyzed', sCubeVersion, sVersionId, 'Status');\nCellPutS('Version compared to master via diff engine.', sCubeVersion, sVersionId, 'Notes');",
+  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\n\nsDimDimension = sPrefix | '.D.Dimension';\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(sDimensionCode @= '');\n  ProcessBreak;\nEndIf;\nIf(sVersionId @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimDimension, sDimensionCode) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\n\nsMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));\nIf(sMasterDimension @= '');\n  sMasterDimension = sDimensionCode;\nEndIf;\nsWorkDimension = Trim(CellGetS(sCubeVersion, sVersionId, 'WorkDimension'));\n\nIf(DimensionExists(sMasterDimension) = 0);\n  ProcessBreak;\nEndIf;\nIf(sWorkDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sWorkDimension) = 0);\n  ProcessBreak;\nEndIf;\n\nExecuteProcess(sPrefix | '.P.Compare.Elements',\n  'pPrefix', sPrefix,\n  'pDimensionCode', sDimensionCode,\n  'pVersionId', sVersionId,\n  'pMasterDimension', sMasterDimension,\n  'pWorkDimension', sWorkDimension);\n\nExecuteProcess(sPrefix | '.P.Compare.Relations',\n  'pPrefix', sPrefix,\n  'pDimensionCode', sDimensionCode,\n  'pVersionId', sVersionId,\n  'pMasterDimension', sMasterDimension,\n  'pWorkDimension', sWorkDimension);\n\nExecuteProcess(sPrefix | '.P.Compare.Attributes',\n  'pPrefix', sPrefix,\n  'pDimensionCode', sDimensionCode,\n  'pVersionId', sVersionId,\n  'pMasterDimension', sMasterDimension,\n  'pWorkDimension', sWorkDimension);\n\nAttrPutS('ImpactAnalyzed', sDimVersion, sVersionId, 'Status');\nCellPutS('ImpactAnalyzed', sCubeVersion, sVersionId, 'Status');\nCellPutS('Version compared to master via diff engine.', sCubeVersion, sVersionId, 'Notes');",
+  "Metadata": "",
+  "metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Validation"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }

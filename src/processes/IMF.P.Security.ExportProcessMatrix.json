@@ -1,46 +1,76 @@
 {
-    "Name":  "IMF.P.Security.ExportProcessMatrix",
-    "Purpose":  "Export the IMF process security matrix for documentation and audit review.",
-    "Code@Code.link":  "IMF.P.Security.ExportProcessMatrix.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pEnvironment",
-                           "Prompt":  "Environment",
-                           "Value":  "DEV",
-                           "Description":  "Parameter pEnvironment"
-                       },
-                       {
-                           "Name":  "pOutputFile",
-                           "Prompt":  "Output File",
-                           "Value":  "docs/security/IMF_Process_Security_Matrix.csv",
-                           "Description":  "Parameter pOutputFile"
-                       },
-                       {
-                           "Name":  "pLogToCube",
-                           "Prompt":  "Log To Cube",
-                           "Value":  "Y",
-                           "Description":  "Parameter pLogToCube"
-                       },
-                       {
-                           "Name":  "pLogFile",
-                           "Prompt":  "Log File",
-                           "Value":  "docs/security/IMF_Security_Bootstrap.log",
-                           "Description":  "Parameter pLogFile"
-                       }
-                   ],
-    "Prolog":  "sEnvironment = Upper(Trim(pEnvironment));\r\nsOutputFile = Trim(pOutputFile);\r\nsLogToCube = Upper(Trim(pLogToCube));\r\nsLogFile = Trim(pLogFile);\r\nIf(sOutputFile @= \u0027\u0027); sOutputFile = \u0027docs/security/IMF_Process_Security_Matrix.csv\u0027; EndIf;\r\nExecuteProcess(\u0027IMF.P.Security.LogBootstrap\u0027, \u0027pEnvironment\u0027, sEnvironment, \u0027pAction\u0027, \u0027EXPORT_PROCESS_MATRIX\u0027, \u0027pObjectType\u0027, \u0027FILE\u0027, \u0027pObjectName\u0027, sOutputFile, \u0027pStatus\u0027, \u0027INFO\u0027, \u0027pMessage\u0027, \u0027Process security matrix export requested.\u0027, \u0027pLogToCube\u0027, sLogToCube, \u0027pLogFile\u0027, sLogFile);",
-    "Metadata":  "# TODO: Add metadata-tab logic only if a real datasource is required.",
-    "tags":  [
-                 "IMF",
-                 "Security",
-                 "TM1",
-                 "PAW",
-                 "v12",
-                 "Documentation"
-             ],
-    "environmentScope":  [
-                             "DEV",
-                             "TEST",
-                             "PROD"
-                         ]
+  "Name": "IMF.P.Security.ExportProcessMatrix",
+  "name": "IMF.P.Security.ExportProcessMatrix",
+  "Purpose": "Export the IMF process security matrix for documentation and audit review.",
+  "purpose": "Export the IMF process security matrix for documentation and audit review.",
+  "Code@Code.link": "IMF.P.Security.ExportProcessMatrix.ti",
+  "Parameters": [
+    {
+      "Name": "pEnvironment",
+      "Prompt": "Environment",
+      "Value": "DEV",
+      "Description": "Parameter pEnvironment"
+    },
+    {
+      "Name": "pOutputFile",
+      "Prompt": "Output File",
+      "Value": "docs/security/IMF_Process_Security_Matrix.csv",
+      "Description": "Parameter pOutputFile"
+    },
+    {
+      "Name": "pLogToCube",
+      "Prompt": "Log To Cube",
+      "Value": "Y",
+      "Description": "Parameter pLogToCube"
+    },
+    {
+      "Name": "pLogFile",
+      "Prompt": "Log File",
+      "Value": "docs/security/IMF_Security_Bootstrap.log",
+      "Description": "Parameter pLogFile"
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pEnvironment",
+      "Prompt": "Environment",
+      "Value": "DEV",
+      "Description": "Parameter pEnvironment"
+    },
+    {
+      "Name": "pOutputFile",
+      "Prompt": "Output File",
+      "Value": "docs/security/IMF_Process_Security_Matrix.csv",
+      "Description": "Parameter pOutputFile"
+    },
+    {
+      "Name": "pLogToCube",
+      "Prompt": "Log To Cube",
+      "Value": "Y",
+      "Description": "Parameter pLogToCube"
+    },
+    {
+      "Name": "pLogFile",
+      "Prompt": "Log File",
+      "Value": "docs/security/IMF_Security_Bootstrap.log",
+      "Description": "Parameter pLogFile"
+    }
+  ],
+  "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsOutputFile = Trim(pOutputFile);\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf(sOutputFile @= ''); sOutputFile = 'docs/security/IMF_Process_Security_Matrix.csv'; EndIf;\nExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'EXPORT_PROCESS_MATRIX', 'pObjectType', 'FILE', 'pObjectName', sOutputFile, 'pStatus', 'INFO', 'pMessage', 'Process security matrix export requested.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);",
+  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsOutputFile = Trim(pOutputFile);\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf(sOutputFile @= ''); sOutputFile = 'docs/security/IMF_Process_Security_Matrix.csv'; EndIf;\nExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'EXPORT_PROCESS_MATRIX', 'pObjectType', 'FILE', 'pObjectName', sOutputFile, 'pStatus', 'INFO', 'pMessage', 'Process security matrix export requested.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);",
+  "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "tags": [
+    "IMF",
+    "Security",
+    "TM1",
+    "PAW",
+    "v12",
+    "Documentation"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }

@@ -1,6 +1,8 @@
 {
   "Name": "IMF.P.Security.ApplyDimensionMasking",
+  "name": "IMF.P.Security.ApplyDimensionMasking",
   "Purpose": "Apply dimension visibility and masking rules for sensitive IMF dimensions.",
+  "purpose": "Apply dimension visibility and masking rules for sensitive IMF dimensions.",
   "Code@Code.link": "IMF.P.Security.ApplyDimensionMasking.ti",
   "Parameters": [
     {
@@ -34,8 +36,42 @@
       "Description": "Parameter pRoleFilter"
     }
   ],
+  "parameters": [
+    {
+      "Name": "pEnvironment",
+      "Prompt": "Environment",
+      "Value": "DEV",
+      "Description": "Parameter pEnvironment"
+    },
+    {
+      "Name": "pLogToCube",
+      "Prompt": "LogToCube",
+      "Value": "Y",
+      "Description": "Parameter pLogToCube"
+    },
+    {
+      "Name": "pLogFile",
+      "Prompt": "LogFile",
+      "Value": "docs/security/IMF_Security_Audit.log",
+      "Description": "Parameter pLogFile"
+    },
+    {
+      "Name": "pDimensionName",
+      "Prompt": "DimensionName",
+      "Value": "",
+      "Description": "Parameter pDimensionName"
+    },
+    {
+      "Name": "pRoleFilter",
+      "Prompt": "RoleFilter",
+      "Value": "",
+      "Description": "Parameter pRoleFilter"
+    }
+  ],
   "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsDimensionName = Trim(pDimensionName);\nsRoleFilter = Upper(Trim(pRoleFilter));\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_DIMENSION_MASKING', 'pObjectType', 'DIMENSION', 'pObjectName', sDimensionName, 'pStatus', 'INFO', 'pMessage', 'Applying dimension masking.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\n# TODO: Map IMF.D.Run, IMF.D.ChangeType, and IMF.D.ImpactType to NONE for IMF_Viewer by default.\n# TODO: Restrict IMF_Editor visibility to only the operational dimensions required for assigned workflows.\n# TODO: Confirm exact writeback pattern for }DimensionSecurity in the target environment.",
+  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsDimensionName = Trim(pDimensionName);\nsRoleFilter = Upper(Trim(pRoleFilter));\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_DIMENSION_MASKING', 'pObjectType', 'DIMENSION', 'pObjectName', sDimensionName, 'pStatus', 'INFO', 'pMessage', 'Applying dimension masking.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\n# TODO: Map IMF.D.Run, IMF.D.ChangeType, and IMF.D.ImpactType to NONE for IMF_Viewer by default.\n# TODO: Restrict IMF_Editor visibility to only the operational dimensions required for assigned workflows.\n# TODO: Confirm exact writeback pattern for }DimensionSecurity in the target environment.",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "Security",
@@ -44,5 +80,10 @@
     "PAW",
     "v12",
     "Masking"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
   ]
 }

@@ -1,21 +1,57 @@
 {
-    "Name":  "IMF.P.Validate.Business",
-    "Code@Code.link":  "IMF.P.Validate.Business.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pPrefix",
-                           "Prompt":  "Prefix",
-                           "Value":  "IMF"
-                       },
-                       {
-                           "Name":  "pDimensionCode",
-                           "Prompt":  "Dimension Code",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pVersionId",
-                           "Prompt":  "Version Id",
-                           "Value":  ""
-                       }
-                   ]
+  "Name": "IMF.P.Validate.Business",
+  "name": "IMF.P.Validate.Business",
+  "Purpose": "Run business-rule validation checks against a work version.",
+  "purpose": "Run business-rule validation checks against a work version.",
+  "Code@Code.link": "IMF.P.Validate.Business.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\n\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(sDimensionCode @= '');\n  ProcessBreak;\nEndIf;\nIf(sVersionId @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\nIf(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);\n  ProcessBreak;\nEndIf;\n\n# Placeholder for business validation checks:\n# 1. required business rollups\n# 2. required publish approvals\n# 3. business-owned attribute completeness\n\nCellPutS('Business validation executed for work version.', sCubeVersion, sVersionId, 'Notes');",
+  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\n\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(sDimensionCode @= '');\n  ProcessBreak;\nEndIf;\nIf(sVersionId @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\nIf(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);\n  ProcessBreak;\nEndIf;\n\n# Placeholder for business validation checks:\n# 1. required business rollups\n# 2. required publish approvals\n# 3. business-owned attribute completeness\n\nCellPutS('Business validation executed for work version.', sCubeVersion, sVersionId, 'Notes');",
+  "Metadata": "",
+  "metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Validation"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }

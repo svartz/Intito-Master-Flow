@@ -1,26 +1,67 @@
 {
-    "Name":  "IMF.P.Commit.PublishVersion",
-    "Code@Code.link":  "IMF.P.Commit.PublishVersion.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pPrefix",
-                           "Prompt":  "Prefix",
-                           "Value":  "IMF"
-                       },
-                       {
-                           "Name":  "pDimensionCode",
-                           "Prompt":  "Dimension Code",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pVersionId",
-                           "Prompt":  "Version Id",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pPublishedBy",
-                           "Prompt":  "Published By",
-                           "Value":  ""
-                       }
-                   ]
+  "Name": "IMF.P.Commit.PublishVersion",
+  "name": "IMF.P.Commit.PublishVersion",
+  "Purpose": "Publish a validated work version to master after impact analysis.",
+  "purpose": "Publish a validated work version to master after impact analysis.",
+  "Code@Code.link": "IMF.P.Commit.PublishVersion.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    },
+    {
+      "Name": "pPublishedBy",
+      "Prompt": "Published By",
+      "Value": ""
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    },
+    {
+      "Name": "pPublishedBy",
+      "Prompt": "Published By",
+      "Value": ""
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\nsPublishedBy = Trim(pPublishedBy);\n\nIf(sPublishedBy @= '');\n  sPublishedBy = 'SYSTEM';\nEndIf;\n\nsDimDimension = sPrefix | '.D.Dimension';\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf((sDimensionCode @= '') % (sVersionId @= ''));\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimDimension, sDimensionCode) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\nIf(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);\n  ProcessBreak;\nEndIf;\n\nExecuteProcess(sPrefix | '.P.Validate.Technical',\n  'pPrefix', sPrefix,\n  'pDimensionCode', sDimensionCode,\n  'pVersionId', sVersionId);\n\nExecuteProcess(sPrefix | '.P.Impact.RunAll',\n  'pPrefix', sPrefix,\n  'pDimensionCode', sDimensionCode,\n  'pVersionId', sVersionId);\n\nExecuteProcess(sPrefix | '.P.Commit.ArchiveMaster',\n  'pPrefix', sPrefix,\n  'pDimensionCode', sDimensionCode,\n  'pVersionId', sVersionId);\n\nsPublishedAt = TIMST(NOW, '\\Y-\\m-\\d \\h:\\i:\\s');\nsWorkDimension = Trim(CellGetS(sCubeVersion, sVersionId, 'WorkDimension'));\nsMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));\nIf(sMasterDimension @= '');\n  sMasterDimension = sDimensionCode;\nEndIf;\n\n# Placeholder:\n# 1. replace master structure with work version structure\n# 2. preserve security and deployment conventions\n\nAttrPutS(sVersionId, sDimDimension, sDimensionCode, 'LastPublishedVersion');\nAttrPutS(sVersionId, sDimDimension, sDimensionCode, 'ActiveVersion');\n\nAttrPutS('Published', sDimVersion, sVersionId, 'Status');\nAttrPutS(sPublishedAt, sDimVersion, sVersionId, 'PublishedAt');\nAttrPutS(sPublishedBy, sDimVersion, sVersionId, 'PublishedBy');\n\nCellPutS('Published', sCubeVersion, sVersionId, 'Status');\nCellPutS(sPublishedAt, sCubeVersion, sVersionId, 'PublishedAt');\nCellPutS(sPublishedBy, sCubeVersion, sVersionId, 'PublishedBy');\nCellPutS('Publish workflow executed for work dimension ' | sWorkDimension | '.', sCubeVersion, sVersionId, 'Notes');",
+  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\nsPublishedBy = Trim(pPublishedBy);\n\nIf(sPublishedBy @= '');\n  sPublishedBy = 'SYSTEM';\nEndIf;\n\nsDimDimension = sPrefix | '.D.Dimension';\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf((sDimensionCode @= '') % (sVersionId @= ''));\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimDimension, sDimensionCode) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\nIf(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);\n  ProcessBreak;\nEndIf;\n\nExecuteProcess(sPrefix | '.P.Validate.Technical',\n  'pPrefix', sPrefix,\n  'pDimensionCode', sDimensionCode,\n  'pVersionId', sVersionId);\n\nExecuteProcess(sPrefix | '.P.Impact.RunAll',\n  'pPrefix', sPrefix,\n  'pDimensionCode', sDimensionCode,\n  'pVersionId', sVersionId);\n\nExecuteProcess(sPrefix | '.P.Commit.ArchiveMaster',\n  'pPrefix', sPrefix,\n  'pDimensionCode', sDimensionCode,\n  'pVersionId', sVersionId);\n\nsPublishedAt = TIMST(NOW, '\\Y-\\m-\\d \\h:\\i:\\s');\nsWorkDimension = Trim(CellGetS(sCubeVersion, sVersionId, 'WorkDimension'));\nsMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));\nIf(sMasterDimension @= '');\n  sMasterDimension = sDimensionCode;\nEndIf;\n\n# Placeholder:\n# 1. replace master structure with work version structure\n# 2. preserve security and deployment conventions\n\nAttrPutS(sVersionId, sDimDimension, sDimensionCode, 'LastPublishedVersion');\nAttrPutS(sVersionId, sDimDimension, sDimensionCode, 'ActiveVersion');\n\nAttrPutS('Published', sDimVersion, sVersionId, 'Status');\nAttrPutS(sPublishedAt, sDimVersion, sVersionId, 'PublishedAt');\nAttrPutS(sPublishedBy, sDimVersion, sVersionId, 'PublishedBy');\n\nCellPutS('Published', sCubeVersion, sVersionId, 'Status');\nCellPutS(sPublishedAt, sCubeVersion, sVersionId, 'PublishedAt');\nCellPutS(sPublishedBy, sCubeVersion, sVersionId, 'PublishedBy');\nCellPutS('Publish workflow executed for work dimension ' | sWorkDimension | '.', sCubeVersion, sVersionId, 'Notes');",
+  "Metadata": "",
+  "metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Publish"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }

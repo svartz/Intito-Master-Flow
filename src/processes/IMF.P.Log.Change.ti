@@ -1,0 +1,39 @@
+# IMF.P.Log.Change
+# Purpose: Write structured IMF change log entries for version and publish workflows.
+# Sources:
+# - IMF control metadata and TM1 native objects where applicable
+# Parameters:
+# - pPrefix: Parameter pPrefix Default 'IMF'.
+# - pChangeType: Parameter pChangeType Default ''.
+# - pObjectType: Parameter pObjectType Default ''.
+# - pObjectName: Parameter pObjectName Default ''.
+# - pBefore: Parameter pBefore Default ''.
+# - pAfter: Parameter pAfter Default ''.
+# - pRunId: Parameter pRunId Default ''.
+# Prolog:
+# - Execute the process-specific workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave deterministic side effects only where supported.
+
+#region prolog
+sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;
+sChangeType = Trim(pChangeType); sObjectType = Trim(pObjectType); sObjectName = Trim(pObjectName); sBefore = Trim(pBefore); sAfter = Trim(pAfter); sRunId = Trim(pRunId);
+LogOutput('INFO', 'IMF.CHANGE|' | sRunId | '|' | sChangeType | '|' | sObjectType | '|' | sObjectName | '|' | sBefore | '|' | sAfter);
+# TODO: Persist into IMF.C.ChangeLog when the cube structure and coordinates are finalized.
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond process orchestration in this scaffold.
+#endregion

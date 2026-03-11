@@ -1,41 +1,97 @@
 {
-    "Name":  "IMF.P.Version.Create",
-    "Code@Code.link":  "IMF.P.Version.Create.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pPrefix",
-                           "Prompt":  "Prefix",
-                           "Value":  "IMF"
-                       },
-                       {
-                           "Name":  "pDimensionCode",
-                           "Prompt":  "Dimension Code",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pVersionId",
-                           "Prompt":  "Version Id",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pSourceType",
-                           "Prompt":  "Source Type",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pSourceVersion",
-                           "Prompt":  "Source Version",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pCreatedBy",
-                           "Prompt":  "Created By",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pNotes",
-                           "Prompt":  "Notes",
-                           "Value":  ""
-                       }
-                   ]
+  "Name": "IMF.P.Version.Create",
+  "name": "IMF.P.Version.Create",
+  "Purpose": "Register a new work version and initialize its work dimension.",
+  "purpose": "Register a new work version and initialize its work dimension.",
+  "Code@Code.link": "IMF.P.Version.Create.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    },
+    {
+      "Name": "pSourceType",
+      "Prompt": "Source Type",
+      "Value": ""
+    },
+    {
+      "Name": "pSourceVersion",
+      "Prompt": "Source Version",
+      "Value": ""
+    },
+    {
+      "Name": "pCreatedBy",
+      "Prompt": "Created By",
+      "Value": ""
+    },
+    {
+      "Name": "pNotes",
+      "Prompt": "Notes",
+      "Value": ""
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    },
+    {
+      "Name": "pSourceType",
+      "Prompt": "Source Type",
+      "Value": ""
+    },
+    {
+      "Name": "pSourceVersion",
+      "Prompt": "Source Version",
+      "Value": ""
+    },
+    {
+      "Name": "pCreatedBy",
+      "Prompt": "Created By",
+      "Value": ""
+    },
+    {
+      "Name": "pNotes",
+      "Prompt": "Notes",
+      "Value": ""
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\nsSourceType = Upper(Trim(pSourceType));\nsSourceVersion = Trim(pSourceVersion);\nsCreatedBy = Trim(pCreatedBy);\nsNotes = Trim(pNotes);\n\nIf(sCreatedBy @= '');\n  sCreatedBy = 'SYSTEM';\nEndIf;\n\nsDimDimension = sPrefix | '.D.Dimension';\nsDimVersion = sPrefix | '.D.Version';\nsCubeConfig = sPrefix | '.C.Config';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(sDimensionCode @= '');\n  ProcessBreak;\nEndIf;\nIf(sVersionId @= '');\n  ProcessBreak;\nEndIf;\nIf((sSourceType @<> 'MASTER') % (sSourceType @<> 'VERSION'));\n  ProcessBreak;\nEndIf;\nIf((sSourceType @= 'VERSION') % (sSourceVersion @= ''));\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimDimension, sDimensionCode) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimVersion, sVersionId) = 1);\n  ProcessBreak;\nEndIf;\n\nsMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));\nIf(sMasterDimension @= '');\n  sMasterDimension = sDimensionCode;\nEndIf;\n\nsVersionDelimiter = Trim(CellGetS(sCubeConfig, sDimensionCode, 'VersionDelimiter'));\nIf(sVersionDelimiter @= '');\n  sVersionDelimiter = Trim(CellGetS(sCubeConfig, '__Template.ManagedDimension', 'VersionDelimiter'));\nEndIf;\nIf(sVersionDelimiter @= '');\n  sVersionDelimiter = '_VER_';\nEndIf;\n\nsWorkDimension = sMasterDimension | sVersionDelimiter | sVersionId;\nsCreatedAt = TIMST(NOW, '\\Y-\\m-\\d \\h:\\i:\\s');\n\nIf(DimensionElementExists(sDimVersion, 'All Versions') = 0);\n  DimensionElementInsert(sDimVersion, '', 'All Versions', 'C');\nEndIf;\n\nDimensionElementInsert(sDimVersion, '', sVersionId, 'N');\nDimensionElementComponentAdd(sDimVersion, 'All Versions', sVersionId, 1);\n\nAttrPutS(sDimensionCode, sDimVersion, sVersionId, 'DimensionCode');\nAttrPutS('Draft', sDimVersion, sVersionId, 'Status');\nAttrPutS(sSourceType, sDimVersion, sVersionId, 'SourceType');\nAttrPutS(sSourceVersion, sDimVersion, sVersionId, 'SourceVersion');\nAttrPutS(sWorkDimension, sDimVersion, sVersionId, 'WorkDimension');\nAttrPutS('', sDimVersion, sVersionId, 'ArchiveDimension');\nAttrPutS(sCreatedAt, sDimVersion, sVersionId, 'CreatedAt');\nAttrPutS(sCreatedBy, sDimVersion, sVersionId, 'CreatedBy');\nAttrPutS('', sDimVersion, sVersionId, 'PublishedAt');\nAttrPutS('', sDimVersion, sVersionId, 'PublishedBy');\nAttrPutS('N', sDimVersion, sVersionId, 'IsLocked');\nAttrPutS('', sDimVersion, sVersionId, 'LockedBy');\nAttrPutS('', sDimVersion, sVersionId, 'LockedAt');\nAttrPutS(sNotes, sDimVersion, sVersionId, 'Notes');\n\nCellPutS(sDimensionCode, sCubeVersion, sVersionId, 'DimensionCode');\nCellPutS('Draft', sCubeVersion, sVersionId, 'Status');\nCellPutS(sSourceType, sCubeVersion, sVersionId, 'SourceType');\nCellPutS(sSourceVersion, sCubeVersion, sVersionId, 'SourceVersion');\nCellPutS(sWorkDimension, sCubeVersion, sVersionId, 'WorkDimension');\nCellPutS('', sCubeVersion, sVersionId, 'ArchiveDimension');\nCellPutS(sCreatedAt, sCubeVersion, sVersionId, 'CreatedAt');\nCellPutS(sCreatedBy, sCubeVersion, sVersionId, 'CreatedBy');\nCellPutS('', sCubeVersion, sVersionId, 'PublishedAt');\nCellPutS('', sCubeVersion, sVersionId, 'PublishedBy');\nCellPutS('N', sCubeVersion, sVersionId, 'IsLocked');\nCellPutS('', sCubeVersion, sVersionId, 'LockedBy');\nCellPutS('', sCubeVersion, sVersionId, 'LockedAt');\nCellPutS('', sCubeVersion, sVersionId, 'LockReason');\nCellPutS('Pending', sCubeVersion, sVersionId, 'ApprovalState');\nCellPutN(0, sCubeVersion, sVersionId, 'LastEventId');\nCellPutS(sNotes, sCubeVersion, sVersionId, 'Notes');\n\nAttrPutS(sVersionId, sDimDimension, sDimensionCode, 'ActiveVersion');\n\nIf(sSourceType @= 'MASTER');\n  ExecuteProcess(sPrefix | '.P.Version.CloneFromMaster',\n    'pPrefix', sPrefix,\n    'pDimensionCode', sDimensionCode,\n    'pVersionId', sVersionId,\n    'pCreatedBy', sCreatedBy);\nElse;\n  ExecuteProcess(sPrefix | '.P.Version.CloneFromVersion',\n    'pPrefix', sPrefix,\n    'pDimensionCode', sDimensionCode,\n    'pVersionId', sVersionId,\n    'pSourceVersion', sSourceVersion,\n    'pCreatedBy', sCreatedBy);\nEndIf;",
+  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\nsSourceType = Upper(Trim(pSourceType));\nsSourceVersion = Trim(pSourceVersion);\nsCreatedBy = Trim(pCreatedBy);\nsNotes = Trim(pNotes);\n\nIf(sCreatedBy @= '');\n  sCreatedBy = 'SYSTEM';\nEndIf;\n\nsDimDimension = sPrefix | '.D.Dimension';\nsDimVersion = sPrefix | '.D.Version';\nsCubeConfig = sPrefix | '.C.Config';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(sDimensionCode @= '');\n  ProcessBreak;\nEndIf;\nIf(sVersionId @= '');\n  ProcessBreak;\nEndIf;\nIf((sSourceType @<> 'MASTER') % (sSourceType @<> 'VERSION'));\n  ProcessBreak;\nEndIf;\nIf((sSourceType @= 'VERSION') % (sSourceVersion @= ''));\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimDimension, sDimensionCode) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimVersion, sVersionId) = 1);\n  ProcessBreak;\nEndIf;\n\nsMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));\nIf(sMasterDimension @= '');\n  sMasterDimension = sDimensionCode;\nEndIf;\n\nsVersionDelimiter = Trim(CellGetS(sCubeConfig, sDimensionCode, 'VersionDelimiter'));\nIf(sVersionDelimiter @= '');\n  sVersionDelimiter = Trim(CellGetS(sCubeConfig, '__Template.ManagedDimension', 'VersionDelimiter'));\nEndIf;\nIf(sVersionDelimiter @= '');\n  sVersionDelimiter = '_VER_';\nEndIf;\n\nsWorkDimension = sMasterDimension | sVersionDelimiter | sVersionId;\nsCreatedAt = TIMST(NOW, '\\Y-\\m-\\d \\h:\\i:\\s');\n\nIf(DimensionElementExists(sDimVersion, 'All Versions') = 0);\n  DimensionElementInsert(sDimVersion, '', 'All Versions', 'C');\nEndIf;\n\nDimensionElementInsert(sDimVersion, '', sVersionId, 'N');\nDimensionElementComponentAdd(sDimVersion, 'All Versions', sVersionId, 1);\n\nAttrPutS(sDimensionCode, sDimVersion, sVersionId, 'DimensionCode');\nAttrPutS('Draft', sDimVersion, sVersionId, 'Status');\nAttrPutS(sSourceType, sDimVersion, sVersionId, 'SourceType');\nAttrPutS(sSourceVersion, sDimVersion, sVersionId, 'SourceVersion');\nAttrPutS(sWorkDimension, sDimVersion, sVersionId, 'WorkDimension');\nAttrPutS('', sDimVersion, sVersionId, 'ArchiveDimension');\nAttrPutS(sCreatedAt, sDimVersion, sVersionId, 'CreatedAt');\nAttrPutS(sCreatedBy, sDimVersion, sVersionId, 'CreatedBy');\nAttrPutS('', sDimVersion, sVersionId, 'PublishedAt');\nAttrPutS('', sDimVersion, sVersionId, 'PublishedBy');\nAttrPutS('N', sDimVersion, sVersionId, 'IsLocked');\nAttrPutS('', sDimVersion, sVersionId, 'LockedBy');\nAttrPutS('', sDimVersion, sVersionId, 'LockedAt');\nAttrPutS(sNotes, sDimVersion, sVersionId, 'Notes');\n\nCellPutS(sDimensionCode, sCubeVersion, sVersionId, 'DimensionCode');\nCellPutS('Draft', sCubeVersion, sVersionId, 'Status');\nCellPutS(sSourceType, sCubeVersion, sVersionId, 'SourceType');\nCellPutS(sSourceVersion, sCubeVersion, sVersionId, 'SourceVersion');\nCellPutS(sWorkDimension, sCubeVersion, sVersionId, 'WorkDimension');\nCellPutS('', sCubeVersion, sVersionId, 'ArchiveDimension');\nCellPutS(sCreatedAt, sCubeVersion, sVersionId, 'CreatedAt');\nCellPutS(sCreatedBy, sCubeVersion, sVersionId, 'CreatedBy');\nCellPutS('', sCubeVersion, sVersionId, 'PublishedAt');\nCellPutS('', sCubeVersion, sVersionId, 'PublishedBy');\nCellPutS('N', sCubeVersion, sVersionId, 'IsLocked');\nCellPutS('', sCubeVersion, sVersionId, 'LockedBy');\nCellPutS('', sCubeVersion, sVersionId, 'LockedAt');\nCellPutS('', sCubeVersion, sVersionId, 'LockReason');\nCellPutS('Pending', sCubeVersion, sVersionId, 'ApprovalState');\nCellPutN(0, sCubeVersion, sVersionId, 'LastEventId');\nCellPutS(sNotes, sCubeVersion, sVersionId, 'Notes');\n\nAttrPutS(sVersionId, sDimDimension, sDimensionCode, 'ActiveVersion');\n\nIf(sSourceType @= 'MASTER');\n  ExecuteProcess(sPrefix | '.P.Version.CloneFromMaster',\n    'pPrefix', sPrefix,\n    'pDimensionCode', sDimensionCode,\n    'pVersionId', sVersionId,\n    'pCreatedBy', sCreatedBy);\nElse;\n  ExecuteProcess(sPrefix | '.P.Version.CloneFromVersion',\n    'pPrefix', sPrefix,\n    'pDimensionCode', sDimensionCode,\n    'pVersionId', sVersionId,\n    'pSourceVersion', sSourceVersion,\n    'pCreatedBy', sCreatedBy);\nEndIf;",
+  "Metadata": "",
+  "metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Versioning"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }

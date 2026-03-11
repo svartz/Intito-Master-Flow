@@ -1,21 +1,56 @@
 {
-    "Name":  "IMF.P.Attribute.CopyValues",
-    "Code@Code.link":  "IMF.P.Attribute.CopyValues.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pPrefix",
-                           "Prompt":  "Prefix",
-                           "Value":  "IMF"
-                       },
-                       {
-                           "Name":  "pSourceDimension",
-                           "Prompt":  "Source Dimension",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pTargetDimension",
-                           "Prompt":  "Target Dimension",
-                           "Value":  ""
-                       }
-                   ]
+  "Name": "IMF.P.Attribute.CopyValues",
+  "name": "IMF.P.Attribute.CopyValues",
+  "Purpose": "Copy element attribute values from a source dimension into a target dimension.",
+  "purpose": "Copy element attribute values from a source dimension into a target dimension.",
+  "Code@Code.link": "IMF.P.Attribute.CopyValues.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pSourceDimension",
+      "Prompt": "Source Dimension",
+      "Value": ""
+    },
+    {
+      "Name": "pTargetDimension",
+      "Prompt": "Target Dimension",
+      "Value": ""
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pSourceDimension",
+      "Prompt": "Source Dimension",
+      "Value": ""
+    },
+    {
+      "Name": "pTargetDimension",
+      "Prompt": "Target Dimension",
+      "Value": ""
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsSourceDimension = Trim(pSourceDimension);\nsTargetDimension = Trim(pTargetDimension);\n\nIf(sSourceDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(sTargetDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sSourceDimension) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sTargetDimension) = 0);\n  ProcessBreak;\nEndIf;\n\nsSourceAttrCube = '}ElementAttributes_' | sSourceDimension;\nsTargetAttrCube = '}ElementAttributes_' | sTargetDimension;\n\nIf(CubeExists(sSourceAttrCube) = 0);\n  ProcessBreak;\nEndIf;\nIf(CubeExists(sTargetAttrCube) = 0);\n  ProcessBreak;\nEndIf;\n\n# Placeholder for attribute-value loop:\n# 1. iterate source elements\n# 2. iterate source attributes\n# 3. copy string or numeric value to the target intersection",
+  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsSourceDimension = Trim(pSourceDimension);\nsTargetDimension = Trim(pTargetDimension);\n\nIf(sSourceDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(sTargetDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sSourceDimension) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sTargetDimension) = 0);\n  ProcessBreak;\nEndIf;\n\nsSourceAttrCube = '}ElementAttributes_' | sSourceDimension;\nsTargetAttrCube = '}ElementAttributes_' | sTargetDimension;\n\nIf(CubeExists(sSourceAttrCube) = 0);\n  ProcessBreak;\nEndIf;\nIf(CubeExists(sTargetAttrCube) = 0);\n  ProcessBreak;\nEndIf;\n\n# Placeholder for attribute-value loop:\n# 1. iterate source elements\n# 2. iterate source attributes\n# 3. copy string or numeric value to the target intersection",
+  "Metadata": "",
+  "metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }

@@ -1,6 +1,8 @@
 {
   "Name": "IMF.P.Security.ValidateCubeSecurity",
+  "name": "IMF.P.Security.ValidateCubeSecurity",
   "Purpose": "Validate cube-level IMF security assignments.",
+  "purpose": "Validate cube-level IMF security assignments.",
   "Code@Code.link": "IMF.P.Security.ValidateCubeSecurity.ti",
   "Parameters": [
     {
@@ -28,8 +30,36 @@
       "Description": "Parameter pOutputFile"
     }
   ],
+  "parameters": [
+    {
+      "Name": "pEnvironment",
+      "Prompt": "Environment",
+      "Value": "DEV",
+      "Description": "Parameter pEnvironment"
+    },
+    {
+      "Name": "pLogToCube",
+      "Prompt": "LogToCube",
+      "Value": "Y",
+      "Description": "Parameter pLogToCube"
+    },
+    {
+      "Name": "pLogFile",
+      "Prompt": "LogFile",
+      "Value": "docs/security/IMF_Security_Audit.log",
+      "Description": "Parameter pLogFile"
+    },
+    {
+      "Name": "pOutputFile",
+      "Prompt": "OutputFile",
+      "Value": "docs/security/IMF_Security_Matrix.csv",
+      "Description": "Parameter pOutputFile"
+    }
+  ],
   "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsOutputFile = Trim(pOutputFile);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_CUBE_SECURITY', 'pObjectType', 'CUBE', 'pObjectName', 'IMF_MODEL', 'pStatus', 'INFO', 'pMessage', 'Validating cube security.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\n# TODO: Read effective access from }CubeSecurity and compare against the documented IMF cube matrix.\n# TODO: Write any mismatches to the shared security matrix export.",
+  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsOutputFile = Trim(pOutputFile);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_CUBE_SECURITY', 'pObjectType', 'CUBE', 'pObjectName', 'IMF_MODEL', 'pStatus', 'INFO', 'pMessage', 'Validating cube security.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\n# TODO: Read effective access from }CubeSecurity and compare against the documented IMF cube matrix.\n# TODO: Write any mismatches to the shared security matrix export.",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "Security",
@@ -39,5 +69,10 @@
     "v12",
     "Validation",
     "CubeSecurity"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
   ]
 }

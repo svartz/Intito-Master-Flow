@@ -1,6 +1,8 @@
 {
   "Name": "IMF.P.Security.ExportSecurityAudit",
+  "name": "IMF.P.Security.ExportSecurityAudit",
   "Purpose": "Export the IMF security audit trail to a structured file for review.",
+  "purpose": "Export the IMF security audit trail to a structured file for review.",
   "Code@Code.link": "IMF.P.Security.ExportSecurityAudit.ti",
   "Parameters": [
     {
@@ -28,8 +30,36 @@
       "Description": "Parameter pOutputFile"
     }
   ],
+  "parameters": [
+    {
+      "Name": "pEnvironment",
+      "Prompt": "Environment",
+      "Value": "DEV",
+      "Description": "Parameter pEnvironment"
+    },
+    {
+      "Name": "pLogToCube",
+      "Prompt": "LogToCube",
+      "Value": "Y",
+      "Description": "Parameter pLogToCube"
+    },
+    {
+      "Name": "pLogFile",
+      "Prompt": "LogFile",
+      "Value": "docs/security/IMF_Security_Audit.log",
+      "Description": "Parameter pLogFile"
+    },
+    {
+      "Name": "pOutputFile",
+      "Prompt": "OutputFile",
+      "Value": "docs/security/IMF_Security_Audit.csv",
+      "Description": "Parameter pOutputFile"
+    }
+  ],
   "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsOutputFile = Trim(pOutputFile);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'EXPORT_SECURITY_AUDIT', 'pObjectType', 'AUDIT', 'pObjectName', sOutputFile, 'pStatus', 'INFO', 'pMessage', 'Exporting security audit trail.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\n# TODO: Export IMF.C.EventLog security events once cube logging is available.\n# TODO: If cube logging is unavailable, export the structured file log emitted by IMF.P.Security.LogSecurityEvent.",
+  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsOutputFile = Trim(pOutputFile);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'EXPORT_SECURITY_AUDIT', 'pObjectType', 'AUDIT', 'pObjectName', sOutputFile, 'pStatus', 'INFO', 'pMessage', 'Exporting security audit trail.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\n# TODO: Export IMF.C.EventLog security events once cube logging is available.\n# TODO: If cube logging is unavailable, export the structured file log emitted by IMF.P.Security.LogSecurityEvent.",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
+  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "Security",
@@ -39,5 +69,10 @@
     "v12",
     "Audit",
     "Export"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
   ]
 }

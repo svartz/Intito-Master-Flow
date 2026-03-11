@@ -1,21 +1,57 @@
 {
-    "Name":  "IMF.P.Impact.RunAll",
-    "Code@Code.link":  "IMF.P.Impact.RunAll.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pPrefix",
-                           "Prompt":  "Prefix",
-                           "Value":  "IMF"
-                       },
-                       {
-                           "Name":  "pDimensionCode",
-                           "Prompt":  "Dimension Code",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pVersionId",
-                           "Prompt":  "Version Id",
-                           "Value":  ""
-                       }
-                   ]
+  "Name": "IMF.P.Impact.RunAll",
+  "name": "IMF.P.Impact.RunAll",
+  "Purpose": "Run all impact analysis domains for a work version.",
+  "purpose": "Run all impact analysis domains for a work version.",
+  "Code@Code.link": "IMF.P.Impact.RunAll.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pDimensionCode",
+      "Prompt": "Dimension Code",
+      "Value": ""
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\n\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(sDimensionCode @= '');\n  ProcessBreak;\nEndIf;\nIf(sVersionId @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\nIf(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);\n  ProcessBreak;\nEndIf;\n\nExecuteProcess(sPrefix | '.P.Impact.Cubes', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);\nExecuteProcess(sPrefix | '.P.Impact.Views', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);\nExecuteProcess(sPrefix | '.P.Impact.Subsets', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);\nExecuteProcess(sPrefix | '.P.Impact.Processes', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);\nExecuteProcess(sPrefix | '.P.Impact.Security', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);\nExecuteProcess(sPrefix | '.P.Impact.Integrations', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);\n\nAttrPutS('ImpactAnalyzed', sDimVersion, sVersionId, 'Status');\nCellPutS('ImpactAnalyzed', sCubeVersion, sVersionId, 'Status');\nCellPutS('Impact analysis executed across all configured domains.', sCubeVersion, sVersionId, 'Notes');",
+  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\n\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(sDimensionCode @= '');\n  ProcessBreak;\nEndIf;\nIf(sVersionId @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\nIf(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);\n  ProcessBreak;\nEndIf;\n\nExecuteProcess(sPrefix | '.P.Impact.Cubes', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);\nExecuteProcess(sPrefix | '.P.Impact.Views', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);\nExecuteProcess(sPrefix | '.P.Impact.Subsets', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);\nExecuteProcess(sPrefix | '.P.Impact.Processes', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);\nExecuteProcess(sPrefix | '.P.Impact.Security', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);\nExecuteProcess(sPrefix | '.P.Impact.Integrations', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);\n\nAttrPutS('ImpactAnalyzed', sDimVersion, sVersionId, 'Status');\nCellPutS('ImpactAnalyzed', sCubeVersion, sVersionId, 'Status');\nCellPutS('Impact analysis executed across all configured domains.', sCubeVersion, sVersionId, 'Notes');",
+  "Metadata": "",
+  "metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Impact"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }

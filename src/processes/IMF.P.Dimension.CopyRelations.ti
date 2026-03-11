@@ -1,0 +1,36 @@
+# IMF.P.Dimension.CopyRelations
+# Purpose: Copy parent-child relations and consolidation weights between dimensions.
+# Sources:
+# - IMF control metadata and TM1 native objects where applicable
+# Parameters:
+# - pPrefix: Parameter pPrefix Default 'IMF'.
+# - pSourceDimension: Parameter pSourceDimension Default ''.
+# - pTargetDimension: Parameter pTargetDimension Default ''.
+# Prolog:
+# - Execute the process-specific workflow.
+# Metadata:
+# - No metadata datasource is required in this scaffold.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave deterministic side effects only where supported.
+
+#region prolog
+sSourceDimension = Trim(pSourceDimension); sTargetDimension = Trim(pTargetDimension);
+If((sSourceDimension @= '') % (sTargetDimension @= '')); ProcessBreak; EndIf;
+If((DimensionExists(sSourceDimension) = 0) % (DimensionExists(sTargetDimension) = 0)); ProcessBreak; EndIf;
+# TODO: Traverse consolidations in the source dimension and replay them with weights on the target dimension.
+# TODO: Preserve hierarchy-specific ordering where the target environment relies on insertion order.
+#endregion
+
+#region metadata
+# TODO: Add metadata-tab logic only if a real datasource is required.
+#endregion
+
+#region data
+# No Data tab logic in this scaffold.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond process orchestration in this scaffold.
+#endregion

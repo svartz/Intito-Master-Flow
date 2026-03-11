@@ -1,26 +1,67 @@
 {
-    "Name":  "IMF.P.Version.Lock",
-    "Code@Code.link":  "IMF.P.Version.Lock.ti",
-    "Parameters":  [
-                       {
-                           "Name":  "pPrefix",
-                           "Prompt":  "Prefix",
-                           "Value":  "IMF"
-                       },
-                       {
-                           "Name":  "pVersionId",
-                           "Prompt":  "Version Id",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pLockedBy",
-                           "Prompt":  "Locked By",
-                           "Value":  ""
-                       },
-                       {
-                           "Name":  "pLockReason",
-                           "Prompt":  "Lock Reason",
-                           "Value":  ""
-                       }
-                   ]
+  "Name": "IMF.P.Version.Lock",
+  "name": "IMF.P.Version.Lock",
+  "Purpose": "Lock a work version to prevent concurrent edits or publish actions.",
+  "purpose": "Lock a work version to prevent concurrent edits or publish actions.",
+  "Code@Code.link": "IMF.P.Version.Lock.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    },
+    {
+      "Name": "pLockedBy",
+      "Prompt": "Locked By",
+      "Value": ""
+    },
+    {
+      "Name": "pLockReason",
+      "Prompt": "Lock Reason",
+      "Value": ""
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pVersionId",
+      "Prompt": "Version Id",
+      "Value": ""
+    },
+    {
+      "Name": "pLockedBy",
+      "Prompt": "Locked By",
+      "Value": ""
+    },
+    {
+      "Name": "pLockReason",
+      "Prompt": "Lock Reason",
+      "Value": ""
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsVersionId = Trim(pVersionId);\nsLockedBy = Trim(pLockedBy);\nsLockReason = Trim(pLockReason);\n\nIf(sLockedBy @= '');\n  sLockedBy = 'SYSTEM';\nEndIf;\n\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\nIf(Upper(Trim(CellGetS(sCubeVersion, sVersionId, 'IsLocked'))) @= 'Y');\n  ProcessBreak;\nEndIf;\n\nsLockedAt = TIMST(NOW, '\\Y-\\m-\\d \\h:\\i:\\s');\n\nCellPutS('Y', sCubeVersion, sVersionId, 'IsLocked');\nCellPutS(sLockedBy, sCubeVersion, sVersionId, 'LockedBy');\nCellPutS(sLockedAt, sCubeVersion, sVersionId, 'LockedAt');\nCellPutS(sLockReason, sCubeVersion, sVersionId, 'LockReason');\n\nAttrPutS('Y', sDimVersion, sVersionId, 'IsLocked');\nAttrPutS(sLockedBy, sDimVersion, sVersionId, 'LockedBy');\nAttrPutS(sLockedAt, sDimVersion, sVersionId, 'LockedAt');",
+  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsVersionId = Trim(pVersionId);\nsLockedBy = Trim(pLockedBy);\nsLockReason = Trim(pLockReason);\n\nIf(sLockedBy @= '');\n  sLockedBy = 'SYSTEM';\nEndIf;\n\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\nIf(Upper(Trim(CellGetS(sCubeVersion, sVersionId, 'IsLocked'))) @= 'Y');\n  ProcessBreak;\nEndIf;\n\nsLockedAt = TIMST(NOW, '\\Y-\\m-\\d \\h:\\i:\\s');\n\nCellPutS('Y', sCubeVersion, sVersionId, 'IsLocked');\nCellPutS(sLockedBy, sCubeVersion, sVersionId, 'LockedBy');\nCellPutS(sLockedAt, sCubeVersion, sVersionId, 'LockedAt');\nCellPutS(sLockReason, sCubeVersion, sVersionId, 'LockReason');\n\nAttrPutS('Y', sDimVersion, sVersionId, 'IsLocked');\nAttrPutS(sLockedBy, sDimVersion, sVersionId, 'LockedBy');\nAttrPutS(sLockedAt, sDimVersion, sVersionId, 'LockedAt');",
+  "Metadata": "",
+  "metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Versioning"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
 }
