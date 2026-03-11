@@ -1,0 +1,48 @@
+# Intito MasterFlow archive current master
+# Purpose: Archive the current master dimension before publish or rollback.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pVersionId      Existing work version
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sDimensionCode = Trim(pDimensionCode);
+sVersionId = Trim(pVersionId);
+
+sDimDimension = sPrefix | '.D.Dimension';
+sDimVersion = sPrefix | '.D.Version';
+sCubeVersion = sPrefix | '.C.Version';
+
+If((sDimensionCode @= '') % (sVersionId @= ''));
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimDimension, sDimensionCode) = 0);
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimVersion, sVersionId) = 0);
+  ProcessBreak;
+EndIf;
+
+sMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));
+If(sMasterDimension @= '');
+  sMasterDimension = sDimensionCode;
+EndIf;
+If(DimensionExists(sMasterDimension) = 0);
+  ProcessBreak;
+EndIf;
+
+sArchiveDimension = sMasterDimension | '_ARC_' | TIMST(NOW, '\Y\m\d\h\i\s');
+
+# Placeholder:
+# 1. create archive dimension
+# 2. copy master structure into archive
+# 3. update version metadata with archive name
+
+AttrPutS(sArchiveDimension, sDimVersion, sVersionId, 'ArchiveDimension');
+CellPutS(sArchiveDimension, sCubeVersion, sVersionId, 'ArchiveDimension');
+AttrPutS(sArchiveDimension, sDimDimension, sDimensionCode, 'LastArchivedDimension');

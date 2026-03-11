@@ -1,0 +1,76 @@
+# Intito MasterFlow publish version
+# Purpose: Publish a validated work version to master after impact analysis.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pVersionId      Existing work version
+#   pPublishedBy    Optional explicit user id
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sDimensionCode = Trim(pDimensionCode);
+sVersionId = Trim(pVersionId);
+sPublishedBy = Trim(pPublishedBy);
+
+If(sPublishedBy @= '');
+  sPublishedBy = 'SYSTEM';
+EndIf;
+
+sDimDimension = sPrefix | '.D.Dimension';
+sDimVersion = sPrefix | '.D.Version';
+sCubeVersion = sPrefix | '.C.Version';
+
+If((sDimensionCode @= '') % (sVersionId @= ''));
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimDimension, sDimensionCode) = 0);
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimVersion, sVersionId) = 0);
+  ProcessBreak;
+EndIf;
+If(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);
+  ProcessBreak;
+EndIf;
+
+ExecuteProcess(sPrefix | '.P.Validate.Technical',
+  'pPrefix', sPrefix,
+  'pDimensionCode', sDimensionCode,
+  'pVersionId', sVersionId);
+
+ExecuteProcess(sPrefix | '.P.Impact.RunAll',
+  'pPrefix', sPrefix,
+  'pDimensionCode', sDimensionCode,
+  'pVersionId', sVersionId);
+
+ExecuteProcess(sPrefix | '.P.Commit.ArchiveMaster',
+  'pPrefix', sPrefix,
+  'pDimensionCode', sDimensionCode,
+  'pVersionId', sVersionId);
+
+sPublishedAt = TIMST(NOW, '\Y-\m-\d \h:\i:\s');
+sWorkDimension = Trim(CellGetS(sCubeVersion, sVersionId, 'WorkDimension'));
+sMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));
+If(sMasterDimension @= '');
+  sMasterDimension = sDimensionCode;
+EndIf;
+
+# Placeholder:
+# 1. replace master structure with work version structure
+# 2. preserve security and deployment conventions
+
+AttrPutS(sVersionId, sDimDimension, sDimensionCode, 'LastPublishedVersion');
+AttrPutS(sVersionId, sDimDimension, sDimensionCode, 'ActiveVersion');
+
+AttrPutS('Published', sDimVersion, sVersionId, 'Status');
+AttrPutS(sPublishedAt, sDimVersion, sVersionId, 'PublishedAt');
+AttrPutS(sPublishedBy, sDimVersion, sVersionId, 'PublishedBy');
+
+CellPutS('Published', sCubeVersion, sVersionId, 'Status');
+CellPutS(sPublishedAt, sCubeVersion, sVersionId, 'PublishedAt');
+CellPutS(sPublishedBy, sCubeVersion, sVersionId, 'PublishedBy');
+CellPutS('Publish workflow executed for work dimension ' | sWorkDimension | '.', sCubeVersion, sVersionId, 'Notes');
