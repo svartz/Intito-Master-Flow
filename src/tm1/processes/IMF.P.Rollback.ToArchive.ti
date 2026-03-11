@@ -1,0 +1,47 @@
+# Intito MasterFlow rollback to archive
+# Purpose: Restore an archived master dimension as the current master.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pArchiveName    Existing archive dimension
+#   pRestoredBy     Optional explicit user id
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sDimensionCode = Trim(pDimensionCode);
+sArchiveName = Trim(pArchiveName);
+sRestoredBy = Trim(pRestoredBy);
+
+If(sRestoredBy @= '');
+  sRestoredBy = 'SYSTEM';
+EndIf;
+
+sDimDimension = sPrefix | '.D.Dimension';
+
+If((sDimensionCode @= '') % (sArchiveName @= ''));
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimDimension, sDimensionCode) = 0);
+  ProcessBreak;
+EndIf;
+
+sMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));
+If(sMasterDimension @= '');
+  sMasterDimension = sDimensionCode;
+EndIf;
+
+ExecuteProcess(sPrefix | '.P.Rollback.Validate',
+  'pPrefix', sPrefix,
+  'pDimensionCode', sDimensionCode,
+  'pArchiveName', sArchiveName);
+
+# Placeholder:
+# 1. archive current master
+# 2. restore archive structure into master dimension
+# 3. log rollback actor and timestamp
+
+AttrPutS(sArchiveName, sDimDimension, sDimensionCode, 'LastArchivedDimension');

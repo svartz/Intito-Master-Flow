@@ -1,0 +1,32 @@
+# Intito MasterFlow rollback validation
+# Purpose: Validate that an archive dimension can safely be restored as master.
+#
+# Parameters:
+#   pPrefix         Default 'IMF'
+#   pDimensionCode  Managed dimension code
+#   pArchiveName    Existing archive dimension
+
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sDimensionCode = Trim(pDimensionCode);
+sArchiveName = Trim(pArchiveName);
+
+sDimDimension = sPrefix | '.D.Dimension';
+
+If((sDimensionCode @= '') % (sArchiveName @= ''));
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimDimension, sDimensionCode) = 0);
+  ProcessBreak;
+EndIf;
+If(DimensionExists(sArchiveName) = 0);
+  ProcessBreak;
+EndIf;
+
+# Placeholder:
+# 1. validate archive structure
+# 2. validate required attributes
+# 3. validate publish preconditions
