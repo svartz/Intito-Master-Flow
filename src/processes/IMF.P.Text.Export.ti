@@ -1,0 +1,87 @@
+# IMF.P.Text.Export
+# Purpose: Export IMF.C.Text content to a deterministic CSV interchange format.
+# Sources:
+# - IMF.C.Text
+# - IMF.D.TextKey
+# - IMF.D.Language
+# Parameters:
+# - pOutputFile: Deterministic CSV output file.
+# - pLocaleCsv: Optional comma-separated locale filter.
+# - pIncludeEmpty: Include empty translations when 'Y'.
+# Prolog:
+# - Export stable text key records without translating technical IMF object names.
+# Metadata:
+# - No metadata datasource is required in this implementation.
+# Data:
+# - No Data tab logic is required in this implementation.
+# Epilog:
+# - Export remains Git-friendly and reviewable.
+
+#region prolog
+sOutputFile = Trim(pOutputFile);
+sLocaleCsv = Upper(Trim(pLocaleCsv));
+sIncludeEmpty = Upper(Trim(pIncludeEmpty));
+
+If(sOutputFile @= '');
+  sOutputFile = 'docs/status/IMF_Text_Export.csv';
+EndIf;
+If(sIncludeEmpty @= '');
+  sIncludeEmpty = 'N';
+EndIf;
+
+ASCIIOutput(sOutputFile, 'TextKey', 'Domain', 'Locale', 'Text', 'Status', 'Owner', 'LastUpdatedBy', 'LastUpdatedAt');
+
+If(CubeExists('IMF.C.Text') = 0 % DimensionExists('IMF.D.TextKey') = 0 % DimensionExists('IMF.D.Language') = 0);
+  ASCIIOutput(sOutputFile, '', '', '', '', 'ERROR', '', '', 'Required language control objects are not deployed.');
+Else;
+  nKeyCount = Dimsiz('IMF.D.TextKey');
+  nLocaleCount = Dimsiz('IMF.D.Language');
+  nKeyIndex = 1;
+
+  While(nKeyIndex <= nKeyCount);
+    sTextKey = DimNm('IMF.D.TextKey', nKeyIndex);
+
+    If(sTextKey @<> 'All Text Keys');
+      sDomain = Trim(AttrS('IMF.D.TextKey', sTextKey, 'Domain'));
+
+      If(SubSt(sTextKey, 1, 6) @<> 'IMF.P.' & SubSt(sTextKey, 1, 6) @<> 'IMF.C.' & SubSt(sTextKey, 1, 6) @<> 'IMF.D.');
+        nLocaleIndex = 1;
+
+        While(nLocaleIndex <= nLocaleCount);
+          sLocale = DimNm('IMF.D.Language', nLocaleIndex);
+
+          If(sLocale @<> 'All Languages');
+            If(sLocaleCsv @= '' % Scan(Upper(sLocale), sLocaleCsv) > 0);
+              sText = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Text');
+              sCellStatus = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Status');
+              sOwner = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Owner');
+              sUpdatedBy = CellGetS('IMF.C.Text', sTextKey, sLocale, 'LastUpdatedBy');
+              sUpdatedAt = CellGetS('IMF.C.Text', sTextKey, sLocale, 'LastUpdatedAt');
+
+              If(sIncludeEmpty @= 'Y' % Trim(sText) @<> '');
+                ASCIIOutput(sOutputFile, sTextKey, sDomain, sLocale, sText, sCellStatus, sOwner, sUpdatedBy, sUpdatedAt);
+              EndIf;
+            EndIf;
+          EndIf;
+
+          nLocaleIndex = nLocaleIndex + 1;
+        End;
+      EndIf;
+    EndIf;
+
+    nKeyIndex = nKeyIndex + 1;
+  End;
+EndIf;
+#endregion
+
+#region metadata
+# No metadata tab logic in this implementation.
+#endregion
+
+#region data
+# No Data tab logic in this implementation.
+#endregion
+
+#region epilog
+# No Epilog tab logic in this implementation.
+#endregion

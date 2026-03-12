@@ -1,0 +1,64 @@
+{
+  "Name": "IMF.P.Text.Resolve",
+  "name": "IMF.P.Text.Resolve",
+  "Purpose": "Resolve one IMF text key for one locale without applying fallback.",
+  "purpose": "Resolve one IMF text key for one locale without applying fallback.",
+  "Code@Code.link": "IMF.P.Text.Resolve.ti",
+  "Parameters": [
+    {
+      "Name": "pTextKey",
+      "Prompt": "Text Key",
+      "Value": "",
+      "Description": "Stable IMF text key to resolve."
+    },
+    {
+      "Name": "pLocale",
+      "Prompt": "Locale",
+      "Value": "en-US",
+      "Description": "Requested locale."
+    },
+    {
+      "Name": "pOutputFile",
+      "Prompt": "Output File",
+      "Value": "",
+      "Description": "Optional deterministic CSV output file."
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pTextKey",
+      "Prompt": "Text Key",
+      "Value": "",
+      "Description": "Stable IMF text key to resolve."
+    },
+    {
+      "Name": "pLocale",
+      "Prompt": "Locale",
+      "Value": "en-US",
+      "Description": "Requested locale."
+    },
+    {
+      "Name": "pOutputFile",
+      "Prompt": "Output File",
+      "Value": "",
+      "Description": "Optional deterministic CSV output file."
+    }
+  ],
+  "Prolog": "sTextKey = Trim(pTextKey);\nsLocale = Trim(pLocale);\nsOutputFile = Trim(pOutputFile);\nsResolvedText = '';\nsStatus = 'MISSING';\nsComment = '';\nsMissingMarker = '[missing:' | sTextKey | ']';\nIf(sLocale @= ''); sLocale = 'en-US'; EndIf;\nIf(sTextKey @= '');\n  sStatus = 'ERROR';\n  sComment = 'Text key is required.';\n  sResolvedText = '[missing:]';\nElseIf(CubeExists('IMF.C.Text') = 0);\n  sStatus = 'ERROR';\n  sComment = 'IMF.C.Text is not deployed.';\n  sResolvedText = sMissingMarker;\nElseIf(DimensionElementExists('IMF.D.TextKey', sTextKey) = 0);\n  sStatus = 'ERROR';\n  sComment = 'Text key is not deployed in IMF.D.TextKey.';\n  sResolvedText = sMissingMarker;\nElse;\n  sResolvedText = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Text');\n  If(Trim(sResolvedText) @<> '');\n    sStatus = 'FOUND';\n    sComment = 'Translation found for requested locale.';\n  Else;\n    sResolvedText = sMissingMarker;\n    sStatus = 'MISSING';\n    sComment = 'No translation exists for the requested locale.';\n  EndIf;\nEndIf;\nIf(sOutputFile @<> '');\n  ASCIIOutput(sOutputFile, 'TextKey', 'RequestedLocale', 'ResolvedLocale', 'Status', 'ResolvedText', 'Comment');\n  ASCIIOutput(sOutputFile, sTextKey, sLocale, sLocale, sStatus, sResolvedText, sComment);\nElse;\n  LogOutput('INFO', 'IMF.P.Text.Resolve|' | sTextKey | '|' | sLocale | '|' | sStatus | '|' | sResolvedText);\nEndIf;",
+  "prolog": "sTextKey = Trim(pTextKey);\nsLocale = Trim(pLocale);\nsOutputFile = Trim(pOutputFile);\nsResolvedText = '';\nsStatus = 'MISSING';\nsComment = '';\nsMissingMarker = '[missing:' | sTextKey | ']';\nIf(sLocale @= ''); sLocale = 'en-US'; EndIf;\nIf(sTextKey @= '');\n  sStatus = 'ERROR';\n  sComment = 'Text key is required.';\n  sResolvedText = '[missing:]';\nElseIf(CubeExists('IMF.C.Text') = 0);\n  sStatus = 'ERROR';\n  sComment = 'IMF.C.Text is not deployed.';\n  sResolvedText = sMissingMarker;\nElseIf(DimensionElementExists('IMF.D.TextKey', sTextKey) = 0);\n  sStatus = 'ERROR';\n  sComment = 'Text key is not deployed in IMF.D.TextKey.';\n  sResolvedText = sMissingMarker;\nElse;\n  sResolvedText = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Text');\n  If(Trim(sResolvedText) @<> '');\n    sStatus = 'FOUND';\n    sComment = 'Translation found for requested locale.';\n  Else;\n    sResolvedText = sMissingMarker;\n    sStatus = 'MISSING';\n    sComment = 'No translation exists for the requested locale.';\n  EndIf;\nEndIf;\nIf(sOutputFile @<> '');\n  ASCIIOutput(sOutputFile, 'TextKey', 'RequestedLocale', 'ResolvedLocale', 'Status', 'ResolvedText', 'Comment');\n  ASCIIOutput(sOutputFile, sTextKey, sLocale, sLocale, sStatus, sResolvedText, sComment);\nElse;\n  LogOutput('INFO', 'IMF.P.Text.Resolve|' | sTextKey | '|' | sLocale | '|' | sStatus | '|' | sResolvedText);\nEndIf;",
+  "Metadata": "# No metadata tab logic in this implementation.",
+  "metadata": "# No metadata tab logic in this implementation.",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Language",
+    "UI"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
+}

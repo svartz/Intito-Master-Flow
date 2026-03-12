@@ -13,8 +13,13 @@
     "root": "All Text Keys",
     "seedElements": [
       { "name": "ui.overview.tab.title", "type": "N", "parent": "All Text Keys", "weight": 1 },
+      { "name": "ui.versions.tab.title", "type": "N", "parent": "All Text Keys", "weight": 1 },
+      { "name": "ui.validation.tab.title", "type": "N", "parent": "All Text Keys", "weight": 1 },
       { "name": "validation.mandatory_attribute_missing", "type": "N", "parent": "All Text Keys", "weight": 1 },
-      { "name": "security.bootstrap.started", "type": "N", "parent": "All Text Keys", "weight": 1 }
+      { "name": "validation.alias_collision", "type": "N", "parent": "All Text Keys", "weight": 1 },
+      { "name": "security.bootstrap.started", "type": "N", "parent": "All Text Keys", "weight": 1 },
+      { "name": "security.group.missing", "type": "N", "parent": "All Text Keys", "weight": 1 },
+      { "name": "audit.publish.completed", "type": "N", "parent": "All Text Keys", "weight": 1 }
     ]
   },
   "notes": [

@@ -1,0 +1,64 @@
+{
+  "Name": "IMF.P.Text.Export",
+  "name": "IMF.P.Text.Export",
+  "Purpose": "Export IMF.C.Text content to a deterministic CSV interchange format.",
+  "purpose": "Export IMF.C.Text content to a deterministic CSV interchange format.",
+  "Code@Code.link": "IMF.P.Text.Export.ti",
+  "Parameters": [
+    {
+      "Name": "pOutputFile",
+      "Prompt": "Output File",
+      "Value": "docs/status/IMF_Text_Export.csv",
+      "Description": "Deterministic CSV output file."
+    },
+    {
+      "Name": "pLocaleCsv",
+      "Prompt": "Locale Filter",
+      "Value": "",
+      "Description": "Optional comma-separated locale filter."
+    },
+    {
+      "Name": "pIncludeEmpty",
+      "Prompt": "Include Empty",
+      "Value": "N",
+      "Description": "Include empty translations when Y."
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pOutputFile",
+      "Prompt": "Output File",
+      "Value": "docs/status/IMF_Text_Export.csv",
+      "Description": "Deterministic CSV output file."
+    },
+    {
+      "Name": "pLocaleCsv",
+      "Prompt": "Locale Filter",
+      "Value": "",
+      "Description": "Optional comma-separated locale filter."
+    },
+    {
+      "Name": "pIncludeEmpty",
+      "Prompt": "Include Empty",
+      "Value": "N",
+      "Description": "Include empty translations when Y."
+    }
+  ],
+  "Prolog": "sOutputFile = Trim(pOutputFile);\nsLocaleCsv = Upper(Trim(pLocaleCsv));\nsIncludeEmpty = Upper(Trim(pIncludeEmpty));\nIf(sOutputFile @= ''); sOutputFile = 'docs/status/IMF_Text_Export.csv'; EndIf;\nIf(sIncludeEmpty @= ''); sIncludeEmpty = 'N'; EndIf;\nASCIIOutput(sOutputFile, 'TextKey', 'Domain', 'Locale', 'Text', 'Status', 'Owner', 'LastUpdatedBy', 'LastUpdatedAt');\nIf(CubeExists('IMF.C.Text') = 0 % DimensionExists('IMF.D.TextKey') = 0 % DimensionExists('IMF.D.Language') = 0);\n  ASCIIOutput(sOutputFile, '', '', '', '', 'ERROR', '', '', 'Required language control objects are not deployed.');\nElse;\n  nKeyCount = Dimsiz('IMF.D.TextKey');\n  nLocaleCount = Dimsiz('IMF.D.Language');\n  nKeyIndex = 1;\n  While(nKeyIndex <= nKeyCount);\n    sTextKey = DimNm('IMF.D.TextKey', nKeyIndex);\n    If(sTextKey @<> 'All Text Keys');\n      sDomain = Trim(AttrS('IMF.D.TextKey', sTextKey, 'Domain'));\n      If(SubSt(sTextKey, 1, 6) @<> 'IMF.P.' & SubSt(sTextKey, 1, 6) @<> 'IMF.C.' & SubSt(sTextKey, 1, 6) @<> 'IMF.D.');\n        nLocaleIndex = 1;\n        While(nLocaleIndex <= nLocaleCount);\n          sLocale = DimNm('IMF.D.Language', nLocaleIndex);\n          If(sLocale @<> 'All Languages');\n            If(sLocaleCsv @= '' % Scan(Upper(sLocale), sLocaleCsv) > 0);\n              sText = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Text');\n              sCellStatus = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Status');\n              sOwner = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Owner');\n              sUpdatedBy = CellGetS('IMF.C.Text', sTextKey, sLocale, 'LastUpdatedBy');\n              sUpdatedAt = CellGetS('IMF.C.Text', sTextKey, sLocale, 'LastUpdatedAt');\n              If(sIncludeEmpty @= 'Y' % Trim(sText) @<> '');\n                ASCIIOutput(sOutputFile, sTextKey, sDomain, sLocale, sText, sCellStatus, sOwner, sUpdatedBy, sUpdatedAt);\n              EndIf;\n            EndIf;\n          EndIf;\n          nLocaleIndex = nLocaleIndex + 1;\n        End;\n      EndIf;\n    EndIf;\n    nKeyIndex = nKeyIndex + 1;\n  End;\nEndIf;",
+  "prolog": "sOutputFile = Trim(pOutputFile);\nsLocaleCsv = Upper(Trim(pLocaleCsv));\nsIncludeEmpty = Upper(Trim(pIncludeEmpty));\nIf(sOutputFile @= ''); sOutputFile = 'docs/status/IMF_Text_Export.csv'; EndIf;\nIf(sIncludeEmpty @= ''); sIncludeEmpty = 'N'; EndIf;\nASCIIOutput(sOutputFile, 'TextKey', 'Domain', 'Locale', 'Text', 'Status', 'Owner', 'LastUpdatedBy', 'LastUpdatedAt');\nIf(CubeExists('IMF.C.Text') = 0 % DimensionExists('IMF.D.TextKey') = 0 % DimensionExists('IMF.D.Language') = 0);\n  ASCIIOutput(sOutputFile, '', '', '', '', 'ERROR', '', '', 'Required language control objects are not deployed.');\nElse;\n  nKeyCount = Dimsiz('IMF.D.TextKey');\n  nLocaleCount = Dimsiz('IMF.D.Language');\n  nKeyIndex = 1;\n  While(nKeyIndex <= nKeyCount);\n    sTextKey = DimNm('IMF.D.TextKey', nKeyIndex);\n    If(sTextKey @<> 'All Text Keys');\n      sDomain = Trim(AttrS('IMF.D.TextKey', sTextKey, 'Domain'));\n      If(SubSt(sTextKey, 1, 6) @<> 'IMF.P.' & SubSt(sTextKey, 1, 6) @<> 'IMF.C.' & SubSt(sTextKey, 1, 6) @<> 'IMF.D.');\n        nLocaleIndex = 1;\n        While(nLocaleIndex <= nLocaleCount);\n          sLocale = DimNm('IMF.D.Language', nLocaleIndex);\n          If(sLocale @<> 'All Languages');\n            If(sLocaleCsv @= '' % Scan(Upper(sLocale), sLocaleCsv) > 0);\n              sText = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Text');\n              sCellStatus = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Status');\n              sOwner = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Owner');\n              sUpdatedBy = CellGetS('IMF.C.Text', sTextKey, sLocale, 'LastUpdatedBy');\n              sUpdatedAt = CellGetS('IMF.C.Text', sTextKey, sLocale, 'LastUpdatedAt');\n              If(sIncludeEmpty @= 'Y' % Trim(sText) @<> '');\n                ASCIIOutput(sOutputFile, sTextKey, sDomain, sLocale, sText, sCellStatus, sOwner, sUpdatedBy, sUpdatedAt);\n              EndIf;\n            EndIf;\n          EndIf;\n          nLocaleIndex = nLocaleIndex + 1;\n        End;\n      EndIf;\n    EndIf;\n    nKeyIndex = nKeyIndex + 1;\n  End;\nEndIf;",
+  "Metadata": "# No metadata tab logic in this implementation.",
+  "metadata": "# No metadata tab logic in this implementation.",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Language",
+    "Export"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
+}

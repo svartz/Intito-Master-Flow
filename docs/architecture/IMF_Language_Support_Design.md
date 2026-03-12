@@ -228,6 +228,21 @@ When a TI process needs user-facing text:
 4. fallback to `en-US`
 5. only then emit to UI, audit, validation, or export
 
+Phase 1 implementation-ready process set:
+
+- `IMF.P.Text.Resolve`
+- `IMF.P.Text.ResolveWithFallback`
+- `IMF.P.Text.ValidateCoverage`
+- `IMF.P.Text.ReportMissing`
+- `IMF.P.Text.Export`
+- `IMF.P.Text.Import`
+- `IMF.P.Text.Init`
+
+Current implementation note:
+
+- text resolution, fallback, coverage reporting, export, and bootstrap seeding are implemented in source
+- CSV import is intentionally left as an honest datasource-wiring TODO because the deployed TM1 datasource convention is environment-specific
+
 ## PAW Design Implications
 
 PAW design should use translated labels, not technical object names, for:
@@ -271,6 +286,7 @@ This should be reflected in:
 - build manifest
 - release notes
 - language support status
+- deterministic CSV outputs from `IMF.P.Text.ValidateCoverage` and `IMF.P.Text.ReportMissing`
 
 ## Decision
 

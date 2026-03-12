@@ -13,6 +13,7 @@ Regler:
 Konsekvens:
 - PAW-designen ska anvanda captions och textnycklar for anvandartext
 - tekniska objektnamn ska endast visas dar teknisk identifiering behovs
+- IMF ska i forsta hand anvanda `IMF.P.Text.ResolveWithFallback`-monster och `IMF.C.Text` for att hamta lokaliserad visningstext
 
 ## Flik 1 - Oversikt
 Visar per dimension:
@@ -42,6 +43,7 @@ Summerar tekniska fel, affarsregelbrott, aliaskrockar och saknade obligatoriska 
 
 Sprakregel:
 - valideringsmeddelanden ska komma fran IMF:s textmodell, inte hardkodade literalstrangar
+- initiala nycklar finns for `validation.mandatory_attribute_missing` och `validation.alias_collision`
 
 ## Flik 5 - Impact
 Visar paverkan pa cubes, subsets, views, processer, sakerhet och integrationer.
@@ -54,6 +56,7 @@ Visar forhandskontroll, arkivnamn som kommer att skapas och publish-status.
 
 Sprakregel:
 - publish-status och instruktionstext ska kunna lokaliseras
+- release notes ska visa sprakcoverage och fallbackregel per build
 
 ## Flik 7 - Arkiv
 Lista over arkiverade masterversioner och publiceringshistorik.

@@ -1,0 +1,76 @@
+{
+  "Name": "IMF.P.Text.ValidateCoverage",
+  "name": "IMF.P.Text.ValidateCoverage",
+  "Purpose": "Validate language coverage in IMF.C.Text for the deployed text key and language model.",
+  "purpose": "Validate language coverage in IMF.C.Text for the deployed text key and language model.",
+  "Code@Code.link": "IMF.P.Text.ValidateCoverage.ti",
+  "Parameters": [
+    {
+      "Name": "pLocaleCsv",
+      "Prompt": "Locale Filter",
+      "Value": "",
+      "Description": "Optional comma-separated locale filter."
+    },
+    {
+      "Name": "pOutputFile",
+      "Prompt": "Output File",
+      "Value": "docs/status/IMF_Language_Coverage.csv",
+      "Description": "Deterministic CSV output file."
+    },
+    {
+      "Name": "pRequiredOnly",
+      "Prompt": "Required Only",
+      "Value": "Y",
+      "Description": "Limit validation to required keys."
+    },
+    {
+      "Name": "pStrictMode",
+      "Prompt": "Strict Mode",
+      "Value": "N",
+      "Description": "Mark missing non-baseline translations as blockers when Y."
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pLocaleCsv",
+      "Prompt": "Locale Filter",
+      "Value": "",
+      "Description": "Optional comma-separated locale filter."
+    },
+    {
+      "Name": "pOutputFile",
+      "Prompt": "Output File",
+      "Value": "docs/status/IMF_Language_Coverage.csv",
+      "Description": "Deterministic CSV output file."
+    },
+    {
+      "Name": "pRequiredOnly",
+      "Prompt": "Required Only",
+      "Value": "Y",
+      "Description": "Limit validation to required keys."
+    },
+    {
+      "Name": "pStrictMode",
+      "Prompt": "Strict Mode",
+      "Value": "N",
+      "Description": "Mark missing non-baseline translations as blockers when Y."
+    }
+  ],
+  "Prolog": "sLocaleCsv = Upper(Trim(pLocaleCsv));\nsOutputFile = Trim(pOutputFile);\nsRequiredOnly = Upper(Trim(pRequiredOnly));\nsStrictMode = Upper(Trim(pStrictMode));\nIf(sOutputFile @= ''); sOutputFile = 'docs/status/IMF_Language_Coverage.csv'; EndIf;\nIf(sRequiredOnly @= ''); sRequiredOnly = 'Y'; EndIf;\nIf(sStrictMode @= ''); sStrictMode = 'N'; EndIf;\nASCIIOutput(sOutputFile, 'TextKey', 'Domain', 'Locale', 'Required', 'Status', 'Comment');\nIf(CubeExists('IMF.C.Text') = 0 % DimensionExists('IMF.D.TextKey') = 0 % DimensionExists('IMF.D.Language') = 0);\n  ASCIIOutput(sOutputFile, '', '', '', '', 'ERROR', 'Required language control objects are not deployed.');\n  LogOutput('ERROR', 'IMF.P.Text.ValidateCoverage|language control objects missing.');\nElse;\n  nKeyCount = Dimsiz('IMF.D.TextKey');\n  nLocaleCount = Dimsiz('IMF.D.Language');\n  nKeyIndex = 1;\n  While(nKeyIndex <= nKeyCount);\n    sTextKey = DimNm('IMF.D.TextKey', nKeyIndex);\n    If(sTextKey @<> 'All Text Keys');\n      sRequired = Upper(Trim(AttrS('IMF.D.TextKey', sTextKey, 'Required')));\n      sDomain = Trim(AttrS('IMF.D.TextKey', sTextKey, 'Domain'));\n      If(sRequiredOnly @<> 'Y' % sRequired @= 'Y');\n        nLocaleIndex = 1;\n        While(nLocaleIndex <= nLocaleCount);\n          sLocale = DimNm('IMF.D.Language', nLocaleIndex);\n          If(sLocale @<> 'All Languages');\n            If(sLocaleCsv @= '' % Scan(Upper(sLocale), sLocaleCsv) > 0);\n              sText = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Text');\n              sStatus = 'OK';\n              sComment = 'Translation available.';\n              If(Trim(sText) @= '');\n                If(sLocale @= 'en-US');\n                  sStatus = 'MISSING_BASELINE';\n                  sComment = 'en-US baseline translation is missing.';\n                ElseIf(sStrictMode @= 'Y');\n                  sStatus = 'MISSING_BLOCKING';\n                  sComment = 'Locale translation is missing and strict mode is active.';\n                Else;\n                  sStatus = 'MISSING';\n                  sComment = 'Locale translation is missing. Fallback to en-US will be used.';\n                EndIf;\n              EndIf;\n              ASCIIOutput(sOutputFile, sTextKey, sDomain, sLocale, sRequired, sStatus, sComment);\n            EndIf;\n          EndIf;\n          nLocaleIndex = nLocaleIndex + 1;\n        End;\n      EndIf;\n    EndIf;\n    nKeyIndex = nKeyIndex + 1;\n  End;\nEndIf;",
+  "prolog": "sLocaleCsv = Upper(Trim(pLocaleCsv));\nsOutputFile = Trim(pOutputFile);\nsRequiredOnly = Upper(Trim(pRequiredOnly));\nsStrictMode = Upper(Trim(pStrictMode));\nIf(sOutputFile @= ''); sOutputFile = 'docs/status/IMF_Language_Coverage.csv'; EndIf;\nIf(sRequiredOnly @= ''); sRequiredOnly = 'Y'; EndIf;\nIf(sStrictMode @= ''); sStrictMode = 'N'; EndIf;\nASCIIOutput(sOutputFile, 'TextKey', 'Domain', 'Locale', 'Required', 'Status', 'Comment');\nIf(CubeExists('IMF.C.Text') = 0 % DimensionExists('IMF.D.TextKey') = 0 % DimensionExists('IMF.D.Language') = 0);\n  ASCIIOutput(sOutputFile, '', '', '', '', 'ERROR', 'Required language control objects are not deployed.');\n  LogOutput('ERROR', 'IMF.P.Text.ValidateCoverage|language control objects missing.');\nElse;\n  nKeyCount = Dimsiz('IMF.D.TextKey');\n  nLocaleCount = Dimsiz('IMF.D.Language');\n  nKeyIndex = 1;\n  While(nKeyIndex <= nKeyCount);\n    sTextKey = DimNm('IMF.D.TextKey', nKeyIndex);\n    If(sTextKey @<> 'All Text Keys');\n      sRequired = Upper(Trim(AttrS('IMF.D.TextKey', sTextKey, 'Required')));\n      sDomain = Trim(AttrS('IMF.D.TextKey', sTextKey, 'Domain'));\n      If(sRequiredOnly @<> 'Y' % sRequired @= 'Y');\n        nLocaleIndex = 1;\n        While(nLocaleIndex <= nLocaleCount);\n          sLocale = DimNm('IMF.D.Language', nLocaleIndex);\n          If(sLocale @<> 'All Languages');\n            If(sLocaleCsv @= '' % Scan(Upper(sLocale), sLocaleCsv) > 0);\n              sText = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Text');\n              sStatus = 'OK';\n              sComment = 'Translation available.';\n              If(Trim(sText) @= '');\n                If(sLocale @= 'en-US');\n                  sStatus = 'MISSING_BASELINE';\n                  sComment = 'en-US baseline translation is missing.';\n                ElseIf(sStrictMode @= 'Y');\n                  sStatus = 'MISSING_BLOCKING';\n                  sComment = 'Locale translation is missing and strict mode is active.';\n                Else;\n                  sStatus = 'MISSING';\n                  sComment = 'Locale translation is missing. Fallback to en-US will be used.';\n                EndIf;\n              EndIf;\n              ASCIIOutput(sOutputFile, sTextKey, sDomain, sLocale, sRequired, sStatus, sComment);\n            EndIf;\n          EndIf;\n          nLocaleIndex = nLocaleIndex + 1;\n        End;\n      EndIf;\n    EndIf;\n    nKeyIndex = nKeyIndex + 1;\n  End;\nEndIf;",
+  "Metadata": "# No metadata tab logic in this implementation.",
+  "metadata": "# No metadata tab logic in this implementation.",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Language",
+    "Validation"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
+}

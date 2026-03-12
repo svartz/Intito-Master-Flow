@@ -1,0 +1,230 @@
+# IMF.P.Text.Init
+# Purpose: Seed IMF language control metadata and baseline en-US translations where the control objects are already deployed.
+# Sources:
+# - IMF.D.Language
+# - IMF.D.TextKey
+# - IMF.C.Text
+# - docs/architecture/IMF_Language_Key_Register.csv
+# Parameters:
+# - pSeedLanguages: Seed language attributes when 'Y'.
+# - pSeedTextKeys: Seed text keys and attributes when 'Y'.
+# - pSeedBaseline: Seed en-US baseline text values when 'Y'.
+# Prolog:
+# - Validate deployed control objects and seed deterministic baseline metadata without overwriting the model shape.
+# Metadata:
+# - No metadata datasource is required in this implementation.
+# Data:
+# - No Data tab logic is required in this implementation.
+# Epilog:
+# - Preserve existing translations and mark register-sync gaps honestly.
+
+#region prolog
+sSeedLanguages = Upper(Trim(pSeedLanguages));
+sSeedTextKeys = Upper(Trim(pSeedTextKeys));
+sSeedBaseline = Upper(Trim(pSeedBaseline));
+sNow = TimSt(Now, '\Y-\m-\d \h:\i:\s');
+
+If(sSeedLanguages @= '');
+  sSeedLanguages = 'Y';
+EndIf;
+If(sSeedTextKeys @= '');
+  sSeedTextKeys = 'Y';
+EndIf;
+If(sSeedBaseline @= '');
+  sSeedBaseline = 'Y';
+EndIf;
+
+If(DimensionExists('IMF.D.Language') = 0 % DimensionExists('IMF.D.TextKey') = 0 % CubeExists('IMF.C.Text') = 0);
+  LogOutput('ERROR', 'IMF.P.Text.Init|Required language control objects are not deployed.');
+Else;
+  LogOutput('INFO', 'IMF.P.Text.Init|Seeding language metadata and baseline text values.');
+
+  If(sSeedLanguages @= 'Y');
+    If(DimensionExists('}ElementAttributes_IMF.D.Language') = 0 % DimensionElementExists('}ElementAttributes_IMF.D.Language', 'DisplayName') = 0);
+      AttrInsert('IMF.D.Language', '', 'DisplayName', 'S');
+    EndIf;
+    If(DimensionExists('}ElementAttributes_IMF.D.Language') = 0 % DimensionElementExists('}ElementAttributes_IMF.D.Language', 'IsDefault') = 0);
+      AttrInsert('IMF.D.Language', '', 'IsDefault', 'S');
+    EndIf;
+    If(DimensionExists('}ElementAttributes_IMF.D.Language') = 0 % DimensionElementExists('}ElementAttributes_IMF.D.Language', 'FallbackLanguage') = 0);
+      AttrInsert('IMF.D.Language', '', 'FallbackLanguage', 'S');
+    EndIf;
+    If(DimensionExists('}ElementAttributes_IMF.D.Language') = 0 % DimensionElementExists('}ElementAttributes_IMF.D.Language', 'IsActive') = 0);
+      AttrInsert('IMF.D.Language', '', 'IsActive', 'S');
+    EndIf;
+
+    AttrPutS('English (United States)', 'IMF.D.Language', 'en-US', 'DisplayName');
+    AttrPutS('Y', 'IMF.D.Language', 'en-US', 'IsDefault');
+    AttrPutS('en-US', 'IMF.D.Language', 'en-US', 'FallbackLanguage');
+    AttrPutS('Y', 'IMF.D.Language', 'en-US', 'IsActive');
+
+    AttrPutS('Swedish (Sweden)', 'IMF.D.Language', 'sv-SE', 'DisplayName');
+    AttrPutS('N', 'IMF.D.Language', 'sv-SE', 'IsDefault');
+    AttrPutS('en-US', 'IMF.D.Language', 'sv-SE', 'FallbackLanguage');
+    AttrPutS('Y', 'IMF.D.Language', 'sv-SE', 'IsActive');
+
+    AttrPutS('Finnish (Finland)', 'IMF.D.Language', 'fi-FI', 'DisplayName');
+    AttrPutS('N', 'IMF.D.Language', 'fi-FI', 'IsDefault');
+    AttrPutS('en-US', 'IMF.D.Language', 'fi-FI', 'FallbackLanguage');
+    AttrPutS('Y', 'IMF.D.Language', 'fi-FI', 'IsActive');
+
+    AttrPutS('Swedish (Finland)', 'IMF.D.Language', 'sv-FI', 'DisplayName');
+    AttrPutS('N', 'IMF.D.Language', 'sv-FI', 'IsDefault');
+    AttrPutS('en-US', 'IMF.D.Language', 'sv-FI', 'FallbackLanguage');
+    AttrPutS('Y', 'IMF.D.Language', 'sv-FI', 'IsActive');
+
+    AttrPutS('Norwegian (Norway)', 'IMF.D.Language', 'no-NO', 'DisplayName');
+    AttrPutS('N', 'IMF.D.Language', 'no-NO', 'IsDefault');
+    AttrPutS('en-US', 'IMF.D.Language', 'no-NO', 'FallbackLanguage');
+    AttrPutS('Y', 'IMF.D.Language', 'no-NO', 'IsActive');
+
+    AttrPutS('Danish (Denmark)', 'IMF.D.Language', 'da-DK', 'DisplayName');
+    AttrPutS('N', 'IMF.D.Language', 'da-DK', 'IsDefault');
+    AttrPutS('en-US', 'IMF.D.Language', 'da-DK', 'FallbackLanguage');
+    AttrPutS('Y', 'IMF.D.Language', 'da-DK', 'IsActive');
+
+    AttrPutS('German (Germany)', 'IMF.D.Language', 'de-DE', 'DisplayName');
+    AttrPutS('N', 'IMF.D.Language', 'de-DE', 'IsDefault');
+    AttrPutS('en-US', 'IMF.D.Language', 'de-DE', 'FallbackLanguage');
+    AttrPutS('Y', 'IMF.D.Language', 'de-DE', 'IsActive');
+  EndIf;
+
+  If(sSeedTextKeys @= 'Y');
+    If(DimensionExists('}ElementAttributes_IMF.D.TextKey') = 0 % DimensionElementExists('}ElementAttributes_IMF.D.TextKey', 'Domain') = 0);
+      AttrInsert('IMF.D.TextKey', '', 'Domain', 'S');
+    EndIf;
+    If(DimensionExists('}ElementAttributes_IMF.D.TextKey') = 0 % DimensionElementExists('}ElementAttributes_IMF.D.TextKey', 'DefaultLocale') = 0);
+      AttrInsert('IMF.D.TextKey', '', 'DefaultLocale', 'S');
+    EndIf;
+    If(DimensionExists('}ElementAttributes_IMF.D.TextKey') = 0 % DimensionElementExists('}ElementAttributes_IMF.D.TextKey', 'DefaultText') = 0);
+      AttrInsert('IMF.D.TextKey', '', 'DefaultText', 'S');
+    EndIf;
+    If(DimensionExists('}ElementAttributes_IMF.D.TextKey') = 0 % DimensionElementExists('}ElementAttributes_IMF.D.TextKey', 'Required') = 0);
+      AttrInsert('IMF.D.TextKey', '', 'Required', 'S');
+    EndIf;
+    If(DimensionExists('}ElementAttributes_IMF.D.TextKey') = 0 % DimensionElementExists('}ElementAttributes_IMF.D.TextKey', 'Owner') = 0);
+      AttrInsert('IMF.D.TextKey', '', 'Owner', 'S');
+    EndIf;
+
+    AttrPutS('UI', 'IMF.D.TextKey', 'ui.overview.tab.title', 'Domain');
+    AttrPutS('en-US', 'IMF.D.TextKey', 'ui.overview.tab.title', 'DefaultLocale');
+    AttrPutS('Overview', 'IMF.D.TextKey', 'ui.overview.tab.title', 'DefaultText');
+    AttrPutS('Y', 'IMF.D.TextKey', 'ui.overview.tab.title', 'Required');
+    AttrPutS('IMF Architecture', 'IMF.D.TextKey', 'ui.overview.tab.title', 'Owner');
+
+    AttrPutS('UI', 'IMF.D.TextKey', 'ui.versions.tab.title', 'Domain');
+    AttrPutS('en-US', 'IMF.D.TextKey', 'ui.versions.tab.title', 'DefaultLocale');
+    AttrPutS('Versions', 'IMF.D.TextKey', 'ui.versions.tab.title', 'DefaultText');
+    AttrPutS('Y', 'IMF.D.TextKey', 'ui.versions.tab.title', 'Required');
+    AttrPutS('IMF Architecture', 'IMF.D.TextKey', 'ui.versions.tab.title', 'Owner');
+
+    AttrPutS('UI', 'IMF.D.TextKey', 'ui.validation.tab.title', 'Domain');
+    AttrPutS('en-US', 'IMF.D.TextKey', 'ui.validation.tab.title', 'DefaultLocale');
+    AttrPutS('Validation', 'IMF.D.TextKey', 'ui.validation.tab.title', 'DefaultText');
+    AttrPutS('Y', 'IMF.D.TextKey', 'ui.validation.tab.title', 'Required');
+    AttrPutS('IMF Architecture', 'IMF.D.TextKey', 'ui.validation.tab.title', 'Owner');
+
+    AttrPutS('Validation', 'IMF.D.TextKey', 'validation.mandatory_attribute_missing', 'Domain');
+    AttrPutS('en-US', 'IMF.D.TextKey', 'validation.mandatory_attribute_missing', 'DefaultLocale');
+    AttrPutS('Mandatory attribute is missing', 'IMF.D.TextKey', 'validation.mandatory_attribute_missing', 'DefaultText');
+    AttrPutS('Y', 'IMF.D.TextKey', 'validation.mandatory_attribute_missing', 'Required');
+    AttrPutS('IMF Architecture', 'IMF.D.TextKey', 'validation.mandatory_attribute_missing', 'Owner');
+
+    AttrPutS('Validation', 'IMF.D.TextKey', 'validation.alias_collision', 'Domain');
+    AttrPutS('en-US', 'IMF.D.TextKey', 'validation.alias_collision', 'DefaultLocale');
+    AttrPutS('Alias collision detected', 'IMF.D.TextKey', 'validation.alias_collision', 'DefaultText');
+    AttrPutS('Y', 'IMF.D.TextKey', 'validation.alias_collision', 'Required');
+    AttrPutS('IMF Architecture', 'IMF.D.TextKey', 'validation.alias_collision', 'Owner');
+
+    AttrPutS('Security', 'IMF.D.TextKey', 'security.bootstrap.started', 'Domain');
+    AttrPutS('en-US', 'IMF.D.TextKey', 'security.bootstrap.started', 'DefaultLocale');
+    AttrPutS('Security bootstrap started', 'IMF.D.TextKey', 'security.bootstrap.started', 'DefaultText');
+    AttrPutS('Y', 'IMF.D.TextKey', 'security.bootstrap.started', 'Required');
+    AttrPutS('IMF Architecture', 'IMF.D.TextKey', 'security.bootstrap.started', 'Owner');
+
+    AttrPutS('Security', 'IMF.D.TextKey', 'security.group.missing', 'Domain');
+    AttrPutS('en-US', 'IMF.D.TextKey', 'security.group.missing', 'DefaultLocale');
+    AttrPutS('Required security group is missing', 'IMF.D.TextKey', 'security.group.missing', 'DefaultText');
+    AttrPutS('Y', 'IMF.D.TextKey', 'security.group.missing', 'Required');
+    AttrPutS('IMF Architecture', 'IMF.D.TextKey', 'security.group.missing', 'Owner');
+
+    AttrPutS('Audit', 'IMF.D.TextKey', 'audit.publish.completed', 'Domain');
+    AttrPutS('en-US', 'IMF.D.TextKey', 'audit.publish.completed', 'DefaultLocale');
+    AttrPutS('Publish completed', 'IMF.D.TextKey', 'audit.publish.completed', 'DefaultText');
+    AttrPutS('Y', 'IMF.D.TextKey', 'audit.publish.completed', 'Required');
+    AttrPutS('IMF Architecture', 'IMF.D.TextKey', 'audit.publish.completed', 'Owner');
+  EndIf;
+
+  If(sSeedBaseline @= 'Y');
+    CellPutS('Overview', 'IMF.C.Text', 'ui.overview.tab.title', 'en-US', 'Text');
+    CellPutS('Approved', 'IMF.C.Text', 'ui.overview.tab.title', 'en-US', 'Status');
+    CellPutS('UI', 'IMF.C.Text', 'ui.overview.tab.title', 'en-US', 'Domain');
+    CellPutS('IMF Architecture', 'IMF.C.Text', 'ui.overview.tab.title', 'en-US', 'Owner');
+    CellPutS('IMF.P.Text.Init', 'IMF.C.Text', 'ui.overview.tab.title', 'en-US', 'LastUpdatedBy');
+    CellPutS(sNow, 'IMF.C.Text', 'ui.overview.tab.title', 'en-US', 'LastUpdatedAt');
+
+    CellPutS('Versions', 'IMF.C.Text', 'ui.versions.tab.title', 'en-US', 'Text');
+    CellPutS('Approved', 'IMF.C.Text', 'ui.versions.tab.title', 'en-US', 'Status');
+    CellPutS('UI', 'IMF.C.Text', 'ui.versions.tab.title', 'en-US', 'Domain');
+    CellPutS('IMF Architecture', 'IMF.C.Text', 'ui.versions.tab.title', 'en-US', 'Owner');
+    CellPutS('IMF.P.Text.Init', 'IMF.C.Text', 'ui.versions.tab.title', 'en-US', 'LastUpdatedBy');
+    CellPutS(sNow, 'IMF.C.Text', 'ui.versions.tab.title', 'en-US', 'LastUpdatedAt');
+
+    CellPutS('Validation', 'IMF.C.Text', 'ui.validation.tab.title', 'en-US', 'Text');
+    CellPutS('Approved', 'IMF.C.Text', 'ui.validation.tab.title', 'en-US', 'Status');
+    CellPutS('UI', 'IMF.C.Text', 'ui.validation.tab.title', 'en-US', 'Domain');
+    CellPutS('IMF Architecture', 'IMF.C.Text', 'ui.validation.tab.title', 'en-US', 'Owner');
+    CellPutS('IMF.P.Text.Init', 'IMF.C.Text', 'ui.validation.tab.title', 'en-US', 'LastUpdatedBy');
+    CellPutS(sNow, 'IMF.C.Text', 'ui.validation.tab.title', 'en-US', 'LastUpdatedAt');
+
+    CellPutS('Mandatory attribute is missing', 'IMF.C.Text', 'validation.mandatory_attribute_missing', 'en-US', 'Text');
+    CellPutS('Approved', 'IMF.C.Text', 'validation.mandatory_attribute_missing', 'en-US', 'Status');
+    CellPutS('Validation', 'IMF.C.Text', 'validation.mandatory_attribute_missing', 'en-US', 'Domain');
+    CellPutS('IMF Architecture', 'IMF.C.Text', 'validation.mandatory_attribute_missing', 'en-US', 'Owner');
+    CellPutS('IMF.P.Text.Init', 'IMF.C.Text', 'validation.mandatory_attribute_missing', 'en-US', 'LastUpdatedBy');
+    CellPutS(sNow, 'IMF.C.Text', 'validation.mandatory_attribute_missing', 'en-US', 'LastUpdatedAt');
+
+    CellPutS('Alias collision detected', 'IMF.C.Text', 'validation.alias_collision', 'en-US', 'Text');
+    CellPutS('Approved', 'IMF.C.Text', 'validation.alias_collision', 'en-US', 'Status');
+    CellPutS('Validation', 'IMF.C.Text', 'validation.alias_collision', 'en-US', 'Domain');
+    CellPutS('IMF Architecture', 'IMF.C.Text', 'validation.alias_collision', 'en-US', 'Owner');
+    CellPutS('IMF.P.Text.Init', 'IMF.C.Text', 'validation.alias_collision', 'en-US', 'LastUpdatedBy');
+    CellPutS(sNow, 'IMF.C.Text', 'validation.alias_collision', 'en-US', 'LastUpdatedAt');
+
+    CellPutS('Security bootstrap started', 'IMF.C.Text', 'security.bootstrap.started', 'en-US', 'Text');
+    CellPutS('Approved', 'IMF.C.Text', 'security.bootstrap.started', 'en-US', 'Status');
+    CellPutS('Security', 'IMF.C.Text', 'security.bootstrap.started', 'en-US', 'Domain');
+    CellPutS('IMF Architecture', 'IMF.C.Text', 'security.bootstrap.started', 'en-US', 'Owner');
+    CellPutS('IMF.P.Text.Init', 'IMF.C.Text', 'security.bootstrap.started', 'en-US', 'LastUpdatedBy');
+    CellPutS(sNow, 'IMF.C.Text', 'security.bootstrap.started', 'en-US', 'LastUpdatedAt');
+
+    CellPutS('Required security group is missing', 'IMF.C.Text', 'security.group.missing', 'en-US', 'Text');
+    CellPutS('Approved', 'IMF.C.Text', 'security.group.missing', 'en-US', 'Status');
+    CellPutS('Security', 'IMF.C.Text', 'security.group.missing', 'en-US', 'Domain');
+    CellPutS('IMF Architecture', 'IMF.C.Text', 'security.group.missing', 'en-US', 'Owner');
+    CellPutS('IMF.P.Text.Init', 'IMF.C.Text', 'security.group.missing', 'en-US', 'LastUpdatedBy');
+    CellPutS(sNow, 'IMF.C.Text', 'security.group.missing', 'en-US', 'LastUpdatedAt');
+
+    CellPutS('Publish completed', 'IMF.C.Text', 'audit.publish.completed', 'en-US', 'Text');
+    CellPutS('Approved', 'IMF.C.Text', 'audit.publish.completed', 'en-US', 'Status');
+    CellPutS('Audit', 'IMF.C.Text', 'audit.publish.completed', 'en-US', 'Domain');
+    CellPutS('IMF Architecture', 'IMF.C.Text', 'audit.publish.completed', 'en-US', 'Owner');
+    CellPutS('IMF.P.Text.Init', 'IMF.C.Text', 'audit.publish.completed', 'en-US', 'LastUpdatedBy');
+    CellPutS(sNow, 'IMF.C.Text', 'audit.publish.completed', 'en-US', 'LastUpdatedAt');
+  EndIf;
+
+  LogOutput('INFO', 'IMF.P.Text.Init|TODO: Sync the full key register automatically from docs/architecture/IMF_Language_Key_Register.csv during build or deployment.');
+EndIf;
+#endregion
+
+#region metadata
+# No metadata tab logic in this implementation.
+#endregion
+
+#region data
+# No Data tab logic in this implementation.
+#endregion
+
+#region epilog
+# No Epilog tab logic in this implementation.
+#endregion

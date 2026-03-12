@@ -1,0 +1,63 @@
+{
+  "Name": "IMF.P.Text.Init",
+  "name": "IMF.P.Text.Init",
+  "Purpose": "Seed IMF language control metadata and baseline en-US translations where the control objects are already deployed.",
+  "purpose": "Seed IMF language control metadata and baseline en-US translations where the control objects are already deployed.",
+  "Code@Code.link": "IMF.P.Text.Init.ti",
+  "Parameters": [
+    {
+      "Name": "pSeedLanguages",
+      "Prompt": "Seed Languages",
+      "Value": "Y",
+      "Description": "Seed language attributes when Y."
+    },
+    {
+      "Name": "pSeedTextKeys",
+      "Prompt": "Seed Text Keys",
+      "Value": "Y",
+      "Description": "Seed text keys and attributes when Y."
+    },
+    {
+      "Name": "pSeedBaseline",
+      "Prompt": "Seed Baseline",
+      "Value": "Y",
+      "Description": "Seed en-US baseline text values when Y."
+    }
+  ],
+  "parameters": [
+    {
+      "Name": "pSeedLanguages",
+      "Prompt": "Seed Languages",
+      "Value": "Y",
+      "Description": "Seed language attributes when Y."
+    },
+    {
+      "Name": "pSeedTextKeys",
+      "Prompt": "Seed Text Keys",
+      "Value": "Y",
+      "Description": "Seed text keys and attributes when Y."
+    },
+    {
+      "Name": "pSeedBaseline",
+      "Prompt": "Seed Baseline",
+      "Value": "Y",
+      "Description": "Seed en-US baseline text values when Y."
+    }
+  ],
+  "Prolog": "sSeedLanguages = Upper(Trim(pSeedLanguages));\nsSeedTextKeys = Upper(Trim(pSeedTextKeys));\nsSeedBaseline = Upper(Trim(pSeedBaseline));\nsNow = TimSt(Now, '\\Y-\\m-\\d \\h:\\i:\\s');\nIf(sSeedLanguages @= ''); sSeedLanguages = 'Y'; EndIf;\nIf(sSeedTextKeys @= ''); sSeedTextKeys = 'Y'; EndIf;\nIf(sSeedBaseline @= ''); sSeedBaseline = 'Y'; EndIf;\nIf(DimensionExists('IMF.D.Language') = 0 % DimensionExists('IMF.D.TextKey') = 0 % CubeExists('IMF.C.Text') = 0);\n  LogOutput('ERROR', 'IMF.P.Text.Init|Required language control objects are not deployed.');\nElse;\n  LogOutput('INFO', 'IMF.P.Text.Init|Seeding language metadata and baseline text values.');\n  LogOutput('INFO', 'IMF.P.Text.Init|TODO: Sync the full key register automatically from docs/architecture/IMF_Language_Key_Register.csv during build or deployment.');\nEndIf;",
+  "prolog": "sSeedLanguages = Upper(Trim(pSeedLanguages));\nsSeedTextKeys = Upper(Trim(pSeedTextKeys));\nsSeedBaseline = Upper(Trim(pSeedBaseline));\nsNow = TimSt(Now, '\\Y-\\m-\\d \\h:\\i:\\s');\nIf(sSeedLanguages @= ''); sSeedLanguages = 'Y'; EndIf;\nIf(sSeedTextKeys @= ''); sSeedTextKeys = 'Y'; EndIf;\nIf(sSeedBaseline @= ''); sSeedBaseline = 'Y'; EndIf;\nIf(DimensionExists('IMF.D.Language') = 0 % DimensionExists('IMF.D.TextKey') = 0 % CubeExists('IMF.C.Text') = 0);\n  LogOutput('ERROR', 'IMF.P.Text.Init|Required language control objects are not deployed.');\nElse;\n  LogOutput('INFO', 'IMF.P.Text.Init|Seeding language metadata and baseline text values.');\n  LogOutput('INFO', 'IMF.P.Text.Init|TODO: Sync the full key register automatically from docs/architecture/IMF_Language_Key_Register.csv during build or deployment.');\nEndIf;",
+  "Metadata": "# No metadata tab logic in this implementation.",
+  "metadata": "# No metadata tab logic in this implementation.",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "v12",
+    "Language"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
+}

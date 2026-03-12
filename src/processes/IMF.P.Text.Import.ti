@@ -1,0 +1,56 @@
+# IMF.P.Text.Import
+# Purpose: Validate a translation import request and define the supported CSV contract for IMF.C.Text.
+# Sources:
+# - IMF.C.Text
+# - IMF.D.TextKey
+# - IMF.D.Language
+# Parameters:
+# - pInputFile: CSV file to import.
+# - pStrictMode: Reject questionable records when 'Y'.
+# - pApplyChanges: Apply changes when 'Y' after datasource wiring is configured.
+# Prolog:
+# - Validate the request, reject technical IMF object names, and mark datasource binding as deployment-specific.
+# Metadata:
+# - TODO: Configure a character-delimited datasource with columns TextKey, Domain, Locale, Text, Status, Owner.
+# Data:
+# - TODO: Reject rows where TextKey starts with IMF.P., IMF.C., or IMF.D. and upsert valid translations to IMF.C.Text.
+# Epilog:
+# - Do not fake a successful import until datasource wiring exists in the target TM1 environment.
+
+#region prolog
+sInputFile = Trim(pInputFile);
+sStrictMode = Upper(Trim(pStrictMode));
+sApplyChanges = Upper(Trim(pApplyChanges));
+
+If(sStrictMode @= '');
+  sStrictMode = 'Y';
+EndIf;
+If(sApplyChanges @= '');
+  sApplyChanges = 'N';
+EndIf;
+
+If(sInputFile @= '');
+  LogOutput('ERROR', 'IMF.P.Text.Import|pInputFile is required.');
+ElseIf(CubeExists('IMF.C.Text') = 0 % DimensionExists('IMF.D.TextKey') = 0 % DimensionExists('IMF.D.Language') = 0);
+  LogOutput('ERROR', 'IMF.P.Text.Import|required language control objects are not deployed.');
+Else;
+  LogOutput('INFO', 'IMF.P.Text.Import|Validated import request for ' | sInputFile | '.');
+  LogOutput('INFO', 'IMF.P.Text.Import|CSV contract: TextKey,Domain,Locale,Text,Status,Owner.');
+  LogOutput('INFO', 'IMF.P.Text.Import|TODO: Bind TM1 datasource variables before applying file content.');
+  If(sApplyChanges @= 'Y');
+    LogOutput('WARNING', 'IMF.P.Text.Import|TODO: Apply mode requested but datasource-driven import is not wired yet.');
+  EndIf;
+EndIf;
+#endregion
+
+#region metadata
+# TODO: Configure a character-delimited datasource with columns TextKey, Domain, Locale, Text, Status, Owner.
+#endregion
+
+#region data
+# TODO: Reject rows where TextKey starts with IMF.P., IMF.C., or IMF.D. and upsert valid translations to IMF.C.Text.
+#endregion
+
+#region epilog
+# No Epilog tab logic in this implementation.
+#endregion

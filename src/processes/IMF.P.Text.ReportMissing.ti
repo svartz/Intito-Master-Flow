@@ -1,0 +1,92 @@
+# IMF.P.Text.ReportMissing
+# Purpose: Export only missing or incomplete translations from IMF.C.Text.
+# Sources:
+# - IMF.C.Text
+# - IMF.D.TextKey
+# - IMF.D.Language
+# Parameters:
+# - pLocaleCsv: Optional comma-separated locale filter.
+# - pOutputFile: Deterministic CSV output file.
+# - pIncludeOptional: Include optional text keys when 'Y'.
+# Prolog:
+# - Identify missing baseline and locale translations and export only the gaps.
+# Metadata:
+# - No metadata datasource is required in this implementation.
+# Data:
+# - No Data tab logic is required in this implementation.
+# Epilog:
+# - Missing translations remain directly reportable for release readiness.
+
+#region prolog
+sLocaleCsv = Upper(Trim(pLocaleCsv));
+sOutputFile = Trim(pOutputFile);
+sIncludeOptional = Upper(Trim(pIncludeOptional));
+
+If(sOutputFile @= '');
+  sOutputFile = 'docs/status/IMF_Missing_Translations.csv';
+EndIf;
+If(sIncludeOptional @= '');
+  sIncludeOptional = 'N';
+EndIf;
+
+ASCIIOutput(sOutputFile, 'TextKey', 'Domain', 'Locale', 'Required', 'Status', 'Comment');
+
+If(CubeExists('IMF.C.Text') = 0 % DimensionExists('IMF.D.TextKey') = 0 % DimensionExists('IMF.D.Language') = 0);
+  ASCIIOutput(sOutputFile, '', '', '', '', 'ERROR', 'Required language control objects are not deployed.');
+Else;
+  nKeyCount = Dimsiz('IMF.D.TextKey');
+  nLocaleCount = Dimsiz('IMF.D.Language');
+  nKeyIndex = 1;
+
+  While(nKeyIndex <= nKeyCount);
+    sTextKey = DimNm('IMF.D.TextKey', nKeyIndex);
+
+    If(sTextKey @<> 'All Text Keys');
+      sRequired = Upper(Trim(AttrS('IMF.D.TextKey', sTextKey, 'Required')));
+      sDomain = Trim(AttrS('IMF.D.TextKey', sTextKey, 'Domain'));
+
+      If(sIncludeOptional @= 'Y' % sRequired @= 'Y');
+        nLocaleIndex = 1;
+
+        While(nLocaleIndex <= nLocaleCount);
+          sLocale = DimNm('IMF.D.Language', nLocaleIndex);
+
+          If(sLocale @<> 'All Languages');
+            If(sLocaleCsv @= '' % Scan(Upper(sLocale), sLocaleCsv) > 0);
+              sText = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Text');
+
+              If(Trim(sText) @= '');
+                If(sLocale @= 'en-US');
+                  sStatus = 'MISSING_BASELINE';
+                  sComment = 'en-US baseline translation is missing.';
+                Else;
+                  sStatus = 'MISSING';
+                  sComment = 'Locale translation is missing. Fallback to en-US will be used.';
+                EndIf;
+
+                ASCIIOutput(sOutputFile, sTextKey, sDomain, sLocale, sRequired, sStatus, sComment);
+              EndIf;
+            EndIf;
+          EndIf;
+
+          nLocaleIndex = nLocaleIndex + 1;
+        End;
+      EndIf;
+    EndIf;
+
+    nKeyIndex = nKeyIndex + 1;
+  End;
+EndIf;
+#endregion
+
+#region metadata
+# No metadata tab logic in this implementation.
+#endregion
+
+#region data
+# No Data tab logic in this implementation.
+#endregion
+
+#region epilog
+# No Epilog tab logic in this implementation.
+#endregion

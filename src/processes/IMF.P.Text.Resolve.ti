@@ -1,0 +1,75 @@
+# IMF.P.Text.Resolve
+# Purpose: Resolve a single IMF text key for one locale without applying fallback logic.
+# Sources:
+# - IMF.C.Text
+# - IMF.D.TextKey
+# - IMF.D.Language
+# Parameters:
+# - pTextKey: Stable IMF text key to resolve.
+# - pLocale: Requested locale. Default 'en-US'.
+# - pOutputFile: Optional deterministic CSV output file.
+# Prolog:
+# - Validate language control objects, resolve one locale, and emit a deterministic result row.
+# Metadata:
+# - No metadata datasource is required in this implementation.
+# Data:
+# - No Data tab logic is required in this implementation.
+# Epilog:
+# - Surface missing translations explicitly instead of pretending they exist.
+
+#region prolog
+sTextKey = Trim(pTextKey);
+sLocale = Trim(pLocale);
+sOutputFile = Trim(pOutputFile);
+sResolvedText = '';
+sStatus = 'MISSING';
+sComment = '';
+sMissingMarker = '[missing:' | sTextKey | ']';
+
+If(sLocale @= '');
+  sLocale = 'en-US';
+EndIf;
+
+If(sTextKey @= '');
+  sStatus = 'ERROR';
+  sComment = 'Text key is required.';
+  sResolvedText = '[missing:]';
+ElseIf(CubeExists('IMF.C.Text') = 0);
+  sStatus = 'ERROR';
+  sComment = 'IMF.C.Text is not deployed.';
+  sResolvedText = sMissingMarker;
+ElseIf(DimensionElementExists('IMF.D.TextKey', sTextKey) = 0);
+  sStatus = 'ERROR';
+  sComment = 'Text key is not deployed in IMF.D.TextKey.';
+  sResolvedText = sMissingMarker;
+Else;
+  sResolvedText = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Text');
+  If(Trim(sResolvedText) @<> '');
+    sStatus = 'FOUND';
+    sComment = 'Translation found for requested locale.';
+  Else;
+    sResolvedText = sMissingMarker;
+    sStatus = 'MISSING';
+    sComment = 'No translation exists for the requested locale.';
+  EndIf;
+EndIf;
+
+If(sOutputFile @<> '');
+  ASCIIOutput(sOutputFile, 'TextKey', 'RequestedLocale', 'ResolvedLocale', 'Status', 'ResolvedText', 'Comment');
+  ASCIIOutput(sOutputFile, sTextKey, sLocale, sLocale, sStatus, sResolvedText, sComment);
+Else;
+  LogOutput('INFO', 'IMF.P.Text.Resolve|' | sTextKey | '|' | sLocale | '|' | sStatus | '|' | sResolvedText);
+EndIf;
+#endregion
+
+#region metadata
+# No metadata tab logic in this implementation.
+#endregion
+
+#region data
+# No Data tab logic in this implementation.
+#endregion
+
+#region epilog
+# No Epilog tab logic in this implementation.
+#endregion

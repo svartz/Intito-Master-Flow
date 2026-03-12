@@ -18,12 +18,12 @@
 | Area | Status | Notes |
 |---|---|---|
 | Language design | defined | Initial architecture and governance documents created. |
-| Translation control objects | defined | First object definitions proposed in `src/object-definitions`. |
-| Text key register | started | Initial key register added. |
+| Translation control objects | implementation-ready | Control objects are defined and the text key dimension now seeds the current register baseline. |
+| Text key register | connected | The current register keys are mirrored in `IMF.D.TextKey` and seeded by `IMF.P.Text.Init`. |
 | PAW-facing language model | partial | UI document updated with localization principles. |
-| TI message localization | not started | Existing processes still mostly use hardcoded or placeholder text. |
+| TI message localization | partial | `IMF.P.Text.Resolve*`, coverage, export, and bootstrap processes are now in source control. |
 | Process prompt localization | environment-dependent | Depends on runtime/UI resolution strategy. |
-| Release traceability | partial | Build template and release docs now need language fields populated in real releases. |
+| Release traceability | connected | Release/build templates now reference locale coverage and the language processes can export deterministic reports. |
 
 ## Known Risks
 
@@ -34,6 +34,6 @@
 ## Next Steps
 
 1. decide whether `sv-FI` remains a first-class locale
-2. implement `IMF.D.Language`, `IMF.D.TextKey`, `IMF.D.TextMeasure`, and `IMF.C.Text`
-3. start with validation and security message keys
-4. add release coverage reporting for translations
+2. wire `IMF.P.Text.Import` to a deployed TM1 datasource contract
+3. replace hardcoded validation and security literals in the main IMF process library with text keys
+4. add release coverage reporting for translations from deployed environments
