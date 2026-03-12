@@ -29,6 +29,8 @@ sDimensionCode = Trim(pDimensionCode);
 sVersionId = Trim(pVersionId);
 sMasterDimension = Trim(pMasterDimension);
 sWorkDimension = Trim(pWorkDimension);
+sDimDiffRecord = sPrefix | '.D.DiffRecord';
+sCubeDiff = sPrefix | '.C.Diff';
 
 If((sDimensionCode @= '') % (sVersionId @= ''));
   ProcessBreak;
@@ -36,11 +38,130 @@ EndIf;
 If((DimensionExists(sMasterDimension) = 0) % (DimensionExists(sWorkDimension) = 0));
   ProcessBreak;
 EndIf;
+If((DimensionExists(sDimDiffRecord) = 0) % (CubeExists(sCubeDiff) = 0));
+  ProcessBreak;
+EndIf;
 
-# Placeholder for hierarchy compare loop:
-# 1. compare parent assignments per element
-# 2. compare consolidation weights
-# 3. write one record per relation delta to IMF.C.Diff
+nMasterParentIndex = 1;
+nMasterParentCount = DIMSIZ(sMasterDimension);
+While(nMasterParentIndex <= nMasterParentCount);
+  sParent = DIMNM(sMasterDimension, nMasterParentIndex);
+  nMasterComponentCount = ELNCOMP(sMasterDimension, sParent);
+  If(nMasterComponentCount > 0);
+    nMasterComponentIndex = 1;
+    While(nMasterComponentIndex <= nMasterComponentCount);
+      sChild = ELCOMPN(sMasterDimension, sParent, nMasterComponentIndex);
+      nMasterWeight = ELWEIGHT(sMasterDimension, sParent, sChild);
+      nFoundInWork = 0;
+      If(DIMIX(sWorkDimension, sParent) > 0);
+        nWorkComponentCount = ELNCOMP(sWorkDimension, sParent);
+        nWorkComponentIndex = 1;
+        While((nWorkComponentIndex <= nWorkComponentCount) & (nFoundInWork = 0));
+          If(ELCOMPN(sWorkDimension, sParent, nWorkComponentIndex) @= sChild);
+            nFoundInWork = 1;
+            nWorkWeight = ELWEIGHT(sWorkDimension, sParent, sChild);
+          EndIf;
+          nWorkComponentIndex = nWorkComponentIndex + 1;
+        End;
+      EndIf;
+
+      If(nFoundInWork = 0);
+        sRecordId = 'DIFF|' | sVersionId | '|RELATION|DELETE|' | sParent | '|' | sChild;
+        If(DIMIX(sDimDiffRecord, sRecordId) = 0);
+          DimensionElementInsert(sDimDiffRecord, '', sRecordId, 'N');
+          DimensionElementComponentAdd(sDimDiffRecord, 'All Diff Records', sRecordId, 1);
+        EndIf;
+        AttrPutS(sVersionId, sDimDiffRecord, sRecordId, 'VersionId');
+        AttrPutS(sDimensionCode, sDimDiffRecord, sRecordId, 'DimensionCode');
+        AttrPutS('RELATION_DELETE', sDimDiffRecord, sRecordId, 'ChangeType');
+        CellPutS(sVersionId, sCubeDiff, sRecordId, 'VersionId');
+        CellPutS(sDimensionCode, sCubeDiff, sRecordId, 'DimensionCode');
+        CellPutS('RELATION_DELETE', sCubeDiff, sRecordId, 'ChangeType');
+        CellPutS('RELATION', sCubeDiff, sRecordId, 'ObjectType');
+        CellPutS(sChild, sCubeDiff, sRecordId, 'ObjectName');
+        CellPutS(sParent, sCubeDiff, sRecordId, 'ParentName');
+        CellPutS('', sCubeDiff, sRecordId, 'AttributeName');
+        CellPutS(STR(nMasterWeight, 18, 6), sCubeDiff, sRecordId, 'OldValue');
+        CellPutS('', sCubeDiff, sRecordId, 'NewValue');
+        CellPutS('WARNING', sCubeDiff, sRecordId, 'Severity');
+        CellPutS(TIMST(NOW, '\Y-\m-\d \h:\i:\s'), sCubeDiff, sRecordId, 'DetectedAt');
+      ElseIf(nMasterWeight <> nWorkWeight);
+        sRecordId = 'DIFF|' | sVersionId | '|RELATION|WEIGHT|' | sParent | '|' | sChild;
+        If(DIMIX(sDimDiffRecord, sRecordId) = 0);
+          DimensionElementInsert(sDimDiffRecord, '', sRecordId, 'N');
+          DimensionElementComponentAdd(sDimDiffRecord, 'All Diff Records', sRecordId, 1);
+        EndIf;
+        AttrPutS(sVersionId, sDimDiffRecord, sRecordId, 'VersionId');
+        AttrPutS(sDimensionCode, sDimDiffRecord, sRecordId, 'DimensionCode');
+        AttrPutS('WEIGHT_CHANGE', sDimDiffRecord, sRecordId, 'ChangeType');
+        CellPutS(sVersionId, sCubeDiff, sRecordId, 'VersionId');
+        CellPutS(sDimensionCode, sCubeDiff, sRecordId, 'DimensionCode');
+        CellPutS('WEIGHT_CHANGE', sCubeDiff, sRecordId, 'ChangeType');
+        CellPutS('RELATION', sCubeDiff, sRecordId, 'ObjectType');
+        CellPutS(sChild, sCubeDiff, sRecordId, 'ObjectName');
+        CellPutS(sParent, sCubeDiff, sRecordId, 'ParentName');
+        CellPutS('', sCubeDiff, sRecordId, 'AttributeName');
+        CellPutS(STR(nMasterWeight, 18, 6), sCubeDiff, sRecordId, 'OldValue');
+        CellPutS(STR(nWorkWeight, 18, 6), sCubeDiff, sRecordId, 'NewValue');
+        CellPutS('WARNING', sCubeDiff, sRecordId, 'Severity');
+        CellPutS(TIMST(NOW, '\Y-\m-\d \h:\i:\s'), sCubeDiff, sRecordId, 'DetectedAt');
+      EndIf;
+
+      nMasterComponentIndex = nMasterComponentIndex + 1;
+    End;
+  EndIf;
+  nMasterParentIndex = nMasterParentIndex + 1;
+End;
+
+nWorkParentIndex = 1;
+nWorkParentCount = DIMSIZ(sWorkDimension);
+While(nWorkParentIndex <= nWorkParentCount);
+  sParent = DIMNM(sWorkDimension, nWorkParentIndex);
+  nWorkComponentCount = ELNCOMP(sWorkDimension, sParent);
+  If(nWorkComponentCount > 0);
+    nWorkComponentIndex = 1;
+    While(nWorkComponentIndex <= nWorkComponentCount);
+      sChild = ELCOMPN(sWorkDimension, sParent, nWorkComponentIndex);
+      nFoundInMaster = 0;
+      If(DIMIX(sMasterDimension, sParent) > 0);
+        nMasterComponentCount = ELNCOMP(sMasterDimension, sParent);
+        nMasterComponentIndex = 1;
+        While((nMasterComponentIndex <= nMasterComponentCount) & (nFoundInMaster = 0));
+          If(ELCOMPN(sMasterDimension, sParent, nMasterComponentIndex) @= sChild);
+            nFoundInMaster = 1;
+          EndIf;
+          nMasterComponentIndex = nMasterComponentIndex + 1;
+        End;
+      EndIf;
+
+      If(nFoundInMaster = 0);
+        nWorkWeight = ELWEIGHT(sWorkDimension, sParent, sChild);
+        sRecordId = 'DIFF|' | sVersionId | '|RELATION|ADD|' | sParent | '|' | sChild;
+        If(DIMIX(sDimDiffRecord, sRecordId) = 0);
+          DimensionElementInsert(sDimDiffRecord, '', sRecordId, 'N');
+          DimensionElementComponentAdd(sDimDiffRecord, 'All Diff Records', sRecordId, 1);
+        EndIf;
+        AttrPutS(sVersionId, sDimDiffRecord, sRecordId, 'VersionId');
+        AttrPutS(sDimensionCode, sDimDiffRecord, sRecordId, 'DimensionCode');
+        AttrPutS('RELATION_ADD', sDimDiffRecord, sRecordId, 'ChangeType');
+        CellPutS(sVersionId, sCubeDiff, sRecordId, 'VersionId');
+        CellPutS(sDimensionCode, sCubeDiff, sRecordId, 'DimensionCode');
+        CellPutS('RELATION_ADD', sCubeDiff, sRecordId, 'ChangeType');
+        CellPutS('RELATION', sCubeDiff, sRecordId, 'ObjectType');
+        CellPutS(sChild, sCubeDiff, sRecordId, 'ObjectName');
+        CellPutS(sParent, sCubeDiff, sRecordId, 'ParentName');
+        CellPutS('', sCubeDiff, sRecordId, 'AttributeName');
+        CellPutS('', sCubeDiff, sRecordId, 'OldValue');
+        CellPutS(STR(nWorkWeight, 18, 6), sCubeDiff, sRecordId, 'NewValue');
+        CellPutS('INFO', sCubeDiff, sRecordId, 'Severity');
+        CellPutS(TIMST(NOW, '\Y-\m-\d \h:\i:\s'), sCubeDiff, sRecordId, 'DetectedAt');
+      EndIf;
+
+      nWorkComponentIndex = nWorkComponentIndex + 1;
+    End;
+  EndIf;
+  nWorkParentIndex = nWorkParentIndex + 1;
+End;
 #endregion
 
 #region metadata

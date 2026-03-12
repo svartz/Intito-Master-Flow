@@ -31,7 +31,9 @@ sVersionId = Trim(pVersionId);
 
 sDimDimension = sPrefix | '.D.Dimension';
 sDimVersion = sPrefix | '.D.Version';
+sDimDiffRecord = sPrefix | '.D.DiffRecord';
 sCubeVersion = sPrefix | '.C.Version';
+sCubeDiff = sPrefix | '.C.Diff';
 
 If(sDimensionCode @= '');
   ProcessBreak;
@@ -61,6 +63,23 @@ EndIf;
 If(DimensionExists(sWorkDimension) = 0);
   ProcessBreak;
 EndIf;
+If(DimensionExists(sDimDiffRecord) = 0);
+  ProcessBreak;
+EndIf;
+If(CubeExists(sCubeDiff) = 0);
+  ProcessBreak;
+EndIf;
+
+nDiffIndex = DIMSIZ(sDimDiffRecord);
+While(nDiffIndex >= 1);
+  sDiffRecord = DIMNM(sDimDiffRecord, nDiffIndex);
+  If((sDiffRecord @<> 'All Diff Records') & (sDiffRecord @<> '__Template.DiffRecord'));
+    If((Trim(AttrS(sDimDiffRecord, sDiffRecord, 'VersionId')) @= sVersionId) & (Trim(AttrS(sDimDiffRecord, sDiffRecord, 'DimensionCode')) @= sDimensionCode));
+      DimensionElementDelete(sDimDiffRecord, sDiffRecord);
+    EndIf;
+  EndIf;
+  nDiffIndex = nDiffIndex - 1;
+End;
 
 ExecuteProcess(sPrefix | '.P.Compare.Elements',
   'pPrefix', sPrefix,
@@ -83,8 +102,6 @@ ExecuteProcess(sPrefix | '.P.Compare.Attributes',
   'pMasterDimension', sMasterDimension,
   'pWorkDimension', sWorkDimension);
 
-AttrPutS('ImpactAnalyzed', sDimVersion, sVersionId, 'Status');
-CellPutS('ImpactAnalyzed', sCubeVersion, sVersionId, 'Status');
 CellPutS('Version compared to master via diff engine.', sCubeVersion, sVersionId, 'Notes');
 #endregion
 

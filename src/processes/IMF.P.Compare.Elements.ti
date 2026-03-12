@@ -28,6 +28,8 @@ sDimensionCode = Trim(pDimensionCode);
 sVersionId = Trim(pVersionId);
 sMasterDimension = Trim(pMasterDimension);
 sWorkDimension = Trim(pWorkDimension);
+sDimDiffRecord = sPrefix | '.D.DiffRecord';
+sCubeDiff = sPrefix | '.C.Diff';
 
 If((sDimensionCode @= '') % (sVersionId @= ''));
   ProcessBreak;
@@ -35,11 +37,65 @@ EndIf;
 If((DimensionExists(sMasterDimension) = 0) % (DimensionExists(sWorkDimension) = 0));
   ProcessBreak;
 EndIf;
+If((DimensionExists(sDimDiffRecord) = 0) % (CubeExists(sCubeDiff) = 0));
+  ProcessBreak;
+EndIf;
 
-# Placeholder for element compare loop:
-# 1. scan master elements and flag deletes missing from work
-# 2. scan work elements and flag adds missing from master
-# 3. write one record per delta to IMF.C.Diff
+nMasterIndex = 1;
+nMasterCount = DIMSIZ(sMasterDimension);
+While(nMasterIndex <= nMasterCount);
+  sElement = DIMNM(sMasterDimension, nMasterIndex);
+  If(DIMIX(sWorkDimension, sElement) = 0);
+    sRecordId = 'DIFF|' | sVersionId | '|ELEMENT|DELETE|' | sElement;
+    If(DIMIX(sDimDiffRecord, sRecordId) = 0);
+      DimensionElementInsert(sDimDiffRecord, '', sRecordId, 'N');
+      DimensionElementComponentAdd(sDimDiffRecord, 'All Diff Records', sRecordId, 1);
+    EndIf;
+    AttrPutS(sVersionId, sDimDiffRecord, sRecordId, 'VersionId');
+    AttrPutS(sDimensionCode, sDimDiffRecord, sRecordId, 'DimensionCode');
+    AttrPutS('DELETE', sDimDiffRecord, sRecordId, 'ChangeType');
+    CellPutS(sVersionId, sCubeDiff, sRecordId, 'VersionId');
+    CellPutS(sDimensionCode, sCubeDiff, sRecordId, 'DimensionCode');
+    CellPutS('DELETE', sCubeDiff, sRecordId, 'ChangeType');
+    CellPutS('ELEMENT', sCubeDiff, sRecordId, 'ObjectType');
+    CellPutS(sElement, sCubeDiff, sRecordId, 'ObjectName');
+    CellPutS('', sCubeDiff, sRecordId, 'ParentName');
+    CellPutS('', sCubeDiff, sRecordId, 'AttributeName');
+    CellPutS('present', sCubeDiff, sRecordId, 'OldValue');
+    CellPutS('', sCubeDiff, sRecordId, 'NewValue');
+    CellPutS('WARNING', sCubeDiff, sRecordId, 'Severity');
+    CellPutS(TIMST(NOW, '\Y-\m-\d \h:\i:\s'), sCubeDiff, sRecordId, 'DetectedAt');
+  EndIf;
+  nMasterIndex = nMasterIndex + 1;
+End;
+
+nWorkIndex = 1;
+nWorkCount = DIMSIZ(sWorkDimension);
+While(nWorkIndex <= nWorkCount);
+  sElement = DIMNM(sWorkDimension, nWorkIndex);
+  If(DIMIX(sMasterDimension, sElement) = 0);
+    sRecordId = 'DIFF|' | sVersionId | '|ELEMENT|ADD|' | sElement;
+    If(DIMIX(sDimDiffRecord, sRecordId) = 0);
+      DimensionElementInsert(sDimDiffRecord, '', sRecordId, 'N');
+      DimensionElementComponentAdd(sDimDiffRecord, 'All Diff Records', sRecordId, 1);
+    EndIf;
+    AttrPutS(sVersionId, sDimDiffRecord, sRecordId, 'VersionId');
+    AttrPutS(sDimensionCode, sDimDiffRecord, sRecordId, 'DimensionCode');
+    AttrPutS('ADD', sDimDiffRecord, sRecordId, 'ChangeType');
+    CellPutS(sVersionId, sCubeDiff, sRecordId, 'VersionId');
+    CellPutS(sDimensionCode, sCubeDiff, sRecordId, 'DimensionCode');
+    CellPutS('ADD', sCubeDiff, sRecordId, 'ChangeType');
+    CellPutS('ELEMENT', sCubeDiff, sRecordId, 'ObjectType');
+    CellPutS(sElement, sCubeDiff, sRecordId, 'ObjectName');
+    CellPutS('', sCubeDiff, sRecordId, 'ParentName');
+    CellPutS('', sCubeDiff, sRecordId, 'AttributeName');
+    CellPutS('', sCubeDiff, sRecordId, 'OldValue');
+    CellPutS('present', sCubeDiff, sRecordId, 'NewValue');
+    CellPutS('INFO', sCubeDiff, sRecordId, 'Severity');
+    CellPutS(TIMST(NOW, '\Y-\m-\d \h:\i:\s'), sCubeDiff, sRecordId, 'DetectedAt');
+  EndIf;
+  nWorkIndex = nWorkIndex + 1;
+End;
 #endregion
 
 #region metadata
