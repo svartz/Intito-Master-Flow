@@ -1,0 +1,14 @@
+{
+  "name": "IMF.C.Text",
+  "kind": "control-cube",
+  "purpose": "Multilingual translation storage for IMF user-facing text keys.",
+  "dimensions": [
+    "IMF.D.TextKey",
+    "IMF.D.Language",
+    "IMF.D.TextMeasure"
+  ],
+  "notes": [
+    "Used to resolve user-facing messages, labels, prompts, and help text.",
+    "Technical object names remain untranslated and should not be stored as localized captions here."
+  ]
+}

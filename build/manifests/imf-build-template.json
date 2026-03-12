@@ -5,6 +5,20 @@
   "buildDateUtc": "2026-03-12T00:00:00Z",
   "environment": "DEV",
   "deploymentMode": "validate-only",
+  "languageSupport": {
+    "defaultLocale": "en-US",
+    "fallbackLocale": "en-US",
+    "supportedLocales": [
+      "en-US",
+      "sv-SE",
+      "fi-FI",
+      "sv-FI",
+      "no-NO",
+      "da-DK",
+      "de-DE"
+    ],
+    "coverageStatus": "pending"
+  },
   "artifactScope": {
     "processes": 0,
     "dimensions": 0,
@@ -20,7 +34,8 @@
     "tm1DeployValidate": "pending",
     "unitTests": "pending",
     "integrationTests": "pending",
-    "regressionTests": "pending"
+    "regressionTests": "pending",
+    "languageCoverage": "pending"
   },
   "notes": [
     "Replace placeholders before using this manifest for a real build."

@@ -1,0 +1,20 @@
+{
+  "name": "IMF.D.TextMeasure",
+  "kind": "control-dimension",
+  "purpose": "Measures used in IMF multilingual text storage.",
+  "hierarchy": {
+    "root": "All Text Measures",
+    "seedElements": [
+      { "name": "Text", "type": "N", "parent": "All Text Measures", "weight": 1 },
+      { "name": "Status", "type": "N", "parent": "All Text Measures", "weight": 1 },
+      { "name": "Domain", "type": "N", "parent": "All Text Measures", "weight": 1 },
+      { "name": "Owner", "type": "N", "parent": "All Text Measures", "weight": 1 },
+      { "name": "LastUpdatedBy", "type": "N", "parent": "All Text Measures", "weight": 1 },
+      { "name": "LastUpdatedAt", "type": "N", "parent": "All Text Measures", "weight": 1 }
+    ]
+  },
+  "notes": [
+    "Text is the resolved translation payload.",
+    "Status can be used for Draft, Approved, Deprecated, or Missing."
+  ]
+}

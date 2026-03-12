@@ -28,6 +28,10 @@
 - IMF cubes:
 - Security phase:
 - Bedrock refactor phase:
+- Supported locales:
+- Default locale:
+- Fallback locale:
+- Translation coverage:
 
 ## Validation
 

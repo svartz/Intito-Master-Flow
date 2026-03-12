@@ -1,0 +1,9 @@
+Key,Domain,DefaultLocale,DefaultText,Required,sv-SE,fi-FI,sv-FI,no-NO,da-DK,de-DE,Status,Owner,Notes
+ui.overview.tab.title,UI,en-US,Overview,Y,,,,,,,Planned,IMF Architecture,PAW overview tab label
+ui.versions.tab.title,UI,en-US,Versions,Y,,,,,,,Planned,IMF Architecture,PAW versions tab label
+ui.validation.tab.title,UI,en-US,Validation,Y,,,,,,,Planned,IMF Architecture,PAW validation tab label
+validation.mandatory_attribute_missing,Validation,en-US,Mandatory attribute is missing,Y,,,,,,,Planned,IMF Architecture,Core business-facing validation message
+validation.alias_collision,Validation,en-US,Alias collision detected,Y,,,,,,,Planned,IMF Architecture,Core compare/validation message
+security.bootstrap.started,Security,en-US,Security bootstrap started,Y,,,,,,,Planned,IMF Architecture,Security bootstrap message
+security.group.missing,Security,en-US,Required security group is missing,Y,,,,,,,Planned,IMF Architecture,Security validation message
+audit.publish.completed,Audit,en-US,Publish completed,Y,,,,,,,Planned,IMF Architecture,Audit-facing lifecycle message

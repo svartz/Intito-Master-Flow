@@ -84,6 +84,7 @@ Each IMF build should carry:
 - `artifactScope`
 - `documentationBaseline`
 - `deploymentMode`
+- `languageSupport`
 
 ## Documentation Model
 

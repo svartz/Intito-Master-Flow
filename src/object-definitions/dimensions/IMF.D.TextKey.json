@@ -1,0 +1,24 @@
+{
+  "name": "IMF.D.TextKey",
+  "kind": "control-dimension",
+  "purpose": "Stable language-neutral text keys used to resolve multilingual user-facing text in IMF.",
+  "attributes": [
+    { "name": "Domain", "type": "string", "required": true },
+    { "name": "DefaultLocale", "type": "string", "required": true },
+    { "name": "DefaultText", "type": "string", "required": true },
+    { "name": "Required", "type": "string", "required": true },
+    { "name": "Owner", "type": "string", "required": false }
+  ],
+  "hierarchy": {
+    "root": "All Text Keys",
+    "seedElements": [
+      { "name": "ui.overview.tab.title", "type": "N", "parent": "All Text Keys", "weight": 1 },
+      { "name": "validation.mandatory_attribute_missing", "type": "N", "parent": "All Text Keys", "weight": 1 },
+      { "name": "security.bootstrap.started", "type": "N", "parent": "All Text Keys", "weight": 1 }
+    ]
+  },
+  "notes": [
+    "Text keys are stable and language-neutral.",
+    "Missing text should fall back to en-US before exposing a missing-text marker."
+  ]
+}

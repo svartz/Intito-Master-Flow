@@ -1,0 +1,27 @@
+{
+  "name": "IMF.D.Language",
+  "kind": "control-dimension",
+  "purpose": "Supported language locales for IMF multilingual text resolution.",
+  "attributes": [
+    { "name": "DisplayName", "type": "string", "required": true },
+    { "name": "IsDefault", "type": "string", "required": true },
+    { "name": "FallbackLanguage", "type": "string", "required": false },
+    { "name": "IsActive", "type": "string", "required": true }
+  ],
+  "hierarchy": {
+    "root": "All Languages",
+    "seedElements": [
+      { "name": "en-US", "type": "N", "parent": "All Languages", "weight": 1 },
+      { "name": "sv-SE", "type": "N", "parent": "All Languages", "weight": 1 },
+      { "name": "fi-FI", "type": "N", "parent": "All Languages", "weight": 1 },
+      { "name": "sv-FI", "type": "N", "parent": "All Languages", "weight": 1 },
+      { "name": "no-NO", "type": "N", "parent": "All Languages", "weight": 1 },
+      { "name": "da-DK", "type": "N", "parent": "All Languages", "weight": 1 },
+      { "name": "de-DE", "type": "N", "parent": "All Languages", "weight": 1 }
+    ]
+  },
+  "notes": [
+    "Technical IMF object names remain untranslated.",
+    "Phase 1 fallback is always en-US."
+  ]
+}

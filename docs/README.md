@@ -46,3 +46,12 @@ Living status documents:
 - [process_implementation_status.md](/c:/Programming/Intito-Master-Flow/docs/status/process_implementation_status.md)
 - [bedrock_refactor_status.md](/c:/Programming/Intito-Master-Flow/docs/status/bedrock_refactor_status.md)
 - [release_status.md](/c:/Programming/Intito-Master-Flow/docs/status/release_status.md)
+
+## Language Support
+
+IMF language support design and governance are documented in:
+
+- [IMF_Language_Support_Design.md](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Language_Support_Design.md)
+- [IMF_Language_Governance.md](/c:/Programming/Intito-Master-Flow/docs/governance/IMF_Language_Governance.md)
+- [IMF_Language_Key_Register.csv](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Language_Key_Register.csv)
+- [language_support_status.md](/c:/Programming/Intito-Master-Flow/docs/status/language_support_status.md)

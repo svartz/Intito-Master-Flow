@@ -3,6 +3,7 @@
 ## Added
 
 - Placeholder for newly added IMF processes, objects, tests, and documentation.
+- Initial language support architecture, governance, status, key register, and control-object design.
 
 ## Changed
 
