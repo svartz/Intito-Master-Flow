@@ -1,39 +1,38 @@
+# Impact Analysis Algorithm for TM1
 
-# Impact analysis - algoritm för TM1
+## Inputs
+- `IMF.C.Diff`
+- `IMF.C.Version`
+- `IMF.C.Config`
 
-## Input
-- IMF.C.Diff
-- IMF.C.Version
-- IMF.C.Config
+## Pseudocode
+1. Read the diff for the selected version.
+2. Classify changes as add, delete, move, attribute, alias, or relation changes.
+3. Identify affected cubes from dimension references.
+4. Identify affected subsets and views.
+5. Scan TI processes for dependencies on elements, attributes, subsets, and dimensions.
+6. Check the impact on security objects.
+7. Check integration contracts:
+   - leaf key changed
+   - full path changed
+   - attributes used in exports changed
+8. Calculate business impact:
+   - number of moved leaves
+   - number of deletes
+   - number of new elements
+   - number of changed attributes
+9. Assign severity:
+   - `Info`
+   - `Warning`
+   - `Error`
+   - `Blocker`
+10. Summarize blockers and write status:
+   - `ImpactAnalyzed` when blockers = 0
+   - `Blocked` when blockers > 0
 
-## Pseudokod
-1. Läs diff för vald version
-2. Klassificera ändringar: add, delete, move, attribute, alias, relation
-3. Hitta berörda cubes via dimensionsreferenser
-4. Hitta berörda subsets och views
-5. Skanna TI-processer efter beroenden till element, attributes, subsets och dimensioner
-6. Kontrollera påverkan på security-objekt
-7. Kontrollera integrationskontrakt:
-   - leaf key ändrad
-   - full path ändrad
-   - attribut som används i export ändrade
-8. Beräkna business impact:
-   - antal leafs flyttade
-   - antal deletes
-   - antal nya element
-   - antal ändrade attribut
-9. Tilldela severity:
-   - Info
-   - Warning
-   - Error
-   - Blocker
-10. Summera blockerare och skriv status:
-   - ImpactAnalyzed om blockerare = 0
-   - Blocked om blockerare > 0
-
-## Publiceringsregel
-Publish får endast ske om:
-- teknisk validering = godkänd
-- impact analysis = körd
-- blockerare = 0
-- eventuell approval = klar
+## Publish Rule
+Publish is allowed only when:
+- technical validation = approved
+- impact analysis = completed
+- blockers = 0
+- any required approval = completed

@@ -1,78 +1,78 @@
-# PAW UI-design
+# PAW UI Design
 
-## Sprakstod
-PAW-ytor i IMF ska skilja mellan tekniska objektnamn och visningstext.
+## Language Support
+PAW surfaces in IMF must distinguish between technical object names and display text.
 
-Regler:
-- tekniska namn som `IMF.P.*`, `IMF.C.*` och `IMF.D.*` oversatts inte
-- fliknamn, instruktioner, statusetiketter och valideringsmeddelanden ska kunna resolveas via IMF:s spraknycklar
-- default-sprak ar `en-US`
-- fallback-sprak ar `en-US`
-- stodda sprak ar `en-US`, `sv-SE`, `fi-FI`, `sv-FI`, `no-NO`, `da-DK`, `de-DE`
+Rules:
+- technical names such as `IMF.P.*`, `IMF.C.*`, and `IMF.D.*` must not be translated
+- tab names, instructions, status labels, and validation messages must be resolvable through IMF text keys
+- default language is `en-US`
+- fallback language is `en-US`
+- supported languages are `en-US`, `sv-SE`, `fi-FI`, `sv-FI`, `no-NO`, `da-DK`, and `de-DE`
 
-Konsekvens:
-- PAW-designen ska anvanda captions och textnycklar for anvandartext
-- tekniska objektnamn ska endast visas dar teknisk identifiering behovs
-- IMF ska i forsta hand anvanda `IMF.P.Text.ResolveWithFallback`-monster och `IMF.C.Text` for att hamta lokaliserad visningstext
+Implications:
+- PAW design must use captions and text keys for user-facing text
+- technical object names must only be shown where technical identification is required
+- IMF should primarily use the `IMF.P.Text.ResolveWithFallback` pattern and `IMF.C.Text` to retrieve localized display text
 
-## Flik 1 - Oversikt
-Visar per dimension:
-- aktiv master
-- antal oppna versioner
-- senaste publish
-- blockerare
-- senaste impact-status
+## Tab 1 - Overview
+Shows per dimension:
+- active master
+- number of open versions
+- latest publish
+- blockers
+- latest impact status
 
-Sprakregel:
-- tabtitel och statusetiketter ska vara lokaliserbara
+Language rule:
+- tab title and status labels must be localizable
 
-## Flik 2 - Versioner
-Visar samtliga arbetsversioner med status, skapad av, las, impact-status och approval.
+## Tab 2 - Versions
+Shows all work versions with status, created by, lock state, impact status, and approval.
 
-Sprakregel:
-- kolumnrubriker och statusvarden ska kunna oversattas
+Language rule:
+- column headers and status values must be translatable
 
-## Flik 3 - Redigering
-Oppnar vald arbetsversion i dimension editor och visar attribut och instruktioner.
+## Tab 3 - Editing
+Opens the selected work version in the dimension editor and shows attributes and instructions.
 
-Sprakregel:
-- instruktioner och hjalptexter ska komma fran IMF:s textmodell
+Language rule:
+- instructions and help text must come from the IMF text model
 
-## Flik 4 - Validering
-Summerar tekniska fel, affarsregelbrott, aliaskrockar och saknade obligatoriska attribut.
+## Tab 4 - Validation
+Summarizes technical errors, business rule violations, alias collisions, and missing mandatory attributes.
 
-Sprakregel:
-- valideringsmeddelanden ska komma fran IMF:s textmodell, inte hardkodade literalstrangar
-- initiala nycklar finns for `validation.mandatory_attribute_missing` och `validation.alias_collision`
+Language rule:
+- validation messages must come from the IMF text model, not from hardcoded string literals
+- initial keys exist for `validation.mandatory_attribute_missing` and `validation.alias_collision`
 
-## Flik 5 - Impact
-Visar paverkan pa cubes, subsets, views, processer, sakerhet och integrationer.
+## Tab 5 - Impact
+Shows the impact on cubes, subsets, views, processes, security, and integrations.
 
-Sprakregel:
-- severity-etiketter och forklaringar ska kunna lokaliseras
+Language rule:
+- severity labels and explanations must be localizable
 
-## Flik 6 - Publish
-Visar forhandskontroll, arkivnamn som kommer att skapas och publish-status.
+## Tab 6 - Publish
+Shows pre-publish checks, the archive name that will be created, and publish status.
 
-Sprakregel:
-- publish-status och instruktionstext ska kunna lokaliseras
-- release notes ska visa sprakcoverage och fallbackregel per build
+Language rule:
+- publish status and instructional text must be localizable
+- release notes must show language coverage and fallback rules per build
 
-## Flik 7 - Arkiv
-Lista over arkiverade masterversioner och publiceringshistorik.
+## Tab 7 - Archive
+Lists archived master versions and publish history.
 
-Sprakregel:
-- affarsvanda listetiketter och beskrivningar ska kunna lokaliseras
+Language rule:
+- business-facing labels and descriptions must be localizable
 
-## Flik 8 - Rollback
-Val av arkivversion, analysresultat och aterstallning.
+## Tab 8 - Rollback
+Shows archive version selection, analysis results, and restore actions.
 
-Sprakregel:
-- rollback-varningar och instruktioner ska kunna lokaliseras
+Language rule:
+- rollback warnings and instructions must be localizable
 
-## Flik 9 - Export/Import
-Val av format, shape och target/source.
+## Tab 9 - Export/Import
+Shows format, shape, and target/source selection.
 
-Sprakregel:
-- formatnamn kan vara tekniskt stabila
-- hjalptexter, instruktioner och felmeddelanden ska kunna oversattas
+Language rule:
+- format names may remain technically stable
+- help text, instructions, and error messages must be translatable

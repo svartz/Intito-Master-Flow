@@ -1,26 +1,25 @@
+# AI-Assisted Master Data Governance
 
-# AI-assisterad masterdata governance
+## Principle
+AI is used as decision support, not as the decision-maker, in matters related to master data. All AI-generated suggestions must be traceable and reviewable.
 
-## Princip
-AI används som stöd, inte som beslutsmotor, i frågor som rör masterdata. Alla AI-förslag måste vara spårbara och granskningsbara.
+## Use Cases
+- proposals for validation rules
+- proposals for mappings between import fields and attributes
+- summaries of impact analysis results
+- generation of test cases
+- support for release notes and change descriptions
 
-## Användningsfall
-- förslag på valideringsregler
-- förslag på mappings mellan importfält och attribut
-- sammanfattning av impact analysis
-- generering av testfall
-- stöd till release notes och ändringsbeskrivningar
+## Controls
+- all AI-generated artifacts must be versioned in Git
+- no master data changes may be published without human approval
+- AI must never write directly to the master dimension
+- prompts and responses that affect design or code must be stored in the repository
 
-## Kontroller
-- alla AI-genererade artefakter ska versioneras i Git
-- inga masterändringar får publiceras utan mänsklig approval
-- AI får aldrig skriva direkt till masterdimension
-- prompts och svar som påverkar design eller kod ska sparas i repo
-
-## Driftmodell
-1. AI föreslår
-2. Utvecklare granskar
-3. Kod/test genereras
-4. Teknisk review
-5. Deployment via pipeline
-6. Audit trail lagras i MasterFlow
+## Operating Model
+1. AI proposes
+2. A developer reviews
+3. Code and tests are generated
+4. Technical review is completed
+5. Deployment runs through the pipeline
+6. The audit trail is stored in MasterFlow
