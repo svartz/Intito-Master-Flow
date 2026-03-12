@@ -7,6 +7,7 @@
 - Phase 1 language support processes: `IMF.P.Text.Resolve`, `IMF.P.Text.ResolveWithFallback`, `IMF.P.Text.ValidateCoverage`, `IMF.P.Text.ReportMissing`, `IMF.P.Text.Export`, `IMF.P.Text.Import`, and `IMF.P.Text.Init`.
 - Static test coverage for language process pairs, fallback marker behavior, and text-key seeding.
 - Static test coverage for Wave 1 Bedrock facade parameters and source markers.
+- Source-controlled PAW workbook specifications for `IMF.PAW.MasterFlow`.
 
 ## Changed
 
@@ -14,6 +15,7 @@
 - `IMF.D.TextKey` now seeds the current language key register baseline.
 - Language support status and PAW UI design now reflect the implemented text-resolution workflow.
 - `IMF.P.Dimension.Create` and `IMF.P.Log.Event` now support opt-in Bedrock delegation with native fallback.
+- `IMF.P.Dimension.CopyRelations` now performs native element and relation replay when Bedrock delegation is not used or fails.
 - `IMF.P.Attribute.CopyDefinitions` now includes Bedrock-ready orchestration and explicit Bedrock contract checkpoints.
 - `IMF.P.Dimension.Clear`, `IMF.P.Dimension.CopyRelations`, `IMF.P.Security.CreateGroups`, `IMF.P.Security.SetCubeAccess`, and `IMF.P.Security.SetDimensionAccess` now include Wave 1 Bedrock delegation parameters and documented contract boundaries.
 

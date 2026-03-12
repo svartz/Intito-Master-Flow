@@ -1,0 +1,63 @@
+{
+  "Name": "IMF.PAW.MasterFlow",
+  "Type": "PAWWorkbookSpec",
+  "Purpose": "Source-controlled specification for the primary IMF operator workbook in PAW.",
+  "DefaultLanguage": "en-US",
+  "FallbackLanguage": "en-US",
+  "SupportedLanguages": [
+    "en-US",
+    "sv-SE",
+    "fi-FI",
+    "sv-FI",
+    "no-NO",
+    "da-DK",
+    "de-DE"
+  ],
+  "Tabs": [
+    {
+      "Id": "overview",
+      "TitleKey": "paw.tab.overview",
+      "ViewSpec": "IMF.PAW.MasterFlow.Tab.Overview"
+    },
+    {
+      "Id": "versions",
+      "TitleKey": "paw.tab.versions",
+      "ViewSpec": "IMF.PAW.MasterFlow.Tab.Versions"
+    },
+    {
+      "Id": "editing",
+      "TitleKey": "paw.tab.editing",
+      "ViewSpec": "IMF.PAW.MasterFlow.Tab.Editing"
+    },
+    {
+      "Id": "validation",
+      "TitleKey": "paw.tab.validation",
+      "ViewSpec": "IMF.PAW.MasterFlow.Tab.Validation"
+    },
+    {
+      "Id": "impact",
+      "TitleKey": "paw.tab.impact",
+      "ViewSpec": "IMF.PAW.MasterFlow.Tab.Impact"
+    },
+    {
+      "Id": "publish",
+      "TitleKey": "paw.tab.publish",
+      "ViewSpec": "IMF.PAW.MasterFlow.Tab.Publish"
+    },
+    {
+      "Id": "archive",
+      "TitleKey": "paw.tab.archive",
+      "ViewSpec": "IMF.PAW.MasterFlow.Tab.Archive"
+    },
+    {
+      "Id": "rollback",
+      "TitleKey": "paw.tab.rollback",
+      "ViewSpec": "IMF.PAW.MasterFlow.Tab.Rollback"
+    },
+    {
+      "Id": "exchange",
+      "TitleKey": "paw.tab.export_import",
+      "ViewSpec": "IMF.PAW.MasterFlow.Tab.Exchange"
+    }
+  ]
+}

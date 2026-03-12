@@ -11,7 +11,7 @@
 # - pBedrockProcess: Parameter pBedrockProcess Default '}bedrock.hier.clone'.
 # - pStrictBedrock: Parameter pStrictBedrock Default 'N'.
 # Prolog:
-# - Validate parameters, optionally delegate relation replay to Bedrock, and preserve explicit IMF guardrails.
+# - Validate parameters, optionally delegate relation replay to Bedrock, and preserve an IMF native fallback.
 # Metadata:
 # - No metadata datasource is required in this scaffold.
 # Data:
@@ -25,6 +25,9 @@ If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;
 sSourceDimension = Trim(pSourceDimension); sTargetDimension = Trim(pTargetDimension);
 sUseBedrock = Upper(Trim(pUseBedrock)); sBedrockProcess = Trim(pBedrockProcess); sStrictBedrock = Upper(Trim(pStrictBedrock));
 nBedrockReturn = ProcessExitNormal();
+nUseNativeReplay = 1;
+nSourceElementCount = 0;
+nRelationCount = 0;
 If(sUseBedrock @= ''); sUseBedrock = 'N'; EndIf;
 If(sBedrockProcess @= ''); sBedrockProcess = '}bedrock.hier.clone'; EndIf;
 If(sStrictBedrock @= ''); sStrictBedrock = 'N'; EndIf;
@@ -36,17 +39,50 @@ If(sUseBedrock @= 'Y');
     # TODO: Confirm Bedrock hierarchy clone/move parameter contracts, including hierarchy names and weight handling.
     # Current delegation assumes wrapper-compatible parameters pSourceDimension and pTargetDimension.
     nBedrockReturn = ExecuteProcess(sBedrockProcess, 'pSourceDimension', sSourceDimension, 'pTargetDimension', sTargetDimension);
-    If(nBedrockReturn <> ProcessExitNormal());
-      ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'WARNING', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Bedrock relation copy failed. IMF fallback remains TODO until hierarchy traversal is implemented.', 'pRunId', sSourceDimension | '->' | sTargetDimension);
+    If(nBedrockReturn = ProcessExitNormal());
+      nUseNativeReplay = 0;
+      ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'INFO', 'pObjectType', 'DIMENSION', 'pObjectName', sTargetDimension, 'pMessage', 'Bedrock relation replay completed.', 'pRunId', sSourceDimension | '->' | sTargetDimension);
+    Else;
+      ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'WARNING', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Bedrock relation copy failed. Native IMF replay will be used if allowed.', 'pRunId', sSourceDimension | '->' | sTargetDimension);
       If(sStrictBedrock @= 'Y'); ProcessBreak; EndIf;
     EndIf;
   Else;
-    ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'WARNING', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Requested Bedrock hierarchy process was not found. IMF fallback remains TODO until hierarchy traversal is implemented.', 'pRunId', sSourceDimension | '->' | sTargetDimension);
+    ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'WARNING', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Requested Bedrock hierarchy process was not found. Native IMF replay will be used if allowed.', 'pRunId', sSourceDimension | '->' | sTargetDimension);
     If(sStrictBedrock @= 'Y'); ProcessBreak; EndIf;
   EndIf;
 EndIf;
-# TODO: Traverse consolidations in the source dimension and replay them with weights on the target dimension.
-# TODO: Preserve hierarchy-specific ordering where the target environment relies on insertion order.
+If(nUseNativeReplay = 1);
+  nSourceElementCount = DIMSIZ(sSourceDimension);
+  nElementIndex = 1;
+  While(nElementIndex <= nSourceElementCount);
+    sElement = DIMNM(sSourceDimension, nElementIndex);
+    sElementType = ELTYPE(sSourceDimension, sElement);
+    If(DIMIX(sTargetDimension, sElement) = 0);
+      DimensionElementInsert(sTargetDimension, '', sElement, sElementType);
+    EndIf;
+    nElementIndex = nElementIndex + 1;
+  End;
+
+  nParentIndex = 1;
+  While(nParentIndex <= nSourceElementCount);
+    sParent = DIMNM(sSourceDimension, nParentIndex);
+    nComponentCount = ELNCOMP(sSourceDimension, sParent);
+    If(nComponentCount > 0);
+      nComponentIndex = 1;
+      While(nComponentIndex <= nComponentCount);
+        sChild = ELCOMPN(sSourceDimension, sParent, nComponentIndex);
+        nWeight = ELWEIGHT(sSourceDimension, sParent, sChild);
+        DimensionElementComponentAdd(sTargetDimension, sParent, sChild, nWeight);
+        nRelationCount = nRelationCount + 1;
+        nComponentIndex = nComponentIndex + 1;
+      End;
+    EndIf;
+    nParentIndex = nParentIndex + 1;
+  End;
+
+  ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'INFO', 'pObjectType', 'DIMENSION', 'pObjectName', sTargetDimension, 'pMessage', 'Native relation replay created ' | STR(nSourceElementCount, 12, 0) | ' elements and ' | STR(nRelationCount, 12, 0) | ' relations.', 'pRunId', sSourceDimension | '->' | sTargetDimension);
+EndIf;
+# TODO: Extend this implementation for multi-hierarchy and explicit sibling-order preservation if the target model requires it.
 #endregion
 
 #region metadata

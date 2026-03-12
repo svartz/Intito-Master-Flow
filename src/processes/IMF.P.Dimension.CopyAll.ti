@@ -54,13 +54,12 @@ ExecuteProcess(sPrefix | '.P.Attribute.CopyDefinitions',
   'pSourceDimension', sSourceDimension,
   'pTargetDimension', sTargetDimension);
 
-ExecuteProcess(sPrefix | '.P.Attribute.CopyValues',
+ExecuteProcess(sPrefix | '.P.Dimension.CopyRelations',
   'pPrefix', sPrefix,
   'pSourceDimension', sSourceDimension,
   'pTargetDimension', sTargetDimension);
 
-# TODO: Replay leaf and consolidated element creation before relation copy in a live TM1 environment.
-ExecuteProcess(sPrefix | '.P.Dimension.CopyRelations',
+ExecuteProcess(sPrefix | '.P.Attribute.CopyValues',
   'pPrefix', sPrefix,
   'pSourceDimension', sSourceDimension,
   'pTargetDimension', sTargetDimension);

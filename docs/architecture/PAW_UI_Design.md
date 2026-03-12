@@ -14,6 +14,7 @@ Implications:
 - PAW design must use captions and text keys for user-facing text
 - technical object names must only be shown where technical identification is required
 - IMF should primarily use the `IMF.P.Text.ResolveWithFallback` pattern and `IMF.C.Text` to retrieve localized display text
+- the source-controlled workbook baseline is documented in `docs/architecture/PAW_Report_Pack.md` and `src/paw-reports/`
 
 ## Tab 1 - Overview
 Shows per dimension:

@@ -1,0 +1,127 @@
+{
+  "Workbook": "IMF.PAW.MasterFlow",
+  "Views": [
+    {
+      "Name": "IMF.PAW.MasterFlow.Tab.Overview",
+      "PrimaryObject": "IMF.C.Version",
+      "Purpose": "Overview of active managed dimensions, open versions, latest publish, blockers, and latest impact state.",
+      "Selectors": [
+        "IMF.D.Dimension",
+        "IMF.D.VersionMeasure"
+      ],
+      "LocalizedTextKeys": [
+        "paw.tab.overview",
+        "paw.status.blockers",
+        "paw.status.latest_publish",
+        "paw.status.open_versions"
+      ]
+    },
+    {
+      "Name": "IMF.PAW.MasterFlow.Tab.Versions",
+      "PrimaryObject": "IMF.C.Version",
+      "Purpose": "Operational grid over all work versions with owner, status, lock state, and approval metadata.",
+      "Selectors": [
+        "IMF.D.Version",
+        "IMF.D.VersionMeasure"
+      ],
+      "LocalizedTextKeys": [
+        "paw.tab.versions",
+        "paw.column.status",
+        "paw.column.owner",
+        "paw.column.lock_state"
+      ]
+    },
+    {
+      "Name": "IMF.PAW.MasterFlow.Tab.Editing",
+      "PrimaryObject": "IMF.C.Version",
+      "Purpose": "Landing page for work-version editing with localized instructions and selected version metadata.",
+      "Selectors": [
+        "IMF.D.Version",
+        "IMF.D.TextKey"
+      ],
+      "LocalizedTextKeys": [
+        "paw.tab.editing",
+        "paw.help.editing"
+      ]
+    },
+    {
+      "Name": "IMF.PAW.MasterFlow.Tab.Validation",
+      "PrimaryObject": "IMF.C.Validation",
+      "Purpose": "Validation findings grid for technical and business checks.",
+      "Selectors": [
+        "IMF.D.ValidationRecord",
+        "IMF.D.ValidationMeasure"
+      ],
+      "LocalizedTextKeys": [
+        "paw.tab.validation",
+        "validation.mandatory_attribute_missing",
+        "validation.alias_collision"
+      ]
+    },
+    {
+      "Name": "IMF.PAW.MasterFlow.Tab.Impact",
+      "PrimaryObject": "IMF.C.Impact",
+      "Purpose": "Impact analysis view across cubes, subsets, views, processes, security, and integrations.",
+      "Selectors": [
+        "IMF.D.ImpactRecord",
+        "IMF.D.ImpactMeasure"
+      ],
+      "LocalizedTextKeys": [
+        "paw.tab.impact",
+        "paw.status.impact_warning",
+        "paw.status.impact_blocker"
+      ]
+    },
+    {
+      "Name": "IMF.PAW.MasterFlow.Tab.Publish",
+      "PrimaryObject": "IMF.C.Version",
+      "Purpose": "Publish cockpit with pre-publish checks, target archive name, and localized guidance.",
+      "Selectors": [
+        "IMF.D.Version",
+        "IMF.D.VersionMeasure"
+      ],
+      "LocalizedTextKeys": [
+        "paw.tab.publish",
+        "paw.help.publish"
+      ]
+    },
+    {
+      "Name": "IMF.PAW.MasterFlow.Tab.Archive",
+      "PrimaryObject": "IMF.C.Version",
+      "Purpose": "Archive history view over published and archived master snapshots.",
+      "Selectors": [
+        "IMF.D.Version",
+        "IMF.D.VersionMeasure"
+      ],
+      "LocalizedTextKeys": [
+        "paw.tab.archive",
+        "paw.column.archive_dimension"
+      ]
+    },
+    {
+      "Name": "IMF.PAW.MasterFlow.Tab.Rollback",
+      "PrimaryObject": "IMF.C.Version",
+      "Purpose": "Rollback selection and guidance screen over archived master candidates.",
+      "Selectors": [
+        "IMF.D.Version",
+        "IMF.D.TextKey"
+      ],
+      "LocalizedTextKeys": [
+        "paw.tab.rollback",
+        "paw.help.rollback"
+      ]
+    },
+    {
+      "Name": "IMF.PAW.MasterFlow.Tab.Exchange",
+      "PrimaryObject": "IMF.C.Config",
+      "Purpose": "Export and import control surface for CSV, JSON, and SQL exchange patterns.",
+      "Selectors": [
+        "IMF.D.ConfigKey"
+      ],
+      "LocalizedTextKeys": [
+        "paw.tab.export_import",
+        "paw.help.exchange"
+      ]
+    }
+  ]
+}
