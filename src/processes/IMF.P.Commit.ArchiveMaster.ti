@@ -52,14 +52,26 @@ EndIf;
 
 sArchiveDimension = sMasterDimension | '_ARC_' | TIMST(NOW, '\Y\m\d\h\i\s');
 
-# Placeholder:
-# 1. create archive dimension
-# 2. copy master structure into archive
-# 3. update version metadata with archive name
+ExecuteProcess(sPrefix | '.P.Dimension.Create',
+  'pPrefix', sPrefix,
+  'pTargetDimension', sArchiveDimension);
+
+ExecuteProcess(sPrefix | '.P.Dimension.CopyAll',
+  'pPrefix', sPrefix,
+  'pSourceDimension', sMasterDimension,
+  'pTargetDimension', sArchiveDimension,
+  'pIncludeData', 'N');
 
 AttrPutS(sArchiveDimension, sDimVersion, sVersionId, 'ArchiveDimension');
 CellPutS(sArchiveDimension, sCubeVersion, sVersionId, 'ArchiveDimension');
 AttrPutS(sArchiveDimension, sDimDimension, sDimensionCode, 'LastArchivedDimension');
+ExecuteProcess(sPrefix | '.P.Log.Event',
+  'pPrefix', sPrefix,
+  'pSeverity', 'INFO',
+  'pObjectType', 'DIMENSION',
+  'pObjectName', sArchiveDimension,
+  'pMessage', 'Master dimension archived before publish or rollback.',
+  'pRunId', sVersionId);
 #endregion
 
 #region metadata

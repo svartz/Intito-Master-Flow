@@ -51,6 +51,9 @@ EndIf;
 If(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);
   ProcessBreak;
 EndIf;
+If(Upper(Trim(CellGetS(sCubeVersion, sVersionId, 'IsLocked'))) @= 'Y');
+  ProcessBreak;
+EndIf;
 
 ExecuteProcess(sPrefix | '.P.Commit.Prepare',
   'pPrefix', sPrefix,
@@ -68,21 +71,31 @@ sMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionNam
 If(sMasterDimension @= '');
   sMasterDimension = sDimensionCode;
 EndIf;
+If(sWorkDimension @= '');
+  ProcessBreak;
+EndIf;
+If(DimensionExists(sWorkDimension) = 0);
+  ProcessBreak;
+EndIf;
+If(DimensionExists(sMasterDimension) = 0);
+  ProcessBreak;
+EndIf;
+sArchiveDimension = Trim(CellGetS(sCubeVersion, sVersionId, 'ArchiveDimension'));
+If(sArchiveDimension @= '');
+  ProcessBreak;
+EndIf;
+If(DimensionExists(sArchiveDimension) = 0);
+  ProcessBreak;
+EndIf;
 
-# Placeholder:
-# 1. replace master structure with work version structure
-# 2. preserve security and deployment conventions
+ExecuteProcess(sPrefix | '.P.Dimension.CopyAll',
+  'pPrefix', sPrefix,
+  'pSourceDimension', sWorkDimension,
+  'pTargetDimension', sMasterDimension,
+  'pIncludeData', 'N');
 
 AttrPutS(sVersionId, sDimDimension, sDimensionCode, 'LastPublishedVersion');
 AttrPutS(sVersionId, sDimDimension, sDimensionCode, 'ActiveVersion');
-
-AttrPutS('Published', sDimVersion, sVersionId, 'Status');
-AttrPutS(sPublishedAt, sDimVersion, sVersionId, 'PublishedAt');
-AttrPutS(sPublishedBy, sDimVersion, sVersionId, 'PublishedBy');
-
-CellPutS('Published', sCubeVersion, sVersionId, 'Status');
-CellPutS(sPublishedAt, sCubeVersion, sVersionId, 'PublishedAt');
-CellPutS(sPublishedBy, sCubeVersion, sVersionId, 'PublishedBy');
 ExecuteProcess(sPrefix | '.P.Commit.Finalize',
   'pPrefix', sPrefix,
   'pDimensionCode', sDimensionCode,
@@ -94,10 +107,10 @@ ExecuteProcess(sPrefix | '.P.Log.Event',
   'pSeverity', 'INFO',
   'pObjectType', 'VERSION',
   'pObjectName', sVersionId,
-  'pMessage', 'Publish workflow executed for work dimension ' | sWorkDimension | '.',
+  'pMessage', 'Publish workflow replaced master ' | sMasterDimension | ' from work dimension ' | sWorkDimension | ' after archiving ' | sArchiveDimension | '.',
   'pRunId', sVersionId);
 
-CellPutS('Publish workflow executed for work dimension ' | sWorkDimension | '.', sCubeVersion, sVersionId, 'Notes');
+CellPutS('Publish workflow replaced master ' | sMasterDimension | ' from work dimension ' | sWorkDimension | ' after archiving ' | sArchiveDimension | '.', sCubeVersion, sVersionId, 'Notes');
 #endregion
 
 #region metadata
