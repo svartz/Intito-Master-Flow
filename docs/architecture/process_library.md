@@ -65,3 +65,10 @@ IMF.P.Import.JSON.ParentChild
 IMF.P.Import.JSON.LeafFlat
 IMF.P.Import.SQL.ParentChild
 IMF.P.Import.SQL.LeafFlat
+
+## Bedrock Adoption
+See:
+
+- [IMF_Bedrock_Adoption_Design.md](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Adoption_Design.md)
+- [IMF_Bedrock_Process_Mapping.csv](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Process_Mapping.csv)
+- [IMF_Bedrock_Refactor_Register.yaml](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Refactor_Register.yaml)

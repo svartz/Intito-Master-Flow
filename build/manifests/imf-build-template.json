@@ -1,0 +1,28 @@
+{
+  "releaseId": "imf-v0.0.0",
+  "gitTag": "imf-v0.0.0",
+  "gitCommit": "REPLACE_WITH_COMMIT",
+  "buildDateUtc": "2026-03-12T00:00:00Z",
+  "environment": "DEV",
+  "deploymentMode": "validate-only",
+  "artifactScope": {
+    "processes": 0,
+    "dimensions": 0,
+    "cubes": 0
+  },
+  "documentationBaseline": {
+    "releaseNote": "docs/releases/imf-v0.0.0.md",
+    "processStatus": "docs/status/process_implementation_status.md",
+    "bedrockStatus": "docs/status/bedrock_refactor_status.md",
+    "releaseStatus": "docs/status/release_status.md"
+  },
+  "validation": {
+    "tm1DeployValidate": "pending",
+    "unitTests": "pending",
+    "integrationTests": "pending",
+    "regressionTests": "pending"
+  },
+  "notes": [
+    "Replace placeholders before using this manifest for a real build."
+  ]
+}

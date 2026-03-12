@@ -1,0 +1,182 @@
+version: 1
+owner: IMF architecture
+purpose: >
+  Living, version-controlled register for Bedrock adoption in IMF.
+  Each entry tracks whether an IMF process should be refactored to use Bedrock,
+  what Bedrock capability is relevant, and the recommended implementation order.
+status_scale:
+  - backlog
+  - analysis
+  - ready
+  - in_progress
+  - delegated_to_bedrock
+  - hybridized
+  - verified
+priority_scale:
+  - Tier1
+  - Tier2
+  - Tier3
+entries:
+  - process: IMF.P.Dimension.Create
+    priority: Tier1
+    status: ready
+    refactor_first: true
+    rationale: Strong technical fit, low business coupling, immediate code reduction.
+    candidate_bedrock:
+      - "}bedrock.dim.create"
+    expected_outcome: IMF wrapper delegates target-dimension creation to Bedrock.
+    blockers:
+      - Confirm Bedrock parameter contract in the target IMF environment.
+  - process: IMF.P.Dimension.Clear
+    priority: Tier1
+    status: ready
+    refactor_first: true
+    rationale: Current process is a thin technical helper and should not own custom clear semantics.
+    candidate_bedrock:
+      - "}bedrock.dim.create"
+      - "}bedrock.dim.clone"
+    expected_outcome: IMF wrapper adopts a safe clear or recreate pattern backed by Bedrock.
+    blockers:
+      - Decide whether clear means delete-all-elements or recreate-and-swap in IMF environments.
+  - process: IMF.P.Dimension.CopyRelations
+    priority: Tier1
+    status: analysis
+    refactor_first: true
+    rationale: Current relation copy behavior is still mostly TODO-oriented.
+    candidate_bedrock:
+      - "}bedrock.hier.clone"
+      - "}bedrock.hier.element.move"
+    expected_outcome: IMF wrapper delegates relation and weight replay.
+    blockers:
+      - Validate exact hierarchy and weight behavior on multi-hierarchy dimensions.
+  - process: IMF.P.Attribute.CopyDefinitions
+    priority: Tier1
+    status: ready
+    refactor_first: true
+    rationale: High repetition, strong Bedrock utility fit.
+    candidate_bedrock:
+      - "}bedrock.dim.attr.create"
+    expected_outcome: Attribute definition creation standardized through Bedrock.
+    blockers:
+      - Confirm alias handling contract for IMF environments.
+  - process: IMF.P.Security.CreateGroups
+    priority: Tier1
+    status: ready
+    refactor_first: true
+    rationale: Generic group provisioning is a textbook Bedrock use case.
+    candidate_bedrock:
+      - "}bedrock.security.group.create"
+    expected_outcome: IMF keeps role policy, Bedrock performs creation mechanics.
+    blockers:
+      - Confirm identity-source ownership of IMF groups.
+  - process: IMF.P.Security.SetCubeAccess
+    priority: Tier1
+    status: ready
+    refactor_first: true
+    rationale: Generic object-security assignment should not remain custom IMF code.
+    candidate_bedrock:
+      - "}bedrock.security.object.assign"
+    expected_outcome: Cube security assignment standardized through Bedrock.
+    blockers:
+      - Confirm Bedrock object type and wildcard handling against IMF security objects.
+  - process: IMF.P.Security.SetDimensionAccess
+    priority: Tier1
+    status: ready
+    refactor_first: true
+    rationale: Generic object-security assignment should not remain custom IMF code.
+    candidate_bedrock:
+      - "}bedrock.security.object.assign"
+    expected_outcome: Dimension security assignment standardized through Bedrock.
+    blockers:
+      - Confirm masking-sensitive dimensions remain policy-owned by IMF.
+  - process: IMF.P.Log.Event
+    priority: Tier1
+    status: ready
+    refactor_first: true
+    rationale: Logging is repetitive and should be standardized early.
+    candidate_bedrock:
+      - "}bedrock.server.writetomessagelog"
+    expected_outcome: Consistent operational logging in all IMF workflows.
+    blockers:
+      - Confirm desired severity mapping for IMF operational logging.
+  - process: IMF.P.Dimension.CopyAll
+    priority: Tier2
+    status: backlog
+    refactor_first: false
+    rationale: Strong value, but depends on Create, Clear, and CopyRelations first.
+    candidate_bedrock:
+      - "}bedrock.dim.clone"
+      - "}bedrock.hier.clone"
+    expected_outcome: IMF orchestrates a Bedrock-backed full copy flow.
+    blockers:
+      - Wave 1 utilities must be stabilized first.
+  - process: IMF.P.Attribute.CopyValues
+    priority: Tier2
+    status: backlog
+    refactor_first: false
+    rationale: Worth refactoring after attribute-definition handling is stabilized.
+    candidate_bedrock:
+      - "}bedrock.dim.attr.swapalias"
+    expected_outcome: Lower custom code for attribute and alias utility behavior.
+    blockers:
+      - Need clear alias and non-alias split.
+  - process: IMF.P.Version.CloneFromMaster
+    priority: Tier2
+    status: backlog
+    refactor_first: false
+    rationale: Good Bedrock fit for dimension clone, but still tightly tied to IMF metadata.
+    candidate_bedrock:
+      - "}bedrock.dim.clone"
+    expected_outcome: Technical clone delegated, IMF metadata preserved in wrapper.
+    blockers:
+      - Confirm target naming and post-clone IMF metadata updates.
+  - process: IMF.P.Version.CloneFromVersion
+    priority: Tier2
+    status: backlog
+    refactor_first: false
+    rationale: Same pattern as CloneFromMaster, but with lineage and source-version handling.
+    candidate_bedrock:
+      - "}bedrock.dim.clone"
+    expected_outcome: Source-version clone standardized through Bedrock utility layer.
+    blockers:
+      - Verify clone behavior for work-to-work scenarios.
+  - process: IMF.P.Commit.ArchiveMaster
+    priority: Tier2
+    status: backlog
+    refactor_first: false
+    rationale: Archive technical step may use Bedrock clone, but registration must remain IMF-owned.
+    candidate_bedrock:
+      - "}bedrock.dim.clone"
+    expected_outcome: Technical archive copy delegated, audit and lineage remain in IMF.
+    blockers:
+      - Confirm archive naming and retention rules.
+  - process: IMF.P.Security.ApplyModel
+    priority: Tier2
+    status: backlog
+    refactor_first: false
+    rationale: Good orchestration target once SetCubeAccess and SetDimensionAccess are Bedrock-backed.
+    candidate_bedrock:
+      - "}bedrock.security.group.create"
+      - "}bedrock.security.object.assign"
+    expected_outcome: IMF policy orchestration with Bedrock assignment mechanics.
+    blockers:
+      - Wave 1 security helpers must be done first.
+  - process: IMF.P.Commit.PublishVersion
+    priority: Tier3
+    status: backlog
+    refactor_first: false
+    rationale: Business-critical workflow; Bedrock should not own publish semantics.
+    candidate_bedrock: []
+    expected_outcome: Remains IMF-owned with only subordinate helper delegation.
+    blockers:
+      - Requires stable prepare, archive, finalize, validation, and impact behavior.
+  - process: IMF.P.Rollback.ToArchive
+    priority: Tier3
+    status: backlog
+    refactor_first: false
+    rationale: Governance-sensitive workflow with limited benefit from deep Bedrock adoption.
+    candidate_bedrock:
+      - "}bedrock.dim.clone"
+    expected_outcome: Remains IMF-owned; may call Bedrock for technical archive restore step only.
+    blockers:
+      - Rollback control model must be stabilized first.

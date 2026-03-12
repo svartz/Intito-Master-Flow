@@ -1,0 +1,46 @@
+IMFProcess,DomainArea,CurrentRole,BedrockFit,RecommendedBedrockUsage,CandidateBedrockProcesses,AdoptionMode,Priority,Notes
+IMF.P.Dimension.Create,Dimension,Utility facade,High,Create target dimension shell,"}bedrock.dim.create",Delegate directly,Tier1,Low business coupling
+IMF.P.Dimension.Clear,Dimension,Utility facade,High,Clear or rebuild target dimension safely,"}bedrock.dim.create; }bedrock.dim.clone",Delegate pattern,Tier1,Prefer safe clear/rebuild pattern
+IMF.P.Dimension.CopyRelations,Dimension,Utility facade,High,Replay consolidations and weights,"}bedrock.hier.clone; }bedrock.hier.element.move",Delegate with IMF guardrails,Tier1,Needs hierarchy behavior verification
+IMF.P.Dimension.CopyAll,Dimension,Orchestrator,Medium,Use Bedrock-backed create and relation helpers,"}bedrock.dim.clone; }bedrock.hier.clone",Hybrid orchestration,Tier2,Keep IMF as orchestration layer
+IMF.P.Attribute.CopyDefinitions,Attribute,Utility facade,High,Create attribute definitions and aliases,"}bedrock.dim.attr.create",Delegate directly,Tier1,Strong Bedrock fit
+IMF.P.Attribute.CopyValues,Attribute,Utility facade,Medium,Assist alias and attribute synchronization,"}bedrock.dim.attr.swapalias",Hybrid utility,Tier2,IMF keeps compare semantics
+IMF.P.Attribute.Compare,Attribute,Domain process,Low,Minimal utility support,,IMF-owned,Tier3,Diff semantics remain IMF-specific
+IMF.P.Attribute.Publish,Attribute,Domain process,Low,Use Bedrock only for low-level attribute mechanics,"}bedrock.dim.attr.create",Selective helper,Tier3,Publish semantics stay in IMF
+IMF.P.Version.CloneFromMaster,Versioning,Hybrid process,Medium,Use Bedrock-backed dimension clone,"}bedrock.dim.clone",Hybrid orchestration,Tier2,IMF still owns version metadata
+IMF.P.Version.CloneFromVersion,Versioning,Hybrid process,Medium,Use Bedrock-backed dimension clone,"}bedrock.dim.clone",Hybrid orchestration,Tier2,IMF still owns lineage
+IMF.P.Version.Create,Versioning,Domain process,Low,Use Bedrock only via subordinate helpers,,IMF-owned,Tier3,Keep lifecycle ownership in IMF
+IMF.P.Version.Lock,Versioning,Domain process,Low,None,,IMF-owned,Tier3,Metadata and policy driven
+IMF.P.Version.Unlock,Versioning,Domain process,Low,None,,IMF-owned,Tier3,Metadata and policy driven
+IMF.P.Version.Delete,Versioning,Domain process,Low,Use Bedrock only if safe technical destroy helper is validated,,IMF-owned,Tier3,Deletion rules are IMF-specific
+IMF.P.Compare.Elements,Diff,Domain process,Low,None,,IMF-owned,Tier3,Diff semantics remain IMF-specific
+IMF.P.Compare.Relations,Diff,Domain process,Low,None,,IMF-owned,Tier3,Diff semantics remain IMF-specific
+IMF.P.Compare.Attributes,Diff,Domain process,Low,None,,IMF-owned,Tier3,Diff semantics remain IMF-specific
+IMF.P.Compare.VersionToMaster,Diff,Orchestrator,Low,None,,IMF-owned,Tier3,Core IMF compare orchestration
+IMF.P.Validate.Technical,Validation,Domain process,Low,Possible internal utility only,,IMF-owned,Tier3,Should not be reduced to Bedrock wrapper
+IMF.P.Validate.Business,Validation,Domain process,Low,None,,IMF-owned,Tier3,Business governance is IMF-owned
+IMF.P.Validate.Attributes,Validation,Domain process,Low,Possible attribute helper usage,"}bedrock.dim.attr.create",Selective helper,Tier3,Validation semantics remain IMF-owned
+IMF.P.Impact.RunAll,Impact,Orchestrator,Low,None,,IMF-owned,Tier3,Impact model is IMF-specific
+IMF.P.Impact.Cubes,Impact,Domain process,Low,None,,IMF-owned,Tier3,IMF-specific
+IMF.P.Impact.Views,Impact,Domain process,Low,None,,IMF-owned,Tier3,IMF-specific
+IMF.P.Impact.Subsets,Impact,Domain process,Low,Possible subset helper usage,,IMF-owned,Tier3,Keep severity logic in IMF
+IMF.P.Impact.Processes,Impact,Domain process,Low,None,,IMF-owned,Tier3,IMF-specific
+IMF.P.Impact.Security,Impact,Domain process,Low,None,,IMF-owned,Tier3,IMF-specific
+IMF.P.Impact.Integrations,Impact,Domain process,Low,None,,IMF-owned,Tier3,IMF-specific
+IMF.P.Commit.Prepare,Publish,Domain process,Low,None,,IMF-owned,Tier3,Gatekeeper process
+IMF.P.Commit.ArchiveMaster,Publish,Hybrid process,Medium,Use Bedrock clone or export utility for archive technical step,"}bedrock.dim.clone",Hybrid orchestration,Tier2,IMF keeps archive registration
+IMF.P.Commit.PublishVersion,Publish,Domain process,Low,Use Bedrock only through subordinate technical helpers,,IMF-owned,Tier3,Must enforce IMF publish gates
+IMF.P.Commit.Finalize,Publish,Domain process,Low,None,,IMF-owned,Tier3,Metadata and audit oriented
+IMF.P.Rollback.Validate,Rollback,Domain process,Low,None,,IMF-owned,Tier3,Governed by IMF policy
+IMF.P.Rollback.ToArchive,Rollback,Domain process,Low,Use technical clone helper only if needed,"}bedrock.dim.clone",Selective helper,Tier3,Rollback semantics stay in IMF
+IMF.P.Security.CreateGroups,Security,Utility facade,High,Create or validate groups,"}bedrock.security.group.create",Delegate directly,Tier1,Strong Bedrock fit
+IMF.P.Security.SetCubeAccess,Security,Utility facade,High,Assign cube security,"}bedrock.security.object.assign",Delegate directly,Tier1,Verify object class mapping
+IMF.P.Security.SetDimensionAccess,Security,Utility facade,High,Assign dimension security,"}bedrock.security.object.assign",Delegate directly,Tier1,Verify object class mapping
+IMF.P.Security.ApplyModel,Security,Orchestrator,Medium,Use Bedrock-backed group and object assignments,"}bedrock.security.group.create; }bedrock.security.object.assign",Hybrid orchestration,Tier2,Keep IMF policy ownership
+IMF.P.Security.LogBootstrap,Security,Utility process,Medium,Standardize log output,"}bedrock.server.writetomessagelog",Delegate or wrap,Tier2,Could merge with IMF.P.Log.Event strategy
+IMF.P.Log.Event,Logging,Utility facade,High,Write standardized server log entries,"}bedrock.server.writetomessagelog",Delegate directly,Tier1,Strong Bedrock fit
+IMF.P.Log.Change,Logging,Utility facade,Medium,Use Bedrock log utility for change events,"}bedrock.server.writetomessagelog",Hybrid utility,Tier2,IMF still formats change semantics
+IMF.P.Export.CSV.ParentChild,Export,Hybrid process,Medium,Use Bedrock utility patterns where file/export handling fits,,Hybrid orchestration,Tier2,Contract remains IMF-owned
+IMF.P.Export.CSV.LeafFlat,Export,Hybrid process,Medium,Use Bedrock utility patterns where file/export handling fits,,Hybrid orchestration,Tier2,Contract remains IMF-owned
+IMF.P.Import.CSV.ParentChild,Import,Hybrid process,Medium,Use Bedrock utility patterns where file/import handling fits,,Hybrid orchestration,Tier2,Normalization remains IMF-owned
+IMF.P.Import.CSV.LeafFlat,Import,Hybrid process,Medium,Use Bedrock utility patterns where file/import handling fits,,Hybrid orchestration,Tier2,Normalization remains IMF-owned
