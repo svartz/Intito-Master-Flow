@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Export.CSV.LeafFlat",
-  "name": "IMF.P.Export.CSV.LeafFlat",
   "Purpose": "Export a managed dimension or version as flat leaf-level CSV rows.",
-  "purpose": "Export a managed dimension or version as flat leaf-level CSV rows.",
   "Code@Code.link": "IMF.P.Export.CSV.LeafFlat.ti",
   "Parameters": [
     {
@@ -26,32 +24,8 @@
       "Value": ""
     }
   ],
-  "parameters": [
-    {
-      "Name": "pPrefix",
-      "Prompt": "Prefix",
-      "Value": "IMF"
-    },
-    {
-      "Name": "pDimensionCode",
-      "Prompt": "Dimension Code",
-      "Value": ""
-    },
-    {
-      "Name": "pVersionId",
-      "Prompt": "Version Id",
-      "Value": ""
-    },
-    {
-      "Name": "pFilePath",
-      "Prompt": "File Path",
-      "Value": ""
-    }
-  ],
   "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\n# Placeholder:\n# 1. resolve source dimension from version or master\n# 2. select leaf elements and attributes\n# 3. write CSV file to pFilePath",
-  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\n# Placeholder:\n# 1. resolve source dimension from version or master\n# 2. select leaf elements and attributes\n# 3. write CSV file to pFilePath",
   "Metadata": "",
-  "metadata": "",
   "tags": [
     "IMF",
     "TM1",

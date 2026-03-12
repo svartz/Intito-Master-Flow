@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Text.ResolveWithFallback",
-  "name": "IMF.P.Text.ResolveWithFallback",
   "Purpose": "Resolve one IMF text key and fall back to en-US before emitting a missing marker.",
-  "purpose": "Resolve one IMF text key and fall back to en-US before emitting a missing marker.",
   "Code@Code.link": "IMF.P.Text.ResolveWithFallback.ti",
   "Parameters": [
     {
@@ -24,30 +22,8 @@
       "Description": "Optional deterministic CSV output file."
     }
   ],
-  "parameters": [
-    {
-      "Name": "pTextKey",
-      "Prompt": "Text Key",
-      "Value": "",
-      "Description": "Stable IMF text key to resolve."
-    },
-    {
-      "Name": "pLocale",
-      "Prompt": "Locale",
-      "Value": "en-US",
-      "Description": "Requested locale."
-    },
-    {
-      "Name": "pOutputFile",
-      "Prompt": "Output File",
-      "Value": "",
-      "Description": "Optional deterministic CSV output file."
-    }
-  ],
   "Prolog": "sTextKey = Trim(pTextKey);\nsRequestedLocale = Trim(pLocale);\nsOutputFile = Trim(pOutputFile);\nsResolvedText = '';\nsResolvedLocale = '';\nsStatus = 'MISSING';\nsComment = '';\nsMissingMarker = '[missing:' | sTextKey | ']';\nIf(sRequestedLocale @= ''); sRequestedLocale = 'en-US'; EndIf;\nIf(sTextKey @= '');\n  sStatus = 'ERROR';\n  sComment = 'Text key is required.';\n  sResolvedText = '[missing:]';\n  sResolvedLocale = sRequestedLocale;\nElseIf(CubeExists('IMF.C.Text') = 0);\n  sStatus = 'ERROR';\n  sComment = 'IMF.C.Text is not deployed.';\n  sResolvedText = sMissingMarker;\n  sResolvedLocale = sRequestedLocale;\nElseIf(DimensionElementExists('IMF.D.TextKey', sTextKey) = 0);\n  sStatus = 'ERROR';\n  sComment = 'Text key is not deployed in IMF.D.TextKey.';\n  sResolvedText = sMissingMarker;\n  sResolvedLocale = sRequestedLocale;\nElse;\n  sResolvedText = CellGetS('IMF.C.Text', sTextKey, sRequestedLocale, 'Text');\n  If(Trim(sResolvedText) @<> '');\n    sStatus = 'FOUND';\n    sResolvedLocale = sRequestedLocale;\n    sComment = 'Translation found for requested locale.';\n  Else;\n    sResolvedText = CellGetS('IMF.C.Text', sTextKey, 'en-US', 'Text');\n    If(Trim(sResolvedText) @<> '');\n      sStatus = 'FALLBACK';\n      sResolvedLocale = 'en-US';\n      sComment = 'Requested locale missing. Fallback to en-US applied.';\n    Else;\n      sStatus = 'MISSING';\n      sResolvedLocale = 'en-US';\n      sResolvedText = sMissingMarker;\n      sComment = 'Requested locale and en-US baseline are both missing.';\n    EndIf;\n  EndIf;\nEndIf;\nIf(sOutputFile @<> '');\n  ASCIIOutput(sOutputFile, 'TextKey', 'RequestedLocale', 'ResolvedLocale', 'Status', 'ResolvedText', 'Comment');\n  ASCIIOutput(sOutputFile, sTextKey, sRequestedLocale, sResolvedLocale, sStatus, sResolvedText, sComment);\nElse;\n  LogOutput('INFO', 'IMF.P.Text.ResolveWithFallback|' | sTextKey | '|' | sRequestedLocale | '|' | sResolvedLocale | '|' | sStatus | '|' | sResolvedText);\nEndIf;",
-  "prolog": "sTextKey = Trim(pTextKey);\nsRequestedLocale = Trim(pLocale);\nsOutputFile = Trim(pOutputFile);\nsResolvedText = '';\nsResolvedLocale = '';\nsStatus = 'MISSING';\nsComment = '';\nsMissingMarker = '[missing:' | sTextKey | ']';\nIf(sRequestedLocale @= ''); sRequestedLocale = 'en-US'; EndIf;\nIf(sTextKey @= '');\n  sStatus = 'ERROR';\n  sComment = 'Text key is required.';\n  sResolvedText = '[missing:]';\n  sResolvedLocale = sRequestedLocale;\nElseIf(CubeExists('IMF.C.Text') = 0);\n  sStatus = 'ERROR';\n  sComment = 'IMF.C.Text is not deployed.';\n  sResolvedText = sMissingMarker;\n  sResolvedLocale = sRequestedLocale;\nElseIf(DimensionElementExists('IMF.D.TextKey', sTextKey) = 0);\n  sStatus = 'ERROR';\n  sComment = 'Text key is not deployed in IMF.D.TextKey.';\n  sResolvedText = sMissingMarker;\n  sResolvedLocale = sRequestedLocale;\nElse;\n  sResolvedText = CellGetS('IMF.C.Text', sTextKey, sRequestedLocale, 'Text');\n  If(Trim(sResolvedText) @<> '');\n    sStatus = 'FOUND';\n    sResolvedLocale = sRequestedLocale;\n    sComment = 'Translation found for requested locale.';\n  Else;\n    sResolvedText = CellGetS('IMF.C.Text', sTextKey, 'en-US', 'Text');\n    If(Trim(sResolvedText) @<> '');\n      sStatus = 'FALLBACK';\n      sResolvedLocale = 'en-US';\n      sComment = 'Requested locale missing. Fallback to en-US applied.';\n    Else;\n      sStatus = 'MISSING';\n      sResolvedLocale = 'en-US';\n      sResolvedText = sMissingMarker;\n      sComment = 'Requested locale and en-US baseline are both missing.';\n    EndIf;\n  EndIf;\nEndIf;\nIf(sOutputFile @<> '');\n  ASCIIOutput(sOutputFile, 'TextKey', 'RequestedLocale', 'ResolvedLocale', 'Status', 'ResolvedText', 'Comment');\n  ASCIIOutput(sOutputFile, sTextKey, sRequestedLocale, sResolvedLocale, sStatus, sResolvedText, sComment);\nElse;\n  LogOutput('INFO', 'IMF.P.Text.ResolveWithFallback|' | sTextKey | '|' | sRequestedLocale | '|' | sResolvedLocale | '|' | sStatus | '|' | sResolvedText);\nEndIf;",
   "Metadata": "# No metadata tab logic in this implementation.",
-  "metadata": "# No metadata tab logic in this implementation.",
   "tags": [
     "IMF",
     "TM1",

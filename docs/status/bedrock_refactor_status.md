@@ -10,8 +10,19 @@ The authoritative machine-readable register is:
 
 ## Current Phase
 
-- Phase: design complete
-- Implementation status: not started
+- Phase: wave 1 started
+- Implementation status: facade implementation started
+
+Implemented in source:
+
+- `IMF.P.Dimension.Create` now supports opt-in Bedrock delegation with native fallback
+- `IMF.P.Dimension.Clear` now supports opt-in Bedrock delegation with native fallback
+- `IMF.P.Dimension.CopyRelations` now supports opt-in Bedrock delegation and explicit IMF fallback TODO boundaries
+- `IMF.P.Log.Event` now supports opt-in Bedrock server-log delegation with native fallback
+- `IMF.P.Attribute.CopyDefinitions` now includes Bedrock-ready orchestration and explicit contract checkpoints for attribute-definition delegation
+- `IMF.P.Security.CreateGroups` now supports Bedrock-aware group provisioning orchestration
+- `IMF.P.Security.SetCubeAccess` now supports Bedrock-aware security assignment orchestration
+- `IMF.P.Security.SetDimensionAccess` now supports Bedrock-aware security assignment orchestration
 
 ## Tier 1 Targets
 
@@ -25,6 +36,17 @@ These should be refactored first:
 6. `IMF.P.Security.SetCubeAccess`
 7. `IMF.P.Security.SetDimensionAccess`
 8. `IMF.P.Log.Event`
+
+Current wave 1 state:
+
+1. `IMF.P.Dimension.Create` - hybridized in source
+2. `IMF.P.Dimension.Clear` - hybridized in source
+3. `IMF.P.Dimension.CopyRelations` - in progress
+4. `IMF.P.Attribute.CopyDefinitions` - in progress
+5. `IMF.P.Security.CreateGroups` - in progress
+6. `IMF.P.Security.SetCubeAccess` - in progress
+7. `IMF.P.Security.SetDimensionAccess` - in progress
+8. `IMF.P.Log.Event` - hybridized in source
 
 ## Tier 2 Targets
 

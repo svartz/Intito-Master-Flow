@@ -10,8 +10,12 @@
 # - pStrictMode: Parameter pStrictMode Default 'N'.
 # - pLogToCube: Parameter pLogToCube Default 'Y'.
 # - pLogFile: Parameter pLogFile Default 'docs/security/IMF_Security_Bootstrap.log'.
+# - pUseBedrock: Parameter pUseBedrock Default 'N'.
+# - pBedrockProcess: Parameter pBedrockProcess Default '}bedrock.security.group.create'.
+# - pStrictBedrock: Parameter pStrictBedrock Default 'N'.
+# - pBedrockMode: Parameter pBedrockMode Default 'VALIDATE_ONLY'.
 # Prolog:
-# - Validate parameters and execute the process-specific security workflow.
+# - Validate parameters and optionally delegate generic group plumbing to Bedrock while IMF keeps role policy ownership.
 # Metadata:
 # - No metadata datasource is required in this scaffold.
 # Data:
@@ -25,9 +29,28 @@ sCreateBehavior = Upper(Trim(pCreateIfExistsBehavior));
 sStrictMode = Upper(Trim(pStrictMode));
 sLogToCube = Upper(Trim(pLogToCube));
 sLogFile = Trim(pLogFile);
+sUseBedrock = Upper(Trim(pUseBedrock));
+sBedrockProcess = Trim(pBedrockProcess);
+sStrictBedrock = Upper(Trim(pStrictBedrock));
+sBedrockMode = Upper(Trim(pBedrockMode));
 If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
 If(sCreateBehavior @= ''); sCreateBehavior = 'SKIP'; EndIf;
 If(sStrictMode @= ''); sStrictMode = 'N'; EndIf;
+If(sUseBedrock @= ''); sUseBedrock = 'N'; EndIf;
+If(sBedrockProcess @= ''); sBedrockProcess = '}bedrock.security.group.create'; EndIf;
+If(sStrictBedrock @= ''); sStrictBedrock = 'N'; EndIf;
+If(sBedrockMode @= ''); sBedrockMode = 'VALIDATE_ONLY'; EndIf;
+If(sUseBedrock @= 'Y');
+  If(ProcessExists(sBedrockProcess) = 1);
+    ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'CREATE_GROUPS', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pStatus', 'INFO', 'pMessage', 'Bedrock-backed security group mode is enabled. Mode=' | sBedrockMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+    # TODO: Confirm the exact }bedrock.security.group.create parameter contract and identity-source ownership model.
+  Else;
+    ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'CREATE_GROUPS', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pStatus', 'WARNING', 'pMessage', 'Requested Bedrock group-create process was not found. IMF will continue with existing per-group workflow.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
+    If(sStrictBedrock @= 'Y');
+      ProcessBreak;
+    EndIf;
+  EndIf;
+EndIf;
 ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Admin', 'pCreateIfExistsBehavior', sCreateBehavior, 'pStrictMode', sStrictMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
 ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Developer', 'pCreateIfExistsBehavior', sCreateBehavior, 'pStrictMode', sStrictMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);
 ExecuteProcess('IMF.P.Security.CreateSingleGroup', 'pEnvironment', sEnvironment, 'pGroupName', 'IMF_Operator', 'pCreateIfExistsBehavior', sCreateBehavior, 'pStrictMode', sStrictMode, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);

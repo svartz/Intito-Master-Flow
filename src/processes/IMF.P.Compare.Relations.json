@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Compare.Relations",
-  "name": "IMF.P.Compare.Relations",
   "Purpose": "Detect parent-child and weight differences between a work dimension and master dimension.",
-  "purpose": "Detect parent-child and weight differences between a work dimension and master dimension.",
   "Code@Code.link": "IMF.P.Compare.Relations.ti",
   "Parameters": [
     {
@@ -31,37 +29,8 @@
       "Value": ""
     }
   ],
-  "parameters": [
-    {
-      "Name": "pPrefix",
-      "Prompt": "Prefix",
-      "Value": "IMF"
-    },
-    {
-      "Name": "pDimensionCode",
-      "Prompt": "Dimension Code",
-      "Value": ""
-    },
-    {
-      "Name": "pVersionId",
-      "Prompt": "Version Id",
-      "Value": ""
-    },
-    {
-      "Name": "pMasterDimension",
-      "Prompt": "Master Dimension",
-      "Value": ""
-    },
-    {
-      "Name": "pWorkDimension",
-      "Prompt": "Work Dimension",
-      "Value": ""
-    }
-  ],
   "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\nsMasterDimension = Trim(pMasterDimension);\nsWorkDimension = Trim(pWorkDimension);\n\nIf((sDimensionCode @= '') % (sVersionId @= ''));\n  ProcessBreak;\nEndIf;\nIf((DimensionExists(sMasterDimension) = 0) % (DimensionExists(sWorkDimension) = 0));\n  ProcessBreak;\nEndIf;\n\n# Placeholder for hierarchy compare loop:\n# 1. compare parent assignments per element\n# 2. compare consolidation weights\n# 3. write one record per relation delta to IMF.C.Diff",
-  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\nsMasterDimension = Trim(pMasterDimension);\nsWorkDimension = Trim(pWorkDimension);\n\nIf((sDimensionCode @= '') % (sVersionId @= ''));\n  ProcessBreak;\nEndIf;\nIf((DimensionExists(sMasterDimension) = 0) % (DimensionExists(sWorkDimension) = 0));\n  ProcessBreak;\nEndIf;\n\n# Placeholder for hierarchy compare loop:\n# 1. compare parent assignments per element\n# 2. compare consolidation weights\n# 3. write one record per relation delta to IMF.C.Diff",
   "Metadata": "",
-  "metadata": "",
   "tags": [
     "IMF",
     "TM1",

@@ -5,7 +5,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 PROCESS_DIR = ROOT / "src" / "processes"
-REQUIRED_JSON_KEYS = {"Name", "name", "Purpose", "purpose", "Parameters", "parameters", "Prolog", "prolog", "Metadata", "metadata", "tags", "environmentScope", "Code@Code.link"}
+REQUIRED_JSON_KEYS = {
+    "Name",
+    "Purpose",
+    "Parameters",
+    "Prolog",
+    "Metadata",
+    "tags",
+    "environmentScope",
+    "Code@Code.link",
+}
+DISALLOWED_LEGACY_KEYS = {"name", "purpose", "parameters", "prolog", "metadata"}
 
 
 def test_each_process_has_matching_ti_and_json() -> None:
@@ -21,5 +31,7 @@ def test_json_contract_fields_present() -> None:
         payload = json.loads(json_path.read_text(encoding="utf-8"))
         missing = REQUIRED_JSON_KEYS - payload.keys()
         assert not missing, f"{json_path.name} missing keys: {sorted(missing)}"
+        legacy_keys = DISALLOWED_LEGACY_KEYS & payload.keys()
+        assert not legacy_keys, f"{json_path.name} contains legacy duplicate keys: {sorted(legacy_keys)}"
         assert payload["Code@Code.link"] == json_path.with_suffix(".ti").name
         assert payload["environmentScope"] == ["DEV", "TEST", "PROD"]

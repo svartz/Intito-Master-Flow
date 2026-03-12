@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Validate.Attributes",
-  "name": "IMF.P.Validate.Attributes",
   "Purpose": "Validate required attributes and attribute hygiene rules for a work version.",
-  "purpose": "Validate required attributes and attribute hygiene rules for a work version.",
   "Code@Code.link": "IMF.P.Validate.Attributes.ti",
   "Parameters": [
     {
@@ -21,27 +19,8 @@
       "Value": ""
     }
   ],
-  "parameters": [
-    {
-      "Name": "pPrefix",
-      "Prompt": "Prefix",
-      "Value": "IMF"
-    },
-    {
-      "Name": "pDimensionCode",
-      "Prompt": "Dimension Code",
-      "Value": ""
-    },
-    {
-      "Name": "pVersionId",
-      "Prompt": "Version Id",
-      "Value": ""
-    }
-  ],
   "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\n\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(sDimensionCode @= '');\n  ProcessBreak;\nEndIf;\nIf(sVersionId @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\nIf(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);\n  ProcessBreak;\nEndIf;\n\n# Placeholder for attribute validation loop:\n# 1. identify mandatory attributes for the managed dimension\n# 2. scan work-dimension elements for blanks\n# 3. write validation findings to IMF.C.Validation",
-  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\n\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(sDimensionCode @= '');\n  ProcessBreak;\nEndIf;\nIf(sVersionId @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\nIf(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);\n  ProcessBreak;\nEndIf;\n\n# Placeholder for attribute validation loop:\n# 1. identify mandatory attributes for the managed dimension\n# 2. scan work-dimension elements for blanks\n# 3. write validation findings to IMF.C.Validation",
   "Metadata": "",
-  "metadata": "",
   "tags": [
     "IMF",
     "TM1",

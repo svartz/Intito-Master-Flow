@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Attribute.CopyDefinitions",
-  "name": "IMF.P.Attribute.CopyDefinitions",
   "Purpose": "Create the source dimension's attribute definitions on the target dimension.",
-  "purpose": "Create the source dimension's attribute definitions on the target dimension.",
   "Code@Code.link": "IMF.P.Attribute.CopyDefinitions.ti",
   "Parameters": [
     {
@@ -19,34 +17,31 @@
       "Name": "pTargetDimension",
       "Prompt": "Target Dimension",
       "Value": ""
-    }
-  ],
-  "parameters": [
-    {
-      "Name": "pPrefix",
-      "Prompt": "Prefix",
-      "Value": "IMF"
     },
     {
-      "Name": "pSourceDimension",
-      "Prompt": "Source Dimension",
-      "Value": ""
+      "Name": "pUseBedrock",
+      "Prompt": "Use Bedrock",
+      "Value": "N"
     },
     {
-      "Name": "pTargetDimension",
-      "Prompt": "Target Dimension",
-      "Value": ""
+      "Name": "pBedrockProcess",
+      "Prompt": "Bedrock Process",
+      "Value": "}bedrock.dim.attr.create"
+    },
+    {
+      "Name": "pStrictBedrock",
+      "Prompt": "Strict Bedrock",
+      "Value": "N"
     }
   ],
-  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsSourceDimension = Trim(pSourceDimension);\nsTargetDimension = Trim(pTargetDimension);\n\nIf(sSourceDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(sTargetDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sSourceDimension) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sTargetDimension) = 0);\n  ProcessBreak;\nEndIf;\n\nsSourceAttrCube = '}ElementAttributes_' | sSourceDimension;\nsTargetAttrCube = '}ElementAttributes_' | sTargetDimension;\n\nIf(CubeExists(sSourceAttrCube) = 0);\n  ProcessBreak;\nEndIf;\n\n# The exact list of attribute elements is read from the }ElementAttributes dimension.\n# This scaffold prepares the copy boundary and is intentionally conservative until\n# tested against a live TM1 model.\n\nIf(CubeExists(sTargetAttrCube) = 0);\n  # The attribute cube is created automatically when the first attribute is added.\nEndIf;\n\n# Placeholder for attribute-definition loop:\n# 1. enumerate attribute names from the source attribute dimension\n# 2. inspect each attribute type\n# 3. create missing attributes on the target dimension",
-  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsSourceDimension = Trim(pSourceDimension);\nsTargetDimension = Trim(pTargetDimension);\n\nIf(sSourceDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(sTargetDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sSourceDimension) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sTargetDimension) = 0);\n  ProcessBreak;\nEndIf;\n\nsSourceAttrCube = '}ElementAttributes_' | sSourceDimension;\nsTargetAttrCube = '}ElementAttributes_' | sTargetDimension;\n\nIf(CubeExists(sSourceAttrCube) = 0);\n  ProcessBreak;\nEndIf;\n\n# The exact list of attribute elements is read from the }ElementAttributes dimension.\n# This scaffold prepares the copy boundary and is intentionally conservative until\n# tested against a live TM1 model.\n\nIf(CubeExists(sTargetAttrCube) = 0);\n  # The attribute cube is created automatically when the first attribute is added.\nEndIf;\n\n# Placeholder for attribute-definition loop:\n# 1. enumerate attribute names from the source attribute dimension\n# 2. inspect each attribute type\n# 3. create missing attributes on the target dimension",
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsSourceDimension = Trim(pSourceDimension);\nsTargetDimension = Trim(pTargetDimension);\nsUseBedrock = Upper(Trim(pUseBedrock));\nsBedrockProcess = Trim(pBedrockProcess);\nsStrictBedrock = Upper(Trim(pStrictBedrock));\nIf(sUseBedrock @= '');\n  sUseBedrock = 'N';\nEndIf;\nIf(sBedrockProcess @= '');\n  sBedrockProcess = '}bedrock.dim.attr.create';\nEndIf;\nIf(sStrictBedrock @= '');\n  sStrictBedrock = 'N';\nEndIf;\n\nIf(sSourceDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(sTargetDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sSourceDimension) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sTargetDimension) = 0);\n  ProcessBreak;\nEndIf;\n\nsSourceAttrCube = '}ElementAttributes_' | sSourceDimension;\nsTargetAttrCube = '}ElementAttributes_' | sTargetDimension;\n\nIf(CubeExists(sSourceAttrCube) = 0);\n  ProcessBreak;\nEndIf;\n\n# The exact list of attribute elements is read from the }ElementAttributes dimension.\n# This scaffold prepares the copy boundary and is intentionally conservative until\n# tested against a live TM1 model.\n\nIf(CubeExists(sTargetAttrCube) = 0);\n  # The attribute cube is created automatically when the first attribute is added.\nEndIf;\n\nIf(sUseBedrock @= 'Y');\n  If(ProcessExists(sBedrockProcess) = 1);\n    ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'INFO', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Bedrock-backed attribute-definition mode is enabled for this copy boundary.', 'pRunId', sSourceDimension | '->' | sTargetDimension);\n    # TODO: Confirm the exact }bedrock.dim.attr.create parameter contract.\n    # TODO: Confirm how attribute type, alias behavior, and existing-definition handling should be derived from }ElementAttributes_<Dimension> in the target IMF environment.\n  Else;\n    ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'WARNING', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Requested Bedrock attribute-definition process was not found.', 'pRunId', sSourceDimension | '->' | sTargetDimension);\n    If(sStrictBedrock @= 'Y');\n      ProcessBreak;\n    EndIf;\n  EndIf;\nEndIf;\n\n# Placeholder for attribute-definition loop:\n# 1. enumerate attribute names from the source attribute dimension\n# 2. inspect each attribute type\n# 3. delegate supported creates to Bedrock or fall back to native IMF logic",
   "Metadata": "",
-  "metadata": "",
   "tags": [
     "IMF",
     "TM1",
     "PAW",
-    "v12"
+    "v12",
+    "Bedrock"
   ],
   "environmentScope": [
     "DEV",

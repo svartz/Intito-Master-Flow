@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Export.SQL.ParentChild",
-  "name": "IMF.P.Export.SQL.ParentChild",
   "Purpose": "Export a managed dimension or version as SQL-ready parent-child rows.",
-  "purpose": "Export a managed dimension or version as SQL-ready parent-child rows.",
   "Code@Code.link": "IMF.P.Export.SQL.ParentChild.ti",
   "Parameters": [
     {
@@ -26,32 +24,8 @@
       "Value": ""
     }
   ],
-  "parameters": [
-    {
-      "Name": "pPrefix",
-      "Prompt": "Prefix",
-      "Value": "IMF"
-    },
-    {
-      "Name": "pDimensionCode",
-      "Prompt": "Dimension Code",
-      "Value": ""
-    },
-    {
-      "Name": "pVersionId",
-      "Prompt": "Version Id",
-      "Value": ""
-    },
-    {
-      "Name": "pTargetTable",
-      "Prompt": "Target Table",
-      "Value": ""
-    }
-  ],
   "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\n# Placeholder:\n# 1. resolve source dimension from version or master\n# 2. flatten hierarchy to parent-child records\n# 3. write records to pTargetTable",
-  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\n# Placeholder:\n# 1. resolve source dimension from version or master\n# 2. flatten hierarchy to parent-child records\n# 3. write records to pTargetTable",
   "Metadata": "",
-  "metadata": "",
   "tags": [
     "IMF",
     "TM1",

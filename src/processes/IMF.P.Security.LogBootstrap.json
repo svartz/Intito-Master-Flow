@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Security.LogBootstrap",
-  "name": "IMF.P.Security.LogBootstrap",
   "Purpose": "Write deterministic log output for IMF security bootstrap and validation activities.",
-  "purpose": "Write deterministic log output for IMF security bootstrap and validation activities.",
   "Code@Code.link": "IMF.P.Security.LogBootstrap.ti",
   "Parameters": [
     {
@@ -54,60 +52,8 @@
       "Description": "Parameter pLogFile"
     }
   ],
-  "parameters": [
-    {
-      "Name": "pEnvironment",
-      "Prompt": "Environment",
-      "Value": "DEV",
-      "Description": "Parameter pEnvironment"
-    },
-    {
-      "Name": "pAction",
-      "Prompt": "Action",
-      "Value": "",
-      "Description": "Parameter pAction"
-    },
-    {
-      "Name": "pObjectType",
-      "Prompt": "Object Type",
-      "Value": "",
-      "Description": "Parameter pObjectType"
-    },
-    {
-      "Name": "pObjectName",
-      "Prompt": "Object Name",
-      "Value": "",
-      "Description": "Parameter pObjectName"
-    },
-    {
-      "Name": "pStatus",
-      "Prompt": "Status",
-      "Value": "INFO",
-      "Description": "Parameter pStatus"
-    },
-    {
-      "Name": "pMessage",
-      "Prompt": "Message",
-      "Value": "",
-      "Description": "Parameter pMessage"
-    },
-    {
-      "Name": "pLogToCube",
-      "Prompt": "Log To Cube",
-      "Value": "Y",
-      "Description": "Parameter pLogToCube"
-    },
-    {
-      "Name": "pLogFile",
-      "Prompt": "Log File",
-      "Value": "docs/security/IMF_Security_Bootstrap.log",
-      "Description": "Parameter pLogFile"
-    }
-  ],
   "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsAction = Trim(pAction);\nsObjectType = Trim(pObjectType);\nsObjectName = Trim(pObjectName);\nsStatus = Upper(Trim(pStatus));\nsMessage = Trim(pMessage);\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf(sStatus @= ''); sStatus = 'INFO'; EndIf;\nIf(sLogToCube @= ''); sLogToCube = 'Y'; EndIf;\nIf(sLogFile @= ''); sLogFile = 'docs/security/IMF_Security_Bootstrap.log'; EndIf;\nsLogLine = '[IMF_SECURITY][' | sEnvironment | '][' | sStatus | '][' | sAction | '][' | sObjectType | '][' | sObjectName | '] ' | sMessage;\nIf(sLogToCube @= 'Y');\n  # TODO: Write to IMF.C.EventLog once the cube grain and insertion convention are finalized.\nEndIf;\nASCIIOutput(sLogFile, sLogLine);\nLogOutput('INFO', sLogLine);",
-  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsAction = Trim(pAction);\nsObjectType = Trim(pObjectType);\nsObjectName = Trim(pObjectName);\nsStatus = Upper(Trim(pStatus));\nsMessage = Trim(pMessage);\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf(sStatus @= ''); sStatus = 'INFO'; EndIf;\nIf(sLogToCube @= ''); sLogToCube = 'Y'; EndIf;\nIf(sLogFile @= ''); sLogFile = 'docs/security/IMF_Security_Bootstrap.log'; EndIf;\nsLogLine = '[IMF_SECURITY][' | sEnvironment | '][' | sStatus | '][' | sAction | '][' | sObjectType | '][' | sObjectName | '] ' | sMessage;\nIf(sLogToCube @= 'Y');\n  # TODO: Write to IMF.C.EventLog once the cube grain and insertion convention are finalized.\nEndIf;\nASCIIOutput(sLogFile, sLogLine);\nLogOutput('INFO', sLogLine);",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "Security",

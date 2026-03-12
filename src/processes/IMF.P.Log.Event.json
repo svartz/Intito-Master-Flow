@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Log.Event",
-  "name": "IMF.P.Log.Event",
   "Purpose": "Write operational IMF event log entries to control cubes or fallback logs.",
-  "purpose": "Write operational IMF event log entries to control cubes or fallback logs.",
   "Code@Code.link": "IMF.P.Log.Event.ti",
   "Parameters": [
     {
@@ -40,56 +38,35 @@
       "Prompt": "RunId",
       "Value": "",
       "Description": "Parameter pRunId"
+    },
+    {
+      "Name": "pUseBedrock",
+      "Prompt": "Use Bedrock",
+      "Value": "N",
+      "Description": "Delegate server logging to Bedrock when Y."
+    },
+    {
+      "Name": "pBedrockProcess",
+      "Prompt": "Bedrock Process",
+      "Value": "}bedrock.server.writetomessagelog",
+      "Description": "Bedrock or wrapper process used for standardized log output."
+    },
+    {
+      "Name": "pStrictBedrock",
+      "Prompt": "Strict Bedrock",
+      "Value": "N",
+      "Description": "Stop if Bedrock logging is requested but unavailable or failing."
     }
   ],
-  "parameters": [
-    {
-      "Name": "pPrefix",
-      "Prompt": "Prefix",
-      "Value": "IMF",
-      "Description": "Parameter pPrefix"
-    },
-    {
-      "Name": "pSeverity",
-      "Prompt": "Severity",
-      "Value": "INFO",
-      "Description": "Parameter pSeverity"
-    },
-    {
-      "Name": "pObjectType",
-      "Prompt": "ObjectType",
-      "Value": "",
-      "Description": "Parameter pObjectType"
-    },
-    {
-      "Name": "pObjectName",
-      "Prompt": "ObjectName",
-      "Value": "",
-      "Description": "Parameter pObjectName"
-    },
-    {
-      "Name": "pMessage",
-      "Prompt": "Message",
-      "Value": "",
-      "Description": "Parameter pMessage"
-    },
-    {
-      "Name": "pRunId",
-      "Prompt": "RunId",
-      "Value": "",
-      "Description": "Parameter pRunId"
-    }
-  ],
-  "Prolog": "sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;\nsSeverity = Upper(Trim(pSeverity)); sObjectType = Trim(pObjectType); sObjectName = Trim(pObjectName); sMessage = Trim(pMessage); sRunId = Trim(pRunId);\nIf(sSeverity @= ''); sSeverity = 'INFO'; EndIf;\nLogOutput('INFO', 'IMF.EVENT|' | sSeverity | '|' | sRunId | '|' | sObjectType | '|' | sObjectName | '|' | sMessage);\n# TODO: Persist into IMF.C.EventLog when the cube structure and coordinates are finalized.",
-  "prolog": "sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;\nsSeverity = Upper(Trim(pSeverity)); sObjectType = Trim(pObjectType); sObjectName = Trim(pObjectName); sMessage = Trim(pMessage); sRunId = Trim(pRunId);\nIf(sSeverity @= ''); sSeverity = 'INFO'; EndIf;\nLogOutput('INFO', 'IMF.EVENT|' | sSeverity | '|' | sRunId | '|' | sObjectType | '|' | sObjectName | '|' | sMessage);\n# TODO: Persist into IMF.C.EventLog when the cube structure and coordinates are finalized.",
+  "Prolog": "sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;\nsSeverity = Upper(Trim(pSeverity)); sObjectType = Trim(pObjectType); sObjectName = Trim(pObjectName); sMessage = Trim(pMessage); sRunId = Trim(pRunId);\nsUseBedrock = Upper(Trim(pUseBedrock)); sBedrockProcess = Trim(pBedrockProcess); sStrictBedrock = Upper(Trim(pStrictBedrock));\nIf(sSeverity @= ''); sSeverity = 'INFO'; EndIf;\nsFormattedMessage = 'IMF.EVENT|' | sSeverity | '|' | sRunId | '|' | sObjectType | '|' | sObjectName | '|' | sMessage;\nIf(sUseBedrock @= ''); sUseBedrock = 'N'; EndIf;\nIf(sBedrockProcess @= ''); sBedrockProcess = '}bedrock.server.writetomessagelog'; EndIf;\nIf(sStrictBedrock @= ''); sStrictBedrock = 'N'; EndIf;\nLogOutput('INFO', sFormattedMessage);\nIf(sUseBedrock @= 'Y');\n  If(ProcessExists(sBedrockProcess) = 1);\n    # TODO: Confirm the exact }bedrock.server.writetomessagelog parameter contract.\n    # Current delegation assumes a wrapper-compatible parameter named pMessage.\n    nBedrockReturn = ExecuteProcess(sBedrockProcess, 'pMessage', sFormattedMessage);\n    If(nBedrockReturn <> ProcessExitNormal() & sStrictBedrock @= 'Y');\n      ProcessBreak;\n    EndIf;\n  ElseIf(sStrictBedrock @= 'Y');\n    ProcessBreak;\n  EndIf;\nEndIf;\n# TODO: Persist into IMF.C.EventLog when the cube structure and coordinates are finalized.",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "TM1",
     "PAW",
     "v12",
-    "Validation"
+    "Validation",
+    "Bedrock"
   ],
   "environmentScope": [
     "DEV",

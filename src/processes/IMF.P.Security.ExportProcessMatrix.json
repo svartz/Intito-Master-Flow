@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Security.ExportProcessMatrix",
-  "name": "IMF.P.Security.ExportProcessMatrix",
   "Purpose": "Export the IMF process security matrix for documentation and audit review.",
-  "purpose": "Export the IMF process security matrix for documentation and audit review.",
   "Code@Code.link": "IMF.P.Security.ExportProcessMatrix.ti",
   "Parameters": [
     {
@@ -30,36 +28,8 @@
       "Description": "Parameter pLogFile"
     }
   ],
-  "parameters": [
-    {
-      "Name": "pEnvironment",
-      "Prompt": "Environment",
-      "Value": "DEV",
-      "Description": "Parameter pEnvironment"
-    },
-    {
-      "Name": "pOutputFile",
-      "Prompt": "Output File",
-      "Value": "docs/security/IMF_Process_Security_Matrix.csv",
-      "Description": "Parameter pOutputFile"
-    },
-    {
-      "Name": "pLogToCube",
-      "Prompt": "Log To Cube",
-      "Value": "Y",
-      "Description": "Parameter pLogToCube"
-    },
-    {
-      "Name": "pLogFile",
-      "Prompt": "Log File",
-      "Value": "docs/security/IMF_Security_Bootstrap.log",
-      "Description": "Parameter pLogFile"
-    }
-  ],
   "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsOutputFile = Trim(pOutputFile);\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf(sOutputFile @= ''); sOutputFile = 'docs/security/IMF_Process_Security_Matrix.csv'; EndIf;\nExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'EXPORT_PROCESS_MATRIX', 'pObjectType', 'FILE', 'pObjectName', sOutputFile, 'pStatus', 'INFO', 'pMessage', 'Process security matrix export requested.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);",
-  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsOutputFile = Trim(pOutputFile);\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf(sOutputFile @= ''); sOutputFile = 'docs/security/IMF_Process_Security_Matrix.csv'; EndIf;\nExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'EXPORT_PROCESS_MATRIX', 'pObjectType', 'FILE', 'pObjectName', sOutputFile, 'pStatus', 'INFO', 'pMessage', 'Process security matrix export requested.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "Security",

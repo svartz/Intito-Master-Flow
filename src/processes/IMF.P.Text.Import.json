@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Text.Import",
-  "name": "IMF.P.Text.Import",
   "Purpose": "Validate a translation import request and define the supported CSV contract for IMF.C.Text.",
-  "purpose": "Validate a translation import request and define the supported CSV contract for IMF.C.Text.",
   "Code@Code.link": "IMF.P.Text.Import.ti",
   "Parameters": [
     {
@@ -24,30 +22,8 @@
       "Description": "Apply changes when Y after datasource wiring is configured."
     }
   ],
-  "parameters": [
-    {
-      "Name": "pInputFile",
-      "Prompt": "Input File",
-      "Value": "",
-      "Description": "CSV file to import."
-    },
-    {
-      "Name": "pStrictMode",
-      "Prompt": "Strict Mode",
-      "Value": "Y",
-      "Description": "Reject questionable records when Y."
-    },
-    {
-      "Name": "pApplyChanges",
-      "Prompt": "Apply Changes",
-      "Value": "N",
-      "Description": "Apply changes when Y after datasource wiring is configured."
-    }
-  ],
   "Prolog": "sInputFile = Trim(pInputFile);\nsStrictMode = Upper(Trim(pStrictMode));\nsApplyChanges = Upper(Trim(pApplyChanges));\nIf(sStrictMode @= ''); sStrictMode = 'Y'; EndIf;\nIf(sApplyChanges @= ''); sApplyChanges = 'N'; EndIf;\nIf(sInputFile @= '');\n  LogOutput('ERROR', 'IMF.P.Text.Import|pInputFile is required.');\nElseIf(CubeExists('IMF.C.Text') = 0 % DimensionExists('IMF.D.TextKey') = 0 % DimensionExists('IMF.D.Language') = 0);\n  LogOutput('ERROR', 'IMF.P.Text.Import|required language control objects are not deployed.');\nElse;\n  LogOutput('INFO', 'IMF.P.Text.Import|Validated import request for ' | sInputFile | '.');\n  LogOutput('INFO', 'IMF.P.Text.Import|CSV contract: TextKey,Domain,Locale,Text,Status,Owner.');\n  LogOutput('INFO', 'IMF.P.Text.Import|TODO: Bind TM1 datasource variables before applying file content.');\n  If(sApplyChanges @= 'Y');\n    LogOutput('WARNING', 'IMF.P.Text.Import|TODO: Apply mode requested but datasource-driven import is not wired yet.');\n  EndIf;\nEndIf;",
-  "prolog": "sInputFile = Trim(pInputFile);\nsStrictMode = Upper(Trim(pStrictMode));\nsApplyChanges = Upper(Trim(pApplyChanges));\nIf(sStrictMode @= ''); sStrictMode = 'Y'; EndIf;\nIf(sApplyChanges @= ''); sApplyChanges = 'N'; EndIf;\nIf(sInputFile @= '');\n  LogOutput('ERROR', 'IMF.P.Text.Import|pInputFile is required.');\nElseIf(CubeExists('IMF.C.Text') = 0 % DimensionExists('IMF.D.TextKey') = 0 % DimensionExists('IMF.D.Language') = 0);\n  LogOutput('ERROR', 'IMF.P.Text.Import|required language control objects are not deployed.');\nElse;\n  LogOutput('INFO', 'IMF.P.Text.Import|Validated import request for ' | sInputFile | '.');\n  LogOutput('INFO', 'IMF.P.Text.Import|CSV contract: TextKey,Domain,Locale,Text,Status,Owner.');\n  LogOutput('INFO', 'IMF.P.Text.Import|TODO: Bind TM1 datasource variables before applying file content.');\n  If(sApplyChanges @= 'Y');\n    LogOutput('WARNING', 'IMF.P.Text.Import|TODO: Apply mode requested but datasource-driven import is not wired yet.');\n  EndIf;\nEndIf;",
   "Metadata": "# TODO: Configure a character-delimited datasource with columns TextKey, Domain, Locale, Text, Status, Owner.",
-  "metadata": "# TODO: Configure a character-delimited datasource with columns TextKey, Domain, Locale, Text, Status, Owner.",
   "tags": [
     "IMF",
     "TM1",

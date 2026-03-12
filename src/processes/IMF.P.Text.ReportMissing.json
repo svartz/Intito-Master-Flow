@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Text.ReportMissing",
-  "name": "IMF.P.Text.ReportMissing",
   "Purpose": "Export only missing or incomplete translations from IMF.C.Text.",
-  "purpose": "Export only missing or incomplete translations from IMF.C.Text.",
   "Code@Code.link": "IMF.P.Text.ReportMissing.ti",
   "Parameters": [
     {
@@ -24,30 +22,8 @@
       "Description": "Include optional text keys when Y."
     }
   ],
-  "parameters": [
-    {
-      "Name": "pLocaleCsv",
-      "Prompt": "Locale Filter",
-      "Value": "",
-      "Description": "Optional comma-separated locale filter."
-    },
-    {
-      "Name": "pOutputFile",
-      "Prompt": "Output File",
-      "Value": "docs/status/IMF_Missing_Translations.csv",
-      "Description": "Deterministic CSV output file."
-    },
-    {
-      "Name": "pIncludeOptional",
-      "Prompt": "Include Optional",
-      "Value": "N",
-      "Description": "Include optional text keys when Y."
-    }
-  ],
   "Prolog": "sLocaleCsv = Upper(Trim(pLocaleCsv));\nsOutputFile = Trim(pOutputFile);\nsIncludeOptional = Upper(Trim(pIncludeOptional));\nIf(sOutputFile @= ''); sOutputFile = 'docs/status/IMF_Missing_Translations.csv'; EndIf;\nIf(sIncludeOptional @= ''); sIncludeOptional = 'N'; EndIf;\nASCIIOutput(sOutputFile, 'TextKey', 'Domain', 'Locale', 'Required', 'Status', 'Comment');\nIf(CubeExists('IMF.C.Text') = 0 % DimensionExists('IMF.D.TextKey') = 0 % DimensionExists('IMF.D.Language') = 0);\n  ASCIIOutput(sOutputFile, '', '', '', '', 'ERROR', 'Required language control objects are not deployed.');\nElse;\n  nKeyCount = Dimsiz('IMF.D.TextKey');\n  nLocaleCount = Dimsiz('IMF.D.Language');\n  nKeyIndex = 1;\n  While(nKeyIndex <= nKeyCount);\n    sTextKey = DimNm('IMF.D.TextKey', nKeyIndex);\n    If(sTextKey @<> 'All Text Keys');\n      sRequired = Upper(Trim(AttrS('IMF.D.TextKey', sTextKey, 'Required')));\n      sDomain = Trim(AttrS('IMF.D.TextKey', sTextKey, 'Domain'));\n      If(sIncludeOptional @= 'Y' % sRequired @= 'Y');\n        nLocaleIndex = 1;\n        While(nLocaleIndex <= nLocaleCount);\n          sLocale = DimNm('IMF.D.Language', nLocaleIndex);\n          If(sLocale @<> 'All Languages');\n            If(sLocaleCsv @= '' % Scan(Upper(sLocale), sLocaleCsv) > 0);\n              sText = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Text');\n              If(Trim(sText) @= '');\n                If(sLocale @= 'en-US');\n                  sStatus = 'MISSING_BASELINE';\n                  sComment = 'en-US baseline translation is missing.';\n                Else;\n                  sStatus = 'MISSING';\n                  sComment = 'Locale translation is missing. Fallback to en-US will be used.';\n                EndIf;\n                ASCIIOutput(sOutputFile, sTextKey, sDomain, sLocale, sRequired, sStatus, sComment);\n              EndIf;\n            EndIf;\n          EndIf;\n          nLocaleIndex = nLocaleIndex + 1;\n        End;\n      EndIf;\n    EndIf;\n    nKeyIndex = nKeyIndex + 1;\n  End;\nEndIf;",
-  "prolog": "sLocaleCsv = Upper(Trim(pLocaleCsv));\nsOutputFile = Trim(pOutputFile);\nsIncludeOptional = Upper(Trim(pIncludeOptional));\nIf(sOutputFile @= ''); sOutputFile = 'docs/status/IMF_Missing_Translations.csv'; EndIf;\nIf(sIncludeOptional @= ''); sIncludeOptional = 'N'; EndIf;\nASCIIOutput(sOutputFile, 'TextKey', 'Domain', 'Locale', 'Required', 'Status', 'Comment');\nIf(CubeExists('IMF.C.Text') = 0 % DimensionExists('IMF.D.TextKey') = 0 % DimensionExists('IMF.D.Language') = 0);\n  ASCIIOutput(sOutputFile, '', '', '', '', 'ERROR', 'Required language control objects are not deployed.');\nElse;\n  nKeyCount = Dimsiz('IMF.D.TextKey');\n  nLocaleCount = Dimsiz('IMF.D.Language');\n  nKeyIndex = 1;\n  While(nKeyIndex <= nKeyCount);\n    sTextKey = DimNm('IMF.D.TextKey', nKeyIndex);\n    If(sTextKey @<> 'All Text Keys');\n      sRequired = Upper(Trim(AttrS('IMF.D.TextKey', sTextKey, 'Required')));\n      sDomain = Trim(AttrS('IMF.D.TextKey', sTextKey, 'Domain'));\n      If(sIncludeOptional @= 'Y' % sRequired @= 'Y');\n        nLocaleIndex = 1;\n        While(nLocaleIndex <= nLocaleCount);\n          sLocale = DimNm('IMF.D.Language', nLocaleIndex);\n          If(sLocale @<> 'All Languages');\n            If(sLocaleCsv @= '' % Scan(Upper(sLocale), sLocaleCsv) > 0);\n              sText = CellGetS('IMF.C.Text', sTextKey, sLocale, 'Text');\n              If(Trim(sText) @= '');\n                If(sLocale @= 'en-US');\n                  sStatus = 'MISSING_BASELINE';\n                  sComment = 'en-US baseline translation is missing.';\n                Else;\n                  sStatus = 'MISSING';\n                  sComment = 'Locale translation is missing. Fallback to en-US will be used.';\n                EndIf;\n                ASCIIOutput(sOutputFile, sTextKey, sDomain, sLocale, sRequired, sStatus, sComment);\n              EndIf;\n            EndIf;\n          EndIf;\n          nLocaleIndex = nLocaleIndex + 1;\n        End;\n      EndIf;\n    EndIf;\n    nKeyIndex = nKeyIndex + 1;\n  End;\nEndIf;",
   "Metadata": "# No metadata tab logic in this implementation.",
-  "metadata": "# No metadata tab logic in this implementation.",
   "tags": [
     "IMF",
     "TM1",

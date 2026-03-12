@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Security.ApplyModel",
-  "name": "IMF.P.Security.ApplyModel",
   "Purpose": "Apply the IMF security model including cube, dimension, masking, ownership, and element rules.",
-  "purpose": "Apply the IMF security model including cube, dimension, masking, ownership, and element rules.",
   "Code@Code.link": "IMF.P.Security.ApplyModel.ti",
   "Parameters": [
     {
@@ -30,36 +28,8 @@
       "Description": "Parameter pLogOnly"
     }
   ],
-  "parameters": [
-    {
-      "Name": "pEnvironment",
-      "Prompt": "Environment",
-      "Value": "DEV",
-      "Description": "Parameter pEnvironment"
-    },
-    {
-      "Name": "pLogToCube",
-      "Prompt": "LogToCube",
-      "Value": "Y",
-      "Description": "Parameter pLogToCube"
-    },
-    {
-      "Name": "pLogFile",
-      "Prompt": "LogFile",
-      "Value": "docs/security/IMF_Security_Audit.log",
-      "Description": "Parameter pLogFile"
-    },
-    {
-      "Name": "pLogOnly",
-      "Prompt": "LogOnly",
-      "Value": "N",
-      "Description": "Parameter pLogOnly"
-    }
-  ],
   "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsLogOnly = Upper(Trim(pLogOnly));\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_MODEL_START', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'Applying IMF security model.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pLogOnly', sLogOnly, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pLogOnly', sLogOnly, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.ApplyDimensionMasking', 'pEnvironment', sEnvironment, 'pDimensionName', '', 'pRoleFilter', '', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.ApplyVersionOwnershipSecurity', 'pEnvironment', sEnvironment, 'pVersionId', '', 'pOwner', '', 'pStatus', '', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.ApplyElementSecurity', 'pEnvironment', sEnvironment, 'pDimensionName', '', 'pVersionId', '', 'pRoleFilter', '', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_MODEL_END', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'IMF security model applied.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);",
-  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsLogOnly = Upper(Trim(pLogOnly));\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_MODEL_START', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'Applying IMF security model.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pLogOnly', sLogOnly, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pLogOnly', sLogOnly, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.ApplyDimensionMasking', 'pEnvironment', sEnvironment, 'pDimensionName', '', 'pRoleFilter', '', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.ApplyVersionOwnershipSecurity', 'pEnvironment', sEnvironment, 'pVersionId', '', 'pOwner', '', 'pStatus', '', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.ApplyElementSecurity', 'pEnvironment', sEnvironment, 'pDimensionName', '', 'pVersionId', '', 'pRoleFilter', '', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_MODEL_END', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'IMF security model applied.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "Security",

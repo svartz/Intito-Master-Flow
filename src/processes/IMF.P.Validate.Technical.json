@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Validate.Technical",
-  "name": "IMF.P.Validate.Technical",
   "Purpose": "Run technical validation checks against a work version.",
-  "purpose": "Run technical validation checks against a work version.",
   "Code@Code.link": "IMF.P.Validate.Technical.ti",
   "Parameters": [
     {
@@ -21,27 +19,8 @@
       "Value": ""
     }
   ],
-  "parameters": [
-    {
-      "Name": "pPrefix",
-      "Prompt": "Prefix",
-      "Value": "IMF"
-    },
-    {
-      "Name": "pDimensionCode",
-      "Prompt": "Dimension Code",
-      "Value": ""
-    },
-    {
-      "Name": "pVersionId",
-      "Prompt": "Version Id",
-      "Value": ""
-    }
-  ],
   "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\n\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(sDimensionCode @= '');\n  ProcessBreak;\nEndIf;\nIf(sVersionId @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\nIf(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);\n  ProcessBreak;\nEndIf;\n\nExecuteProcess(sPrefix | '.P.Validate.Attributes',\n  'pPrefix', sPrefix,\n  'pDimensionCode', sDimensionCode,\n  'pVersionId', sVersionId);\n\n# Placeholder for remaining technical checks:\n# 1. duplicate keys\n# 2. invalid hierarchies\n# 3. orphan elements\n# 4. alias collisions\n\nAttrPutS('Validated', sDimVersion, sVersionId, 'Status');\nCellPutS('Validated', sCubeVersion, sVersionId, 'Status');\nCellPutS('Technical validation executed for work version.', sCubeVersion, sVersionId, 'Notes');",
-  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\n\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(sDimensionCode @= '');\n  ProcessBreak;\nEndIf;\nIf(sVersionId @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\nIf(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);\n  ProcessBreak;\nEndIf;\n\nExecuteProcess(sPrefix | '.P.Validate.Attributes',\n  'pPrefix', sPrefix,\n  'pDimensionCode', sDimensionCode,\n  'pVersionId', sVersionId);\n\n# Placeholder for remaining technical checks:\n# 1. duplicate keys\n# 2. invalid hierarchies\n# 3. orphan elements\n# 4. alias collisions\n\nAttrPutS('Validated', sDimVersion, sVersionId, 'Status');\nCellPutS('Validated', sCubeVersion, sVersionId, 'Status');\nCellPutS('Technical validation executed for work version.', sCubeVersion, sVersionId, 'Notes');",
   "Metadata": "",
-  "metadata": "",
   "tags": [
     "IMF",
     "TM1",

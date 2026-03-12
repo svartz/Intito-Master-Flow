@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Security.RunSecurityRegressionSuite",
-  "name": "IMF.P.Security.RunSecurityRegressionSuite",
   "Purpose": "Run the IMF security regression test suite across core roles and environment-specific hardening controls.",
-  "purpose": "Run the IMF security regression test suite across core roles and environment-specific hardening controls.",
   "Code@Code.link": "IMF.P.Security.RunSecurityRegressionSuite.ti",
   "Parameters": [
     {
@@ -24,30 +22,8 @@
       "Description": "Parameter pLogFile"
     }
   ],
-  "parameters": [
-    {
-      "Name": "pEnvironment",
-      "Prompt": "Environment",
-      "Value": "DEV",
-      "Description": "Parameter pEnvironment"
-    },
-    {
-      "Name": "pLogToCube",
-      "Prompt": "LogToCube",
-      "Value": "Y",
-      "Description": "Parameter pLogToCube"
-    },
-    {
-      "Name": "pLogFile",
-      "Prompt": "LogFile",
-      "Value": "docs/security/IMF_Security_Audit.log",
-      "Description": "Parameter pLogFile"
-    }
-  ],
   "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'RUN_REGRESSION_SUITE_START', 'pObjectType', 'REGRESSION', 'pObjectName', 'IMF_SECURITY', 'pStatus', 'INFO', 'pMessage', 'Starting security regression suite.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.TestAccessEditor', 'pEnvironment', sEnvironment, 'pExpectedOutcome', 'PASS', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.TestAccessViewer', 'pEnvironment', sEnvironment, 'pExpectedOutcome', 'PASS', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.TestAccessApprover', 'pEnvironment', sEnvironment, 'pExpectedOutcome', 'PASS', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\n# TODO: Add a developer-in-PROD bypass regression check once impersonation or automated session switching is available.\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'RUN_REGRESSION_SUITE_END', 'pObjectType', 'REGRESSION', 'pObjectName', 'IMF_SECURITY', 'pStatus', 'INFO', 'pMessage', 'Completed security regression suite.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);",
-  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'RUN_REGRESSION_SUITE_START', 'pObjectType', 'REGRESSION', 'pObjectName', 'IMF_SECURITY', 'pStatus', 'INFO', 'pMessage', 'Starting security regression suite.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.TestAccessEditor', 'pEnvironment', sEnvironment, 'pExpectedOutcome', 'PASS', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.TestAccessViewer', 'pEnvironment', sEnvironment, 'pExpectedOutcome', 'PASS', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\nExecuteProcess('IMF.P.Security.TestAccessApprover', 'pEnvironment', sEnvironment, 'pExpectedOutcome', 'PASS', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\n# TODO: Add a developer-in-PROD bypass regression check once impersonation or automated session switching is available.\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'RUN_REGRESSION_SUITE_END', 'pObjectType', 'REGRESSION', 'pObjectName', 'IMF_SECURITY', 'pStatus', 'INFO', 'pMessage', 'Completed security regression suite.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "Security",

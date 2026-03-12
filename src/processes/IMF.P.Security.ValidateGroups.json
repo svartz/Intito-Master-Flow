@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Security.ValidateGroups",
-  "name": "IMF.P.Security.ValidateGroups",
   "Purpose": "Validate that all required IMF security groups exist or are clearly flagged as TODO.",
-  "purpose": "Validate that all required IMF security groups exist or are clearly flagged as TODO.",
   "Code@Code.link": "IMF.P.Security.ValidateGroups.ti",
   "Parameters": [
     {
@@ -30,36 +28,8 @@
       "Description": "Parameter pLogFile"
     }
   ],
-  "parameters": [
-    {
-      "Name": "pEnvironment",
-      "Prompt": "Environment",
-      "Value": "DEV",
-      "Description": "Parameter pEnvironment"
-    },
-    {
-      "Name": "pStrictMode",
-      "Prompt": "Strict Mode",
-      "Value": "N",
-      "Description": "Parameter pStrictMode"
-    },
-    {
-      "Name": "pLogToCube",
-      "Prompt": "Log To Cube",
-      "Value": "Y",
-      "Description": "Parameter pLogToCube"
-    },
-    {
-      "Name": "pLogFile",
-      "Prompt": "Log File",
-      "Value": "docs/security/IMF_Security_Bootstrap.log",
-      "Description": "Parameter pLogFile"
-    }
-  ],
   "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsStrictMode = Upper(Trim(pStrictMode));\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nIf(sStrictMode @= ''); sStrictMode = 'N'; EndIf;\n# TODO: Implement native group existence checks against the target TM1 security provider or external IAM source.\nExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_GROUPS', 'pObjectType', 'GROUP_SET', 'pObjectName', 'IMF', 'pStatus', If(sStrictMode @= 'Y', 'ERROR', 'WARN'), 'pMessage', 'TODO: Validate required IMF groups against the real security store.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nIf(sStrictMode @= 'Y'); ProcessBreak; EndIf;",
-  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsStrictMode = Upper(Trim(pStrictMode));\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nIf(sStrictMode @= ''); sStrictMode = 'N'; EndIf;\n# TODO: Implement native group existence checks against the target TM1 security provider or external IAM source.\nExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_GROUPS', 'pObjectType', 'GROUP_SET', 'pObjectName', 'IMF', 'pStatus', If(sStrictMode @= 'Y', 'ERROR', 'WARN'), 'pMessage', 'TODO: Validate required IMF groups against the real security store.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nIf(sStrictMode @= 'Y'); ProcessBreak; EndIf;",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "Security",

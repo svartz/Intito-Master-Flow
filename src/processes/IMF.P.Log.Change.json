@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Log.Change",
-  "name": "IMF.P.Log.Change",
   "Purpose": "Write structured IMF change log entries for version and publish workflows.",
-  "purpose": "Write structured IMF change log entries for version and publish workflows.",
   "Code@Code.link": "IMF.P.Log.Change.ti",
   "Parameters": [
     {
@@ -48,54 +46,8 @@
       "Description": "Parameter pRunId"
     }
   ],
-  "parameters": [
-    {
-      "Name": "pPrefix",
-      "Prompt": "Prefix",
-      "Value": "IMF",
-      "Description": "Parameter pPrefix"
-    },
-    {
-      "Name": "pChangeType",
-      "Prompt": "ChangeType",
-      "Value": "",
-      "Description": "Parameter pChangeType"
-    },
-    {
-      "Name": "pObjectType",
-      "Prompt": "ObjectType",
-      "Value": "",
-      "Description": "Parameter pObjectType"
-    },
-    {
-      "Name": "pObjectName",
-      "Prompt": "ObjectName",
-      "Value": "",
-      "Description": "Parameter pObjectName"
-    },
-    {
-      "Name": "pBefore",
-      "Prompt": "Before",
-      "Value": "",
-      "Description": "Parameter pBefore"
-    },
-    {
-      "Name": "pAfter",
-      "Prompt": "After",
-      "Value": "",
-      "Description": "Parameter pAfter"
-    },
-    {
-      "Name": "pRunId",
-      "Prompt": "RunId",
-      "Value": "",
-      "Description": "Parameter pRunId"
-    }
-  ],
   "Prolog": "sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;\nsChangeType = Trim(pChangeType); sObjectType = Trim(pObjectType); sObjectName = Trim(pObjectName); sBefore = Trim(pBefore); sAfter = Trim(pAfter); sRunId = Trim(pRunId);\nLogOutput('INFO', 'IMF.CHANGE|' | sRunId | '|' | sChangeType | '|' | sObjectType | '|' | sObjectName | '|' | sBefore | '|' | sAfter);\n# TODO: Persist into IMF.C.ChangeLog when the cube structure and coordinates are finalized.",
-  "prolog": "sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;\nsChangeType = Trim(pChangeType); sObjectType = Trim(pObjectType); sObjectName = Trim(pObjectName); sBefore = Trim(pBefore); sAfter = Trim(pAfter); sRunId = Trim(pRunId);\nLogOutput('INFO', 'IMF.CHANGE|' | sRunId | '|' | sChangeType | '|' | sObjectType | '|' | sObjectName | '|' | sBefore | '|' | sAfter);\n# TODO: Persist into IMF.C.ChangeLog when the cube structure and coordinates are finalized.",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "TM1",

@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Impact.Integrations",
-  "name": "IMF.P.Impact.Integrations",
   "Purpose": "Evaluate integration contracts affected by a version diff.",
-  "purpose": "Evaluate integration contracts affected by a version diff.",
   "Code@Code.link": "IMF.P.Impact.Integrations.ti",
   "Parameters": [
     {
@@ -21,27 +19,8 @@
       "Value": ""
     }
   ],
-  "parameters": [
-    {
-      "Name": "pPrefix",
-      "Prompt": "Prefix",
-      "Value": "IMF"
-    },
-    {
-      "Name": "pDimensionCode",
-      "Prompt": "Dimension Code",
-      "Value": ""
-    },
-    {
-      "Name": "pVersionId",
-      "Prompt": "Version Id",
-      "Value": ""
-    }
-  ],
   "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\n# Placeholder:\n# 1. inspect export/import contracts and downstream interface assumptions\n# 2. classify changes to keys, paths, and required attributes\n# 3. write impact findings to IMF.C.Impact",
-  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\n# Placeholder:\n# 1. inspect export/import contracts and downstream interface assumptions\n# 2. classify changes to keys, paths, and required attributes\n# 3. write impact findings to IMF.C.Impact",
   "Metadata": "",
-  "metadata": "",
   "tags": [
     "IMF",
     "TM1",

@@ -2,12 +2,16 @@
 # Purpose: Copy parent-child relations and consolidation weights between dimensions.
 # Sources:
 # - IMF control metadata and TM1 native objects where applicable
+# - Optional Bedrock hierarchy utility delegates
 # Parameters:
 # - pPrefix: Parameter pPrefix Default 'IMF'.
 # - pSourceDimension: Parameter pSourceDimension Default ''.
 # - pTargetDimension: Parameter pTargetDimension Default ''.
+# - pUseBedrock: Parameter pUseBedrock Default 'N'.
+# - pBedrockProcess: Parameter pBedrockProcess Default '}bedrock.hier.clone'.
+# - pStrictBedrock: Parameter pStrictBedrock Default 'N'.
 # Prolog:
-# - Execute the process-specific workflow.
+# - Validate parameters, optionally delegate relation replay to Bedrock, and preserve explicit IMF guardrails.
 # Metadata:
 # - No metadata datasource is required in this scaffold.
 # Data:
@@ -16,9 +20,31 @@
 # - Leave deterministic side effects only where supported.
 
 #region prolog
+sPrefix = Trim(pPrefix);
+If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;
 sSourceDimension = Trim(pSourceDimension); sTargetDimension = Trim(pTargetDimension);
+sUseBedrock = Upper(Trim(pUseBedrock)); sBedrockProcess = Trim(pBedrockProcess); sStrictBedrock = Upper(Trim(pStrictBedrock));
+nBedrockReturn = ProcessExitNormal();
+If(sUseBedrock @= ''); sUseBedrock = 'N'; EndIf;
+If(sBedrockProcess @= ''); sBedrockProcess = '}bedrock.hier.clone'; EndIf;
+If(sStrictBedrock @= ''); sStrictBedrock = 'N'; EndIf;
 If((sSourceDimension @= '') % (sTargetDimension @= '')); ProcessBreak; EndIf;
 If((DimensionExists(sSourceDimension) = 0) % (DimensionExists(sTargetDimension) = 0)); ProcessBreak; EndIf;
+If(sUseBedrock @= 'Y');
+  If(ProcessExists(sBedrockProcess) = 1);
+    ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'INFO', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Delegating dimension relation copy to Bedrock.', 'pRunId', sSourceDimension | '->' | sTargetDimension);
+    # TODO: Confirm Bedrock hierarchy clone/move parameter contracts, including hierarchy names and weight handling.
+    # Current delegation assumes wrapper-compatible parameters pSourceDimension and pTargetDimension.
+    nBedrockReturn = ExecuteProcess(sBedrockProcess, 'pSourceDimension', sSourceDimension, 'pTargetDimension', sTargetDimension);
+    If(nBedrockReturn <> ProcessExitNormal());
+      ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'WARNING', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Bedrock relation copy failed. IMF fallback remains TODO until hierarchy traversal is implemented.', 'pRunId', sSourceDimension | '->' | sTargetDimension);
+      If(sStrictBedrock @= 'Y'); ProcessBreak; EndIf;
+    EndIf;
+  Else;
+    ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'WARNING', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Requested Bedrock hierarchy process was not found. IMF fallback remains TODO until hierarchy traversal is implemented.', 'pRunId', sSourceDimension | '->' | sTargetDimension);
+    If(sStrictBedrock @= 'Y'); ProcessBreak; EndIf;
+  EndIf;
+EndIf;
 # TODO: Traverse consolidations in the source dimension and replay them with weights on the target dimension.
 # TODO: Preserve hierarchy-specific ordering where the target environment relies on insertion order.
 #endregion

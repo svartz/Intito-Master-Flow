@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Attribute.Publish",
-  "name": "IMF.P.Attribute.Publish",
   "Purpose": "Publish attribute definitions and values from a work dimension to the master dimension.",
-  "purpose": "Publish attribute definitions and values from a work dimension to the master dimension.",
   "Code@Code.link": "IMF.P.Attribute.Publish.ti",
   "Parameters": [
     {
@@ -24,30 +22,8 @@
       "Description": "Parameter pVersionId"
     }
   ],
-  "parameters": [
-    {
-      "Name": "pPrefix",
-      "Prompt": "Prefix",
-      "Value": "IMF",
-      "Description": "Parameter pPrefix"
-    },
-    {
-      "Name": "pDimensionCode",
-      "Prompt": "DimensionCode",
-      "Value": "",
-      "Description": "Parameter pDimensionCode"
-    },
-    {
-      "Name": "pVersionId",
-      "Prompt": "VersionId",
-      "Value": "",
-      "Description": "Parameter pVersionId"
-    }
-  ],
   "Prolog": "sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;\nsDimensionCode = Trim(pDimensionCode); sVersionId = Trim(pVersionId);\nIf((sDimensionCode @= '') % (sVersionId @= '')); ProcessBreak; EndIf;\n# TODO: Resolve work and master dimensions and publish attribute definitions and values in two passes.\n# TODO: Use IMF.P.Attribute.CopyDefinitions and IMF.P.Attribute.CopyValues once master-target overwrite rules are finalized.",
-  "prolog": "sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;\nsDimensionCode = Trim(pDimensionCode); sVersionId = Trim(pVersionId);\nIf((sDimensionCode @= '') % (sVersionId @= '')); ProcessBreak; EndIf;\n# TODO: Resolve work and master dimensions and publish attribute definitions and values in two passes.\n# TODO: Use IMF.P.Attribute.CopyDefinitions and IMF.P.Attribute.CopyValues once master-target overwrite rules are finalized.",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "TM1",

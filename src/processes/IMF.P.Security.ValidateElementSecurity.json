@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Security.ValidateElementSecurity",
-  "name": "IMF.P.Security.ValidateElementSecurity",
   "Purpose": "Validate that element-level security rules exist for IMF managed work and archive dimensions.",
-  "purpose": "Validate that element-level security rules exist for IMF managed work and archive dimensions.",
   "Code@Code.link": "IMF.P.Security.ValidateElementSecurity.ti",
   "Parameters": [
     {
@@ -36,42 +34,8 @@
       "Description": "Parameter pOutputFile"
     }
   ],
-  "parameters": [
-    {
-      "Name": "pEnvironment",
-      "Prompt": "Environment",
-      "Value": "DEV",
-      "Description": "Parameter pEnvironment"
-    },
-    {
-      "Name": "pLogToCube",
-      "Prompt": "LogToCube",
-      "Value": "Y",
-      "Description": "Parameter pLogToCube"
-    },
-    {
-      "Name": "pLogFile",
-      "Prompt": "LogFile",
-      "Value": "docs/security/IMF_Security_Audit.log",
-      "Description": "Parameter pLogFile"
-    },
-    {
-      "Name": "pDimensionName",
-      "Prompt": "DimensionName",
-      "Value": "",
-      "Description": "Parameter pDimensionName"
-    },
-    {
-      "Name": "pOutputFile",
-      "Prompt": "OutputFile",
-      "Value": "docs/security/IMF_Security_Matrix.csv",
-      "Description": "Parameter pOutputFile"
-    }
-  ],
   "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsDimensionName = Trim(pDimensionName);\nsOutputFile = Trim(pOutputFile);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_ELEMENT_SECURITY', 'pObjectType', 'DIMENSION', 'pObjectName', sDimensionName, 'pStatus', 'INFO', 'pMessage', 'Validating element security.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\n# TODO: Read effective assignments from }ElementSecurity_<Dimension> and compare against ownership and status rules.\n# TODO: Export mismatches using ObjectType,ObjectName,Group,ExpectedAccess,ActualAccess,Status,Comment.",
-  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsDimensionName = Trim(pDimensionName);\nsOutputFile = Trim(pOutputFile);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_ELEMENT_SECURITY', 'pObjectType', 'DIMENSION', 'pObjectName', sDimensionName, 'pStatus', 'INFO', 'pMessage', 'Validating element security.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\n# TODO: Read effective assignments from }ElementSecurity_<Dimension> and compare against ownership and status rules.\n# TODO: Export mismatches using ObjectType,ObjectName,Group,ExpectedAccess,ActualAccess,Status,Comment.",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "Security",

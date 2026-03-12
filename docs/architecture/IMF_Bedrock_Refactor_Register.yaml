@@ -19,7 +19,7 @@ priority_scale:
 entries:
   - process: IMF.P.Dimension.Create
     priority: Tier1
-    status: ready
+    status: hybridized
     refactor_first: true
     rationale: Strong technical fit, low business coupling, immediate code reduction.
     candidate_bedrock:
@@ -29,7 +29,7 @@ entries:
       - Confirm Bedrock parameter contract in the target IMF environment.
   - process: IMF.P.Dimension.Clear
     priority: Tier1
-    status: ready
+    status: hybridized
     refactor_first: true
     rationale: Current process is a thin technical helper and should not own custom clear semantics.
     candidate_bedrock:
@@ -40,7 +40,7 @@ entries:
       - Decide whether clear means delete-all-elements or recreate-and-swap in IMF environments.
   - process: IMF.P.Dimension.CopyRelations
     priority: Tier1
-    status: analysis
+    status: in_progress
     refactor_first: true
     rationale: Current relation copy behavior is still mostly TODO-oriented.
     candidate_bedrock:
@@ -51,7 +51,7 @@ entries:
       - Validate exact hierarchy and weight behavior on multi-hierarchy dimensions.
   - process: IMF.P.Attribute.CopyDefinitions
     priority: Tier1
-    status: ready
+    status: in_progress
     refactor_first: true
     rationale: High repetition, strong Bedrock utility fit.
     candidate_bedrock:
@@ -61,7 +61,7 @@ entries:
       - Confirm alias handling contract for IMF environments.
   - process: IMF.P.Security.CreateGroups
     priority: Tier1
-    status: ready
+    status: in_progress
     refactor_first: true
     rationale: Generic group provisioning is a textbook Bedrock use case.
     candidate_bedrock:
@@ -71,7 +71,7 @@ entries:
       - Confirm identity-source ownership of IMF groups.
   - process: IMF.P.Security.SetCubeAccess
     priority: Tier1
-    status: ready
+    status: in_progress
     refactor_first: true
     rationale: Generic object-security assignment should not remain custom IMF code.
     candidate_bedrock:
@@ -81,7 +81,7 @@ entries:
       - Confirm Bedrock object type and wildcard handling against IMF security objects.
   - process: IMF.P.Security.SetDimensionAccess
     priority: Tier1
-    status: ready
+    status: in_progress
     refactor_first: true
     rationale: Generic object-security assignment should not remain custom IMF code.
     candidate_bedrock:
@@ -91,7 +91,7 @@ entries:
       - Confirm masking-sensitive dimensions remain policy-owned by IMF.
   - process: IMF.P.Log.Event
     priority: Tier1
-    status: ready
+    status: hybridized
     refactor_first: true
     rationale: Logging is repetitive and should be standardized early.
     candidate_bedrock:

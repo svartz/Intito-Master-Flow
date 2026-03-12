@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Dimension.CopyRelations",
-  "name": "IMF.P.Dimension.CopyRelations",
   "Purpose": "Copy parent-child relations and consolidation weights between dimensions.",
-  "purpose": "Copy parent-child relations and consolidation weights between dimensions.",
   "Code@Code.link": "IMF.P.Dimension.CopyRelations.ti",
   "Parameters": [
     {
@@ -22,38 +20,35 @@
       "Prompt": "TargetDimension",
       "Value": "",
       "Description": "Parameter pTargetDimension"
-    }
-  ],
-  "parameters": [
-    {
-      "Name": "pPrefix",
-      "Prompt": "Prefix",
-      "Value": "IMF",
-      "Description": "Parameter pPrefix"
     },
     {
-      "Name": "pSourceDimension",
-      "Prompt": "SourceDimension",
-      "Value": "",
-      "Description": "Parameter pSourceDimension"
+      "Name": "pUseBedrock",
+      "Prompt": "Use Bedrock",
+      "Value": "N",
+      "Description": "Delegate to Bedrock when Y."
     },
     {
-      "Name": "pTargetDimension",
-      "Prompt": "TargetDimension",
-      "Value": "",
-      "Description": "Parameter pTargetDimension"
+      "Name": "pBedrockProcess",
+      "Prompt": "Bedrock Process",
+      "Value": "}bedrock.hier.clone",
+      "Description": "Bedrock or wrapper process used for relation replay."
+    },
+    {
+      "Name": "pStrictBedrock",
+      "Prompt": "Strict Bedrock",
+      "Value": "N",
+      "Description": "Stop when Bedrock delegation fails or is unavailable."
     }
   ],
-  "Prolog": "sSourceDimension = Trim(pSourceDimension); sTargetDimension = Trim(pTargetDimension);\nIf((sSourceDimension @= '') % (sTargetDimension @= '')); ProcessBreak; EndIf;\nIf((DimensionExists(sSourceDimension) = 0) % (DimensionExists(sTargetDimension) = 0)); ProcessBreak; EndIf;\n# TODO: Traverse consolidations in the source dimension and replay them with weights on the target dimension.\n# TODO: Preserve hierarchy-specific ordering where the target environment relies on insertion order.",
-  "prolog": "sSourceDimension = Trim(pSourceDimension); sTargetDimension = Trim(pTargetDimension);\nIf((sSourceDimension @= '') % (sTargetDimension @= '')); ProcessBreak; EndIf;\nIf((DimensionExists(sSourceDimension) = 0) % (DimensionExists(sTargetDimension) = 0)); ProcessBreak; EndIf;\n# TODO: Traverse consolidations in the source dimension and replay them with weights on the target dimension.\n# TODO: Preserve hierarchy-specific ordering where the target environment relies on insertion order.",
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= ''); sPrefix = 'IMF'; EndIf;\nsSourceDimension = Trim(pSourceDimension); sTargetDimension = Trim(pTargetDimension);\nsUseBedrock = Upper(Trim(pUseBedrock)); sBedrockProcess = Trim(pBedrockProcess); sStrictBedrock = Upper(Trim(pStrictBedrock));\nnBedrockReturn = ProcessExitNormal();\nIf(sUseBedrock @= ''); sUseBedrock = 'N'; EndIf;\nIf(sBedrockProcess @= ''); sBedrockProcess = '}bedrock.hier.clone'; EndIf;\nIf(sStrictBedrock @= ''); sStrictBedrock = 'N'; EndIf;\nIf((sSourceDimension @= '') % (sTargetDimension @= '')); ProcessBreak; EndIf;\nIf((DimensionExists(sSourceDimension) = 0) % (DimensionExists(sTargetDimension) = 0)); ProcessBreak; EndIf;\nIf(sUseBedrock @= 'Y');\n  If(ProcessExists(sBedrockProcess) = 1);\n    ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'INFO', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Delegating dimension relation copy to Bedrock.', 'pRunId', sSourceDimension | '->' | sTargetDimension);\n    # TODO: Confirm Bedrock hierarchy clone/move parameter contracts, including hierarchy names and weight handling.\n    # Current delegation assumes wrapper-compatible parameters pSourceDimension and pTargetDimension.\n    nBedrockReturn = ExecuteProcess(sBedrockProcess, 'pSourceDimension', sSourceDimension, 'pTargetDimension', sTargetDimension);\n    If(nBedrockReturn <> ProcessExitNormal());\n      ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'WARNING', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Bedrock relation copy failed. IMF fallback remains TODO until hierarchy traversal is implemented.', 'pRunId', sSourceDimension | '->' | sTargetDimension);\n      If(sStrictBedrock @= 'Y'); ProcessBreak; EndIf;\n    EndIf;\n  Else;\n    ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'WARNING', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Requested Bedrock hierarchy process was not found. IMF fallback remains TODO until hierarchy traversal is implemented.', 'pRunId', sSourceDimension | '->' | sTargetDimension);\n    If(sStrictBedrock @= 'Y'); ProcessBreak; EndIf;\n  EndIf;\nEndIf;\n# TODO: Traverse consolidations in the source dimension and replay them with weights on the target dimension.\n# TODO: Preserve hierarchy-specific ordering where the target environment relies on insertion order.",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "TM1",
     "PAW",
     "v12",
-    "Versioning"
+    "Versioning",
+    "Bedrock"
   ],
   "environmentScope": [
     "DEV",

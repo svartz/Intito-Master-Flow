@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Security.CreateSingleGroup",
-  "name": "IMF.P.Security.CreateSingleGroup",
   "Purpose": "Provision or validate a single IMF security group.",
-  "purpose": "Provision or validate a single IMF security group.",
   "Code@Code.link": "IMF.P.Security.CreateSingleGroup.ti",
   "Parameters": [
     {
@@ -42,48 +40,8 @@
       "Description": "Parameter pLogFile"
     }
   ],
-  "parameters": [
-    {
-      "Name": "pEnvironment",
-      "Prompt": "Environment",
-      "Value": "DEV",
-      "Description": "Parameter pEnvironment"
-    },
-    {
-      "Name": "pGroupName",
-      "Prompt": "Group Name",
-      "Value": "",
-      "Description": "Parameter pGroupName"
-    },
-    {
-      "Name": "pCreateIfExistsBehavior",
-      "Prompt": "Create If Exists Behavior",
-      "Value": "SKIP",
-      "Description": "Parameter pCreateIfExistsBehavior"
-    },
-    {
-      "Name": "pStrictMode",
-      "Prompt": "Strict Mode",
-      "Value": "N",
-      "Description": "Parameter pStrictMode"
-    },
-    {
-      "Name": "pLogToCube",
-      "Prompt": "Log To Cube",
-      "Value": "Y",
-      "Description": "Parameter pLogToCube"
-    },
-    {
-      "Name": "pLogFile",
-      "Prompt": "Log File",
-      "Value": "docs/security/IMF_Security_Bootstrap.log",
-      "Description": "Parameter pLogFile"
-    }
-  ],
   "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsGroupName = Trim(pGroupName);\nsStrictMode = Upper(Trim(pStrictMode));\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf((sGroupName @= '') % (SubSt(sGroupName, 1, 4) @<> 'IMF_')); ProcessBreak; EndIf;\n# TODO: Replace this placeholder with an actual group existence check against TM1 or the external identity provider.\nsGroupExists = 'N';\nIf(sGroupExists @= 'Y');\n  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'GROUP_VALIDATE', 'pObjectType', 'GROUP', 'pObjectName', sGroupName, 'pStatus', 'INFO', 'pMessage', 'Group already exists.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nElseIf(sStrictMode @= 'Y');\n  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'GROUP_VALIDATE', 'pObjectType', 'GROUP', 'pObjectName', sGroupName, 'pStatus', 'ERROR', 'pMessage', 'Required IMF group missing. Strict mode abort.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\n  ProcessBreak;\nElse;\n  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'GROUP_VALIDATE', 'pObjectType', 'GROUP', 'pObjectName', sGroupName, 'pStatus', 'WARN', 'pMessage', 'Group missing; continuing because strict mode is disabled. TODO: implement real creation or validation.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nEndIf;",
-  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsGroupName = Trim(pGroupName);\nsStrictMode = Upper(Trim(pStrictMode));\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf((sGroupName @= '') % (SubSt(sGroupName, 1, 4) @<> 'IMF_')); ProcessBreak; EndIf;\n# TODO: Replace this placeholder with an actual group existence check against TM1 or the external identity provider.\nsGroupExists = 'N';\nIf(sGroupExists @= 'Y');\n  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'GROUP_VALIDATE', 'pObjectType', 'GROUP', 'pObjectName', sGroupName, 'pStatus', 'INFO', 'pMessage', 'Group already exists.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nElseIf(sStrictMode @= 'Y');\n  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'GROUP_VALIDATE', 'pObjectType', 'GROUP', 'pObjectName', sGroupName, 'pStatus', 'ERROR', 'pMessage', 'Required IMF group missing. Strict mode abort.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\n  ProcessBreak;\nElse;\n  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'GROUP_VALIDATE', 'pObjectType', 'GROUP', 'pObjectName', sGroupName, 'pStatus', 'WARN', 'pMessage', 'Group missing; continuing because strict mode is disabled. TODO: implement real creation or validation.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nEndIf;",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "Security",

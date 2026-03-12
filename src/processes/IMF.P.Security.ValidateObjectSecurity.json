@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Security.ValidateObjectSecurity",
-  "name": "IMF.P.Security.ValidateObjectSecurity",
   "Purpose": "Validate that expected cube and dimension security assignments have been applied.",
-  "purpose": "Validate that expected cube and dimension security assignments have been applied.",
   "Code@Code.link": "IMF.P.Security.ValidateObjectSecurity.ti",
   "Parameters": [
     {
@@ -30,36 +28,8 @@
       "Description": "Parameter pLogFile"
     }
   ],
-  "parameters": [
-    {
-      "Name": "pEnvironment",
-      "Prompt": "Environment",
-      "Value": "DEV",
-      "Description": "Parameter pEnvironment"
-    },
-    {
-      "Name": "pOutputFile",
-      "Prompt": "Output File",
-      "Value": "docs/security/IMF_Security_Matrix.csv",
-      "Description": "Parameter pOutputFile"
-    },
-    {
-      "Name": "pLogToCube",
-      "Prompt": "Log To Cube",
-      "Value": "Y",
-      "Description": "Parameter pLogToCube"
-    },
-    {
-      "Name": "pLogFile",
-      "Prompt": "Log File",
-      "Value": "docs/security/IMF_Security_Bootstrap.log",
-      "Description": "Parameter pLogFile"
-    }
-  ],
   "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsOutputFile = Trim(pOutputFile);\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf(sOutputFile @= ''); sOutputFile = 'docs/security/IMF_Security_Matrix.csv'; EndIf;\n# TODO: Read back actual access from }CubeSecurity and }DimensionSecurity and compare it with the documented IMF matrix.\nExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_OBJECT_SECURITY', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', sOutputFile, 'pStatus', 'TODO', 'pMessage', 'TODO: Implement read-back validation and mismatch export for IMF security.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);",
-  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsOutputFile = Trim(pOutputFile);\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf(sOutputFile @= ''); sOutputFile = 'docs/security/IMF_Security_Matrix.csv'; EndIf;\n# TODO: Read back actual access from }CubeSecurity and }DimensionSecurity and compare it with the documented IMF matrix.\nExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_OBJECT_SECURITY', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', sOutputFile, 'pStatus', 'TODO', 'pMessage', 'TODO: Implement read-back validation and mismatch export for IMF security.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "Security",

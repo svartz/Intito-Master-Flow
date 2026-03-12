@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Security.ApplyVersionOwnershipSecurity",
-  "name": "IMF.P.Security.ApplyVersionOwnershipSecurity",
   "Purpose": "Apply ownership-based security controls for IMF work versions.",
-  "purpose": "Apply ownership-based security controls for IMF work versions.",
   "Code@Code.link": "IMF.P.Security.ApplyVersionOwnershipSecurity.ti",
   "Parameters": [
     {
@@ -42,48 +40,8 @@
       "Description": "Parameter pStatus"
     }
   ],
-  "parameters": [
-    {
-      "Name": "pEnvironment",
-      "Prompt": "Environment",
-      "Value": "DEV",
-      "Description": "Parameter pEnvironment"
-    },
-    {
-      "Name": "pLogToCube",
-      "Prompt": "LogToCube",
-      "Value": "Y",
-      "Description": "Parameter pLogToCube"
-    },
-    {
-      "Name": "pLogFile",
-      "Prompt": "LogFile",
-      "Value": "docs/security/IMF_Security_Audit.log",
-      "Description": "Parameter pLogFile"
-    },
-    {
-      "Name": "pVersionId",
-      "Prompt": "VersionId",
-      "Value": "",
-      "Description": "Parameter pVersionId"
-    },
-    {
-      "Name": "pOwner",
-      "Prompt": "Owner",
-      "Value": "",
-      "Description": "Parameter pOwner"
-    },
-    {
-      "Name": "pStatus",
-      "Prompt": "Status",
-      "Value": "",
-      "Description": "Parameter pStatus"
-    }
-  ],
   "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsVersionId = Trim(pVersionId);\nsOwner = Trim(pOwner);\nsStatus = Upper(Trim(pStatus));\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_VERSION_OWNERSHIP_START', 'pObjectType', 'VERSION', 'pObjectName', sVersionId, 'pStatus', 'INFO', 'pMessage', 'Applying version ownership rules.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\n# TODO: Resolve owner-to-group mapping for editor access on the target version.\n# TODO: Apply ownership controls to work-dimension and version metadata access surfaces.\n# TODO: In PROD, block any developer bypass path that is only acceptable in DEV.\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_VERSION_OWNERSHIP_END', 'pObjectType', 'VERSION', 'pObjectName', sVersionId, 'pStatus', 'INFO', 'pMessage', 'Version ownership rules prepared.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);",
-  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsVersionId = Trim(pVersionId);\nsOwner = Trim(pOwner);\nsStatus = Upper(Trim(pStatus));\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_VERSION_OWNERSHIP_START', 'pObjectType', 'VERSION', 'pObjectName', sVersionId, 'pStatus', 'INFO', 'pMessage', 'Applying version ownership rules.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\n# TODO: Resolve owner-to-group mapping for editor access on the target version.\n# TODO: Apply ownership controls to work-dimension and version metadata access surfaces.\n# TODO: In PROD, block any developer bypass path that is only acceptable in DEV.\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_VERSION_OWNERSHIP_END', 'pObjectType', 'VERSION', 'pObjectName', sVersionId, 'pStatus', 'INFO', 'pMessage', 'Version ownership rules prepared.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "Security",

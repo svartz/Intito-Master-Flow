@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Security.LogSecurityEvent",
-  "name": "IMF.P.Security.LogSecurityEvent",
   "Purpose": "Write structured audit events for IMF security hardening operations.",
-  "purpose": "Write structured audit events for IMF security hardening operations.",
   "Code@Code.link": "IMF.P.Security.LogSecurityEvent.ti",
   "Parameters": [
     {
@@ -54,60 +52,8 @@
       "Description": "Parameter pMessage"
     }
   ],
-  "parameters": [
-    {
-      "Name": "pEnvironment",
-      "Prompt": "Environment",
-      "Value": "DEV",
-      "Description": "Parameter pEnvironment"
-    },
-    {
-      "Name": "pLogToCube",
-      "Prompt": "LogToCube",
-      "Value": "Y",
-      "Description": "Parameter pLogToCube"
-    },
-    {
-      "Name": "pLogFile",
-      "Prompt": "LogFile",
-      "Value": "docs/security/IMF_Security_Audit.log",
-      "Description": "Parameter pLogFile"
-    },
-    {
-      "Name": "pAction",
-      "Prompt": "Action",
-      "Value": "",
-      "Description": "Parameter pAction"
-    },
-    {
-      "Name": "pObjectType",
-      "Prompt": "ObjectType",
-      "Value": "",
-      "Description": "Parameter pObjectType"
-    },
-    {
-      "Name": "pObjectName",
-      "Prompt": "ObjectName",
-      "Value": "",
-      "Description": "Parameter pObjectName"
-    },
-    {
-      "Name": "pStatus",
-      "Prompt": "Status",
-      "Value": "INFO",
-      "Description": "Parameter pStatus"
-    },
-    {
-      "Name": "pMessage",
-      "Prompt": "Message",
-      "Value": "",
-      "Description": "Parameter pMessage"
-    }
-  ],
   "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nsAction = Trim(pAction);\nsObjectType = Trim(pObjectType);\nsObjectName = Trim(pObjectName);\nsStatus = Upper(Trim(pStatus));\nsMessage = Trim(pMessage);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nIf(sStatus @= ''); sStatus = 'INFO'; EndIf;\nLogOutput('INFO', 'IMF.SECURITY|' | sEnvironment | '|' | sStatus | '|' | sAction | '|' | sObjectType | '|' | sObjectName | '|' | sMessage);\n# TODO: When IMF.C.EventLog grain is finalized, mirror the same event into the cube.\n# TODO: When pLogFile is enabled in the target environment, append the event to a structured file sink.",
-  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nsAction = Trim(pAction);\nsObjectType = Trim(pObjectType);\nsObjectName = Trim(pObjectName);\nsStatus = Upper(Trim(pStatus));\nsMessage = Trim(pMessage);\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nIf(sStatus @= ''); sStatus = 'INFO'; EndIf;\nLogOutput('INFO', 'IMF.SECURITY|' | sEnvironment | '|' | sStatus | '|' | sAction | '|' | sObjectType | '|' | sObjectName | '|' | sMessage);\n# TODO: When IMF.C.EventLog grain is finalized, mirror the same event into the cube.\n# TODO: When pLogFile is enabled in the target environment, append the event to a structured file sink.",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "Security",

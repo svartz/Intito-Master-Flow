@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Security.SetDimensionAccess",
-  "name": "IMF.P.Security.SetDimensionAccess",
   "Purpose": "Apply or log a single dimension-security assignment for an IMF group.",
-  "purpose": "Apply or log a single dimension-security assignment for an IMF group.",
   "Code@Code.link": "IMF.P.Security.SetDimensionAccess.ti",
   "Parameters": [
     {
@@ -46,63 +44,36 @@
       "Prompt": "Log File",
       "Value": "docs/security/IMF_Security_Bootstrap.log",
       "Description": "Parameter pLogFile"
-    }
-  ],
-  "parameters": [
-    {
-      "Name": "pEnvironment",
-      "Prompt": "Environment",
-      "Value": "DEV",
-      "Description": "Parameter pEnvironment"
     },
     {
-      "Name": "pDimensionName",
-      "Prompt": "Dimension Name",
-      "Value": "",
-      "Description": "Parameter pDimensionName"
-    },
-    {
-      "Name": "pGroupName",
-      "Prompt": "Group Name",
-      "Value": "",
-      "Description": "Parameter pGroupName"
-    },
-    {
-      "Name": "pAccess",
-      "Prompt": "Access",
-      "Value": "READ",
-      "Description": "Parameter pAccess"
-    },
-    {
-      "Name": "pLogOnly",
-      "Prompt": "Log Only",
+      "Name": "pUseBedrock",
+      "Prompt": "Use Bedrock",
       "Value": "N",
-      "Description": "Parameter pLogOnly"
+      "Description": "Delegate generic object-security mechanics to Bedrock when Y."
     },
     {
-      "Name": "pLogToCube",
-      "Prompt": "Log To Cube",
-      "Value": "Y",
-      "Description": "Parameter pLogToCube"
+      "Name": "pBedrockProcess",
+      "Prompt": "Bedrock Process",
+      "Value": "}bedrock.security.object.assign",
+      "Description": "Bedrock or wrapper process used for dimension-security assignment."
     },
     {
-      "Name": "pLogFile",
-      "Prompt": "Log File",
-      "Value": "docs/security/IMF_Security_Bootstrap.log",
-      "Description": "Parameter pLogFile"
+      "Name": "pStrictBedrock",
+      "Prompt": "Strict Bedrock",
+      "Value": "N",
+      "Description": "Stop if Bedrock security delegation is requested but unavailable."
     }
   ],
-  "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsDimensionName = Trim(pDimensionName);\nsGroupName = Trim(pGroupName);\nsAccess = Upper(Trim(pAccess));\nsLogOnly = Upper(Trim(pLogOnly));\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf((sDimensionName @= '') % (sGroupName @= '')); ProcessBreak; EndIf;\n# TODO: Confirm }DimensionSecurity dimension order and wildcard/class-resolution strategy before enabling native writes.\nIf(sLogOnly @= 'N');\n  # CellPutS(sAccess, '}DimensionSecurity', sGroupName, sDimensionName);\n  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'SET_DIMENSION_ACCESS', 'pObjectType', 'DIMENSION', 'pObjectName', sDimensionName, 'pStatus', 'TODO', 'pMessage', 'TODO: Native }DimensionSecurity write must be validated before activation. Group=' | sGroupName | '; expected=' | sAccess, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nElse;\n  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'SET_DIMENSION_ACCESS', 'pObjectType', 'DIMENSION', 'pObjectName', sDimensionName, 'pStatus', 'INFO', 'pMessage', 'Log-only dimension assignment. Group=' | sGroupName | '; expected=' | sAccess, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nEndIf;",
-  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsDimensionName = Trim(pDimensionName);\nsGroupName = Trim(pGroupName);\nsAccess = Upper(Trim(pAccess));\nsLogOnly = Upper(Trim(pLogOnly));\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nIf((sDimensionName @= '') % (sGroupName @= '')); ProcessBreak; EndIf;\n# TODO: Confirm }DimensionSecurity dimension order and wildcard/class-resolution strategy before enabling native writes.\nIf(sLogOnly @= 'N');\n  # CellPutS(sAccess, '}DimensionSecurity', sGroupName, sDimensionName);\n  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'SET_DIMENSION_ACCESS', 'pObjectType', 'DIMENSION', 'pObjectName', sDimensionName, 'pStatus', 'TODO', 'pMessage', 'TODO: Native }DimensionSecurity write must be validated before activation. Group=' | sGroupName | '; expected=' | sAccess, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nElse;\n  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'SET_DIMENSION_ACCESS', 'pObjectType', 'DIMENSION', 'pObjectName', sDimensionName, 'pStatus', 'INFO', 'pMessage', 'Log-only dimension assignment. Group=' | sGroupName | '; expected=' | sAccess, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nEndIf;",
+  "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nsDimensionName = Trim(pDimensionName);\nsGroupName = Trim(pGroupName);\nsAccess = Upper(Trim(pAccess));\nsLogOnly = Upper(Trim(pLogOnly));\nsLogToCube = Upper(Trim(pLogToCube));\nsLogFile = Trim(pLogFile);\nsUseBedrock = Upper(Trim(pUseBedrock));\nsBedrockProcess = Trim(pBedrockProcess);\nsStrictBedrock = Upper(Trim(pStrictBedrock));\nIf(sUseBedrock @= ''); sUseBedrock = 'N'; EndIf;\nIf(sBedrockProcess @= ''); sBedrockProcess = '}bedrock.security.object.assign'; EndIf;\nIf(sStrictBedrock @= ''); sStrictBedrock = 'N'; EndIf;\nIf((sDimensionName @= '') % (sGroupName @= '')); ProcessBreak; EndIf;\n# TODO: Confirm }DimensionSecurity dimension order and wildcard/class-resolution strategy before enabling native writes.\nIf(sUseBedrock @= 'Y');\n  If(ProcessExists(sBedrockProcess) = 1);\n    ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'SET_DIMENSION_ACCESS', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pStatus', 'INFO', 'pMessage', 'Bedrock-backed dimension security mode is enabled. Group=' | sGroupName | '; expected=' | sAccess, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\n    # TODO: Confirm the exact }bedrock.security.object.assign parameter contract for dimension security assignments and wildcard resolution.\n  Else;\n    ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'SET_DIMENSION_ACCESS', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pStatus', 'WARNING', 'pMessage', 'Requested Bedrock dimension-security process was not found. Existing IMF logging path remains active.', 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\n    If(sStrictBedrock @= 'Y'); ProcessBreak; EndIf;\n  EndIf;\nEndIf;\nIf(sLogOnly @= 'N');\n  # CellPutS(sAccess, '}DimensionSecurity', sGroupName, sDimensionName);\n  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'SET_DIMENSION_ACCESS', 'pObjectType', 'DIMENSION', 'pObjectName', sDimensionName, 'pStatus', 'TODO', 'pMessage', 'TODO: Native }DimensionSecurity write must be validated before activation. Group=' | sGroupName | '; expected=' | sAccess, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nElse;\n  ExecuteProcess('IMF.P.Security.LogBootstrap', 'pEnvironment', sEnvironment, 'pAction', 'SET_DIMENSION_ACCESS', 'pObjectType', 'DIMENSION', 'pObjectName', sDimensionName, 'pStatus', 'INFO', 'pMessage', 'Log-only dimension assignment. Group=' | sGroupName | '; expected=' | sAccess, 'pLogToCube', sLogToCube, 'pLogFile', sLogFile);\nEndIf;",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "Security",
     "TM1",
     "PAW",
     "v12",
-    "DimensionSecurity"
+    "DimensionSecurity",
+    "Bedrock"
   ],
   "environmentScope": [
     "DEV",

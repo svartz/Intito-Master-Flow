@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Version.CloneFromVersion",
-  "name": "IMF.P.Version.CloneFromVersion",
   "Purpose": "Initialize a new work dimension using another work version as source.",
-  "purpose": "Initialize a new work dimension using another work version as source.",
   "Code@Code.link": "IMF.P.Version.CloneFromVersion.ti",
   "Parameters": [
     {
@@ -31,37 +29,8 @@
       "Value": ""
     }
   ],
-  "parameters": [
-    {
-      "Name": "pPrefix",
-      "Prompt": "Prefix",
-      "Value": "IMF"
-    },
-    {
-      "Name": "pDimensionCode",
-      "Prompt": "Dimension Code",
-      "Value": ""
-    },
-    {
-      "Name": "pVersionId",
-      "Prompt": "Version Id",
-      "Value": ""
-    },
-    {
-      "Name": "pSourceVersion",
-      "Prompt": "Source Version",
-      "Value": ""
-    },
-    {
-      "Name": "pCreatedBy",
-      "Prompt": "Created By",
-      "Value": ""
-    }
-  ],
   "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\nsSourceVersion = Trim(pSourceVersion);\nsCreatedBy = Trim(pCreatedBy);\n\nIf(sCreatedBy @= '');\n  sCreatedBy = 'SYSTEM';\nEndIf;\n\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimVersion, sSourceVersion) = 0);\n  ProcessBreak;\nEndIf;\nIf(CellGetS(sCubeVersion, sSourceVersion, 'DimensionCode') @<> sDimensionCode);\n  ProcessBreak;\nEndIf;\n\nsSourceWorkDimension = Trim(CellGetS(sCubeVersion, sSourceVersion, 'WorkDimension'));\nsTargetWorkDimension = Trim(CellGetS(sCubeVersion, sVersionId, 'WorkDimension'));\nIf(sSourceWorkDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(sTargetWorkDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sSourceWorkDimension) = 0);\n  ProcessBreak;\nEndIf;\n\nIf(DimensionExists(sTargetWorkDimension) = 0);\n  DimensionCreate(sTargetWorkDimension);\nEndIf;\n\nExecuteProcess(sPrefix | '.P.Dimension.CopyAll',\n  'pPrefix', sPrefix,\n  'pSourceDimension', sSourceWorkDimension,\n  'pTargetDimension', sTargetWorkDimension,\n  'pIncludeData', 'N');\n\nCellPutS('VERSION', sCubeVersion, sVersionId, 'SourceType');\nCellPutS(sSourceVersion, sCubeVersion, sVersionId, 'SourceVersion');\nCellPutS('Draft', sCubeVersion, sVersionId, 'Status');\nCellPutS('Version clone initialized from ' | sSourceVersion | ' and routed through IMF.P.Dimension.CopyAll.', sCubeVersion, sVersionId, 'Notes');\n\nAttrPutS('VERSION', sDimVersion, sVersionId, 'SourceType');\nAttrPutS(sSourceVersion, sDimVersion, sVersionId, 'SourceVersion');\nAttrPutS('Draft', sDimVersion, sVersionId, 'Status');\nAttrPutS('Version clone initialized from ' | sSourceVersion | ' and routed through IMF.P.Dimension.CopyAll.', sDimVersion, sVersionId, 'Notes');",
-  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsVersionId = Trim(pVersionId);\nsSourceVersion = Trim(pSourceVersion);\nsCreatedBy = Trim(pCreatedBy);\n\nIf(sCreatedBy @= '');\n  sCreatedBy = 'SYSTEM';\nEndIf;\n\nsDimVersion = sPrefix | '.D.Version';\nsCubeVersion = sPrefix | '.C.Version';\n\nIf(DimensionElementExists(sDimVersion, sVersionId) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimVersion, sSourceVersion) = 0);\n  ProcessBreak;\nEndIf;\nIf(CellGetS(sCubeVersion, sSourceVersion, 'DimensionCode') @<> sDimensionCode);\n  ProcessBreak;\nEndIf;\n\nsSourceWorkDimension = Trim(CellGetS(sCubeVersion, sSourceVersion, 'WorkDimension'));\nsTargetWorkDimension = Trim(CellGetS(sCubeVersion, sVersionId, 'WorkDimension'));\nIf(sSourceWorkDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(sTargetWorkDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sSourceWorkDimension) = 0);\n  ProcessBreak;\nEndIf;\n\nIf(DimensionExists(sTargetWorkDimension) = 0);\n  DimensionCreate(sTargetWorkDimension);\nEndIf;\n\nExecuteProcess(sPrefix | '.P.Dimension.CopyAll',\n  'pPrefix', sPrefix,\n  'pSourceDimension', sSourceWorkDimension,\n  'pTargetDimension', sTargetWorkDimension,\n  'pIncludeData', 'N');\n\nCellPutS('VERSION', sCubeVersion, sVersionId, 'SourceType');\nCellPutS(sSourceVersion, sCubeVersion, sVersionId, 'SourceVersion');\nCellPutS('Draft', sCubeVersion, sVersionId, 'Status');\nCellPutS('Version clone initialized from ' | sSourceVersion | ' and routed through IMF.P.Dimension.CopyAll.', sCubeVersion, sVersionId, 'Notes');\n\nAttrPutS('VERSION', sDimVersion, sVersionId, 'SourceType');\nAttrPutS(sSourceVersion, sDimVersion, sVersionId, 'SourceVersion');\nAttrPutS('Draft', sDimVersion, sVersionId, 'Status');\nAttrPutS('Version clone initialized from ' | sSourceVersion | ' and routed through IMF.P.Dimension.CopyAll.', sDimVersion, sVersionId, 'Notes');",
   "Metadata": "",
-  "metadata": "",
   "tags": [
     "IMF",
     "TM1",

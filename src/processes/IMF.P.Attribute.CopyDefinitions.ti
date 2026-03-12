@@ -7,9 +7,13 @@
 # - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
 # - pSourceDimension: Existing source dimension.
 # - pTargetDimension: Existing target dimension.
+# - pUseBedrock: Delegate supported attribute-definition work to Bedrock when 'Y'.
+# - pBedrockProcess: Parameter pBedrockProcess Default '}bedrock.dim.attr.create'.
+# - pStrictBedrock: Stop when Bedrock delegation is unavailable or fails.
 # Prolog:
 # - Normalize prefix and resolve source/target dimension names.
 # - Validate that both source and target dimensions exist.
+# - Prepare Bedrock-backed attribute-definition delegation where the target environment contract is confirmed.
 # Metadata:
 # - Inspect source attribute definitions and target attribute cube availability.
 # Data:
@@ -25,6 +29,19 @@ EndIf;
 
 sSourceDimension = Trim(pSourceDimension);
 sTargetDimension = Trim(pTargetDimension);
+sUseBedrock = Upper(Trim(pUseBedrock));
+sBedrockProcess = Trim(pBedrockProcess);
+sStrictBedrock = Upper(Trim(pStrictBedrock));
+
+If(sUseBedrock @= '');
+  sUseBedrock = 'N';
+EndIf;
+If(sBedrockProcess @= '');
+  sBedrockProcess = '}bedrock.dim.attr.create';
+EndIf;
+If(sStrictBedrock @= '');
+  sStrictBedrock = 'N';
+EndIf;
 
 If(sSourceDimension @= '');
   ProcessBreak;
@@ -54,10 +71,40 @@ If(CubeExists(sTargetAttrCube) = 0);
   # The attribute cube is created automatically when the first attribute is added.
 EndIf;
 
+If(sUseBedrock @= 'Y');
+  If(ProcessExists(sBedrockProcess) = 1);
+    ExecuteProcess(
+      'IMF.P.Log.Event',
+      'pPrefix', sPrefix,
+      'pSeverity', 'INFO',
+      'pObjectType', 'PROCESS',
+      'pObjectName', sBedrockProcess,
+      'pMessage', 'Bedrock-backed attribute-definition mode is enabled for this copy boundary.',
+      'pRunId', sSourceDimension | '->' | sTargetDimension
+    );
+    # TODO: Confirm the exact }bedrock.dim.attr.create parameter contract.
+    # TODO: Confirm how attribute type, alias behavior, and existing-definition handling
+    # should be derived from }ElementAttributes_<Dimension> in the target IMF environment.
+  Else;
+    ExecuteProcess(
+      'IMF.P.Log.Event',
+      'pPrefix', sPrefix,
+      'pSeverity', 'WARNING',
+      'pObjectType', 'PROCESS',
+      'pObjectName', sBedrockProcess,
+      'pMessage', 'Requested Bedrock attribute-definition process was not found.',
+      'pRunId', sSourceDimension | '->' | sTargetDimension
+    );
+    If(sStrictBedrock @= 'Y');
+      ProcessBreak;
+    EndIf;
+  EndIf;
+EndIf;
+
 # Placeholder for attribute-definition loop:
 # 1. enumerate attribute names from the source attribute dimension
 # 2. inspect each attribute type
-# 3. create missing attributes on the target dimension
+# 3. delegate supported creates to Bedrock or fall back to native IMF logic
 #endregion
 
 #region metadata

@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Dimension.CopyAll",
-  "name": "IMF.P.Dimension.CopyAll",
   "Purpose": "Orchestrate the structural copy of a source dimension into a target dimension.",
-  "purpose": "Orchestrate the structural copy of a source dimension into a target dimension.",
   "Code@Code.link": "IMF.P.Dimension.CopyAll.ti",
   "Parameters": [
     {
@@ -26,32 +24,8 @@
       "Value": "N"
     }
   ],
-  "parameters": [
-    {
-      "Name": "pPrefix",
-      "Prompt": "Prefix",
-      "Value": "IMF"
-    },
-    {
-      "Name": "pSourceDimension",
-      "Prompt": "Source Dimension",
-      "Value": ""
-    },
-    {
-      "Name": "pTargetDimension",
-      "Prompt": "Target Dimension",
-      "Value": ""
-    },
-    {
-      "Name": "pIncludeData",
-      "Prompt": "Include Data",
-      "Value": "N"
-    }
-  ],
   "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsSourceDimension = Trim(pSourceDimension);\nsTargetDimension = Trim(pTargetDimension);\nsIncludeData = Upper(Trim(pIncludeData));\n\nIf(sSourceDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(sTargetDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sSourceDimension) = 0);\n  ProcessBreak;\nEndIf;\n\nIf(DimensionExists(sTargetDimension) = 0);\n  DimensionCreate(sTargetDimension);\nEndIf;\n\n# Recreate the target dimension shell before rebuilding structure from the source.\nDimensionDeleteAllElements(sTargetDimension);\n\n# The detailed element and consolidation traversal is environment-specific in TM1\n# and is therefore isolated here as the orchestration entry point.\n# Attribute definitions and values are copied by dedicated subprocesses.\nExecuteProcess(sPrefix | '.P.Attribute.CopyDefinitions',\n  'pPrefix', sPrefix,\n  'pSourceDimension', sSourceDimension,\n  'pTargetDimension', sTargetDimension);\n\nExecuteProcess(sPrefix | '.P.Attribute.CopyValues',\n  'pPrefix', sPrefix,\n  'pSourceDimension', sSourceDimension,\n  'pTargetDimension', sTargetDimension);\n\n# Placeholder for subsequent hierarchy walk:\n# 1. create source elements in target\n# 2. reapply parent-child relations\n# 3. reapply weights\n# 4. preserve aliases already materialized via attribute copy\n\nIf(sIncludeData @= 'Y');\n  # Reserved for future cube-data synchronization logic.\nEndIf;",
-  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsSourceDimension = Trim(pSourceDimension);\nsTargetDimension = Trim(pTargetDimension);\nsIncludeData = Upper(Trim(pIncludeData));\n\nIf(sSourceDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(sTargetDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sSourceDimension) = 0);\n  ProcessBreak;\nEndIf;\n\nIf(DimensionExists(sTargetDimension) = 0);\n  DimensionCreate(sTargetDimension);\nEndIf;\n\n# Recreate the target dimension shell before rebuilding structure from the source.\nDimensionDeleteAllElements(sTargetDimension);\n\n# The detailed element and consolidation traversal is environment-specific in TM1\n# and is therefore isolated here as the orchestration entry point.\n# Attribute definitions and values are copied by dedicated subprocesses.\nExecuteProcess(sPrefix | '.P.Attribute.CopyDefinitions',\n  'pPrefix', sPrefix,\n  'pSourceDimension', sSourceDimension,\n  'pTargetDimension', sTargetDimension);\n\nExecuteProcess(sPrefix | '.P.Attribute.CopyValues',\n  'pPrefix', sPrefix,\n  'pSourceDimension', sSourceDimension,\n  'pTargetDimension', sTargetDimension);\n\n# Placeholder for subsequent hierarchy walk:\n# 1. create source elements in target\n# 2. reapply parent-child relations\n# 3. reapply weights\n# 4. preserve aliases already materialized via attribute copy\n\nIf(sIncludeData @= 'Y');\n  # Reserved for future cube-data synchronization logic.\nEndIf;",
   "Metadata": "",
-  "metadata": "",
   "tags": [
     "IMF",
     "TM1",

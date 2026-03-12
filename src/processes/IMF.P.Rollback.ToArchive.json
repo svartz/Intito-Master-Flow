@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Rollback.ToArchive",
-  "name": "IMF.P.Rollback.ToArchive",
   "Purpose": "Restore an archived master dimension as the current master.",
-  "purpose": "Restore an archived master dimension as the current master.",
   "Code@Code.link": "IMF.P.Rollback.ToArchive.ti",
   "Parameters": [
     {
@@ -26,32 +24,8 @@
       "Value": ""
     }
   ],
-  "parameters": [
-    {
-      "Name": "pPrefix",
-      "Prompt": "Prefix",
-      "Value": "IMF"
-    },
-    {
-      "Name": "pDimensionCode",
-      "Prompt": "Dimension Code",
-      "Value": ""
-    },
-    {
-      "Name": "pArchiveName",
-      "Prompt": "Archive Name",
-      "Value": ""
-    },
-    {
-      "Name": "pRestoredBy",
-      "Prompt": "Restored By",
-      "Value": ""
-    }
-  ],
   "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsArchiveName = Trim(pArchiveName);\nsRestoredBy = Trim(pRestoredBy);\n\nIf(sRestoredBy @= '');\n  sRestoredBy = 'SYSTEM';\nEndIf;\n\nsDimDimension = sPrefix | '.D.Dimension';\n\nIf((sDimensionCode @= '') % (sArchiveName @= ''));\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimDimension, sDimensionCode) = 0);\n  ProcessBreak;\nEndIf;\n\nsMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));\nIf(sMasterDimension @= '');\n  sMasterDimension = sDimensionCode;\nEndIf;\n\nExecuteProcess(sPrefix | '.P.Rollback.Validate',\n  'pPrefix', sPrefix,\n  'pDimensionCode', sDimensionCode,\n  'pArchiveName', sArchiveName);\n\n# Placeholder:\n# 1. archive current master\n# 2. restore archive structure into master dimension\n# 3. log rollback actor and timestamp\n\nAttrPutS(sArchiveName, sDimDimension, sDimensionCode, 'LastArchivedDimension');",
-  "prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsArchiveName = Trim(pArchiveName);\nsRestoredBy = Trim(pRestoredBy);\n\nIf(sRestoredBy @= '');\n  sRestoredBy = 'SYSTEM';\nEndIf;\n\nsDimDimension = sPrefix | '.D.Dimension';\n\nIf((sDimensionCode @= '') % (sArchiveName @= ''));\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimDimension, sDimensionCode) = 0);\n  ProcessBreak;\nEndIf;\n\nsMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));\nIf(sMasterDimension @= '');\n  sMasterDimension = sDimensionCode;\nEndIf;\n\nExecuteProcess(sPrefix | '.P.Rollback.Validate',\n  'pPrefix', sPrefix,\n  'pDimensionCode', sDimensionCode,\n  'pArchiveName', sArchiveName);\n\n# Placeholder:\n# 1. archive current master\n# 2. restore archive structure into master dimension\n# 3. log rollback actor and timestamp\n\nAttrPutS(sArchiveName, sDimDimension, sDimensionCode, 'LastArchivedDimension');",
   "Metadata": "",
-  "metadata": "",
   "tags": [
     "IMF",
     "TM1",

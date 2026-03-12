@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Security.TestAccessEditor",
-  "name": "IMF.P.Security.TestAccessEditor",
   "Purpose": "Test that editors cannot publish and can only modify authorized work versions.",
-  "purpose": "Test that editors cannot publish and can only modify authorized work versions.",
   "Code@Code.link": "IMF.P.Security.TestAccessEditor.ti",
   "Parameters": [
     {
@@ -30,36 +28,8 @@
       "Description": "Parameter pExpectedOutcome"
     }
   ],
-  "parameters": [
-    {
-      "Name": "pEnvironment",
-      "Prompt": "Environment",
-      "Value": "DEV",
-      "Description": "Parameter pEnvironment"
-    },
-    {
-      "Name": "pLogToCube",
-      "Prompt": "LogToCube",
-      "Value": "Y",
-      "Description": "Parameter pLogToCube"
-    },
-    {
-      "Name": "pLogFile",
-      "Prompt": "LogFile",
-      "Value": "docs/security/IMF_Security_Audit.log",
-      "Description": "Parameter pLogFile"
-    },
-    {
-      "Name": "pExpectedOutcome",
-      "Prompt": "ExpectedOutcome",
-      "Value": "PASS",
-      "Description": "Parameter pExpectedOutcome"
-    }
-  ],
   "Prolog": "sEnvironment = Upper(Trim(pEnvironment));\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'TEST_ACCESS_EDITOR', 'pObjectType', 'REGRESSION', 'pObjectName', 'IMF_Editor', 'pStatus', 'INFO', 'pMessage', 'Running editor access regression test.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\n# TODO: Execute a controlled editor-session simulation in the target environment.\n# TODO: Verify editor cannot publish and cannot modify unauthorized versions.",
-  "prolog": "sEnvironment = Upper(Trim(pEnvironment));\nIf(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;\nExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'TEST_ACCESS_EDITOR', 'pObjectType', 'REGRESSION', 'pObjectName', 'IMF_Editor', 'pStatus', 'INFO', 'pMessage', 'Running editor access regression test.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);\n# TODO: Execute a controlled editor-session simulation in the target environment.\n# TODO: Verify editor cannot publish and cannot modify unauthorized versions.",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "Security",

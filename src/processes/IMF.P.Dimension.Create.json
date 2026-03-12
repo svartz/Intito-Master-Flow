@@ -1,8 +1,6 @@
 {
   "Name": "IMF.P.Dimension.Create",
-  "name": "IMF.P.Dimension.Create",
   "Purpose": "Create a target dimension shell for IMF copy and publish workflows.",
-  "purpose": "Create a target dimension shell for IMF copy and publish workflows.",
   "Code@Code.link": "IMF.P.Dimension.Create.ti",
   "Parameters": [
     {
@@ -16,32 +14,35 @@
       "Prompt": "TargetDimension",
       "Value": "",
       "Description": "Parameter pTargetDimension"
-    }
-  ],
-  "parameters": [
-    {
-      "Name": "pPrefix",
-      "Prompt": "Prefix",
-      "Value": "IMF",
-      "Description": "Parameter pPrefix"
     },
     {
-      "Name": "pTargetDimension",
-      "Prompt": "TargetDimension",
-      "Value": "",
-      "Description": "Parameter pTargetDimension"
+      "Name": "pUseBedrock",
+      "Prompt": "Use Bedrock",
+      "Value": "N",
+      "Description": "Delegate to Bedrock when Y."
+    },
+    {
+      "Name": "pBedrockProcess",
+      "Prompt": "Bedrock Process",
+      "Value": "}bedrock.dim.create",
+      "Description": "Bedrock or wrapper process used for dimension creation."
+    },
+    {
+      "Name": "pStrictBedrock",
+      "Prompt": "Strict Bedrock",
+      "Value": "N",
+      "Description": "Stop when Bedrock delegation fails or is unavailable."
     }
   ],
-  "Prolog": "sTargetDimension = Trim(pTargetDimension);\nIf(sTargetDimension @= ''); ProcessBreak; EndIf;\nIf(DimensionExists(sTargetDimension) = 0); DimensionCreate(sTargetDimension); EndIf;",
-  "prolog": "sTargetDimension = Trim(pTargetDimension);\nIf(sTargetDimension @= ''); ProcessBreak; EndIf;\nIf(DimensionExists(sTargetDimension) = 0); DimensionCreate(sTargetDimension); EndIf;",
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\nsTargetDimension = Trim(pTargetDimension);\nsUseBedrock = Upper(Trim(pUseBedrock));\nsBedrockProcess = Trim(pBedrockProcess);\nsStrictBedrock = Upper(Trim(pStrictBedrock));\nnBedrockReturn = ProcessExitNormal();\nIf(sUseBedrock @= '');\n  sUseBedrock = 'N';\nEndIf;\nIf(sBedrockProcess @= '');\n  sBedrockProcess = '}bedrock.dim.create';\nEndIf;\nIf(sStrictBedrock @= '');\n  sStrictBedrock = 'N';\nEndIf;\nIf(sTargetDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(sUseBedrock @= 'Y');\n  If(ProcessExists(sBedrockProcess) = 1);\n    ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'INFO', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Delegating dimension shell creation to Bedrock.', 'pRunId', sTargetDimension);\n    # TODO: Confirm the exact Bedrock parameter contract in the target environment.\n    # Current delegation assumes a wrapper-compatible parameter named pDimension.\n    nBedrockReturn = ExecuteProcess(sBedrockProcess, 'pDimension', sTargetDimension);\n    If(nBedrockReturn <> ProcessExitNormal());\n      ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'WARNING', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Bedrock dimension create failed. Native fallback will be used if allowed.', 'pRunId', sTargetDimension);\n      If(sStrictBedrock @= 'Y');\n        ProcessBreak;\n      EndIf;\n    EndIf;\n  Else;\n    ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'WARNING', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Requested Bedrock process was not found. Native fallback will be used if allowed.', 'pRunId', sTargetDimension);\n    If(sStrictBedrock @= 'Y');\n      ProcessBreak;\n    EndIf;\n  EndIf;\nEndIf;\nIf(DimensionExists(sTargetDimension) = 0);\n  DimensionCreate(sTargetDimension);\nEndIf;",
   "Metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
-  "metadata": "# TODO: Add metadata-tab logic only if a real datasource is required.",
   "tags": [
     "IMF",
     "TM1",
     "PAW",
     "v12",
-    "Versioning"
+    "Versioning",
+    "Bedrock"
   ],
   "environmentScope": [
     "DEV",
