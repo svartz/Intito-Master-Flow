@@ -45,18 +45,41 @@ sMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionNam
 If(sMasterDimension @= '');
   sMasterDimension = sDimensionCode;
 EndIf;
+If(DimensionExists(sMasterDimension) = 0);
+  ProcessBreak;
+EndIf;
 
 ExecuteProcess(sPrefix | '.P.Rollback.Validate',
   'pPrefix', sPrefix,
   'pDimensionCode', sDimensionCode,
   'pArchiveName', sArchiveName);
 
-# Placeholder:
-# 1. archive current master
-# 2. restore archive structure into master dimension
-# 3. log rollback actor and timestamp
+sRollbackBackup = sMasterDimension | '_ARC_RBK_' | TIMST(NOW, '\Y\m\d\h\i\s');
 
-AttrPutS(sArchiveName, sDimDimension, sDimensionCode, 'LastArchivedDimension');
+ExecuteProcess(sPrefix | '.P.Dimension.Create',
+  'pPrefix', sPrefix,
+  'pTargetDimension', sRollbackBackup);
+
+ExecuteProcess(sPrefix | '.P.Dimension.CopyAll',
+  'pPrefix', sPrefix,
+  'pSourceDimension', sMasterDimension,
+  'pTargetDimension', sRollbackBackup,
+  'pIncludeData', 'N');
+
+ExecuteProcess(sPrefix | '.P.Dimension.CopyAll',
+  'pPrefix', sPrefix,
+  'pSourceDimension', sArchiveName,
+  'pTargetDimension', sMasterDimension,
+  'pIncludeData', 'N');
+
+AttrPutS(sRollbackBackup, sDimDimension, sDimensionCode, 'LastArchivedDimension');
+ExecuteProcess(sPrefix | '.P.Log.Event',
+  'pPrefix', sPrefix,
+  'pSeverity', 'INFO',
+  'pObjectType', 'DIMENSION',
+  'pObjectName', sMasterDimension,
+  'pMessage', 'Rollback restored archive ' | sArchiveName | ' and backed up the prior master to ' | sRollbackBackup | '.',
+  'pRunId', sDimensionCode);
 #endregion
 
 #region metadata

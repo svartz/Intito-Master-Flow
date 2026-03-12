@@ -36,11 +36,20 @@ EndIf;
 If(DimensionExists(sArchiveName) = 0);
   ProcessBreak;
 EndIf;
+sMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));
+If(sMasterDimension @= '');
+  sMasterDimension = sDimensionCode;
+EndIf;
+If(sArchiveName @= sMasterDimension);
+  ProcessBreak;
+EndIf;
+If(DimensionExists(sMasterDimension) = 0);
+  ProcessBreak;
+EndIf;
 
-# Placeholder:
-# 1. validate archive structure
-# 2. validate required attributes
-# 3. validate publish preconditions
+If(DimensionExists('}ElementAttributes_' | sArchiveName) = 0);
+  ProcessBreak;
+EndIf;
 #endregion
 
 #region metadata

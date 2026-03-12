@@ -19,7 +19,7 @@
       "Value": ""
     }
   ],
-  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsArchiveName = Trim(pArchiveName);\n\nsDimDimension = sPrefix | '.D.Dimension';\n\nIf((sDimensionCode @= '') % (sArchiveName @= ''));\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimDimension, sDimensionCode) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sArchiveName) = 0);\n  ProcessBreak;\nEndIf;\n\n# Placeholder:\n# 1. validate archive structure\n# 2. validate required attributes\n# 3. validate publish preconditions",
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsDimensionCode = Trim(pDimensionCode);\nsArchiveName = Trim(pArchiveName);\n\nsDimDimension = sPrefix | '.D.Dimension';\n\nIf((sDimensionCode @= '') % (sArchiveName @= ''));\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimDimension, sDimensionCode) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sArchiveName) = 0);\n  ProcessBreak;\nEndIf;\nsMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));\nIf(sMasterDimension @= '');\n  sMasterDimension = sDimensionCode;\nEndIf;\nIf(sArchiveName @= sMasterDimension);\n  ProcessBreak;\nEndIf;\nIf(DimensionExists(sMasterDimension) = 0);\n  ProcessBreak;\nEndIf;\n\nIf(DimensionExists('}ElementAttributes_' | sArchiveName) = 0);\n  ProcessBreak;\nEndIf;",
   "Metadata": "",
   "tags": [
     "IMF",
