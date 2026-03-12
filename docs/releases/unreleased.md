@@ -17,6 +17,11 @@
 - `IMF.P.Dimension.Create` and `IMF.P.Log.Event` now support opt-in Bedrock delegation with native fallback.
 - `IMF.P.Dimension.CopyRelations` now performs native element and relation replay when Bedrock delegation is not used or fails.
 - `IMF.P.Attribute.CopyDefinitions` now includes Bedrock-ready orchestration and explicit Bedrock contract checkpoints.
+- `IMF.P.Attribute.CopyValues` now performs native attribute-value replay for matching target elements.
+- `IMF.P.Compare.VersionToMaster`, `IMF.P.Compare.Elements`, `IMF.P.Compare.Relations`, and `IMF.P.Compare.Attributes` now write baseline diff records to `IMF.C.Diff`.
+- `IMF.P.Commit.ArchiveMaster` now creates and populates an archive dimension before publish.
+- `IMF.P.Commit.PublishVersion` now replaces the master dimension from the work version after archive creation.
+- `IMF.P.Rollback.Validate` and `IMF.P.Rollback.ToArchive` now perform baseline restore validation and master backup before rollback.
 - `IMF.P.Dimension.Clear`, `IMF.P.Dimension.CopyRelations`, `IMF.P.Security.CreateGroups`, `IMF.P.Security.SetCubeAccess`, and `IMF.P.Security.SetDimensionAccess` now include Wave 1 Bedrock delegation parameters and documented contract boundaries.
 
 ## Fixed

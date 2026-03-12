@@ -41,7 +41,7 @@ Current wave 1 state:
 
 1. `IMF.P.Dimension.Create` - hybridized in source
 2. `IMF.P.Dimension.Clear` - hybridized in source
-3. `IMF.P.Dimension.CopyRelations` - in progress
+3. `IMF.P.Dimension.CopyRelations` - native baseline implemented, Bedrock contract still in progress
 4. `IMF.P.Attribute.CopyDefinitions` - in progress
 5. `IMF.P.Security.CreateGroups` - in progress
 6. `IMF.P.Security.SetCubeAccess` - in progress
