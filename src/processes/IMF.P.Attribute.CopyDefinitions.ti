@@ -32,6 +32,7 @@ sTargetDimension = Trim(pTargetDimension);
 sUseBedrock = Upper(Trim(pUseBedrock));
 sBedrockProcess = Trim(pBedrockProcess);
 sStrictBedrock = Upper(Trim(pStrictBedrock));
+nCreatedCount = 0;
 
 If(sUseBedrock @= '');
   sUseBedrock = 'N';
@@ -58,14 +59,15 @@ EndIf;
 
 sSourceAttrCube = '}ElementAttributes_' | sSourceDimension;
 sTargetAttrCube = '}ElementAttributes_' | sTargetDimension;
+sSourceAttrDimension = '}ElementAttributes_' | sSourceDimension;
+sTargetAttrDimension = '}ElementAttributes_' | sTargetDimension;
 
 If(CubeExists(sSourceAttrCube) = 0);
   ProcessBreak;
 EndIf;
-
-# The exact list of attribute elements is read from the }ElementAttributes dimension.
-# This scaffold prepares the copy boundary and is intentionally conservative until
-# tested against a live TM1 model.
+If(DimensionExists(sSourceAttrDimension) = 0);
+  ProcessBreak;
+EndIf;
 
 If(CubeExists(sTargetAttrCube) = 0);
   # The attribute cube is created automatically when the first attribute is added.
@@ -83,8 +85,7 @@ If(sUseBedrock @= 'Y');
       'pRunId', sSourceDimension | '->' | sTargetDimension
     );
     # TODO: Confirm the exact }bedrock.dim.attr.create parameter contract.
-    # TODO: Confirm how attribute type, alias behavior, and existing-definition handling
-    # should be derived from }ElementAttributes_<Dimension> in the target IMF environment.
+    # Until the contract is confirmed, native IMF attribute creation remains the authoritative baseline.
   Else;
     ExecuteProcess(
       'IMF.P.Log.Event',
@@ -101,10 +102,32 @@ If(sUseBedrock @= 'Y');
   EndIf;
 EndIf;
 
-# Placeholder for attribute-definition loop:
-# 1. enumerate attribute names from the source attribute dimension
-# 2. inspect each attribute type
-# 3. delegate supported creates to Bedrock or fall back to native IMF logic
+nAttributeIndex = 1;
+nAttributeCount = DIMSIZ(sSourceAttrDimension);
+While(nAttributeIndex <= nAttributeCount);
+  sAttribute = DIMNM(sSourceAttrDimension, nAttributeIndex);
+  sAttributeType = Upper(Trim(AttrType(sSourceDimension, sAttribute)));
+  If(sAttributeType @= '');
+    sAttributeType = 'S';
+  EndIf;
+
+  If(DIMIX(sTargetAttrDimension, sAttribute) = 0);
+    AttrInsert(sTargetDimension, '', sAttribute, sAttributeType);
+    nCreatedCount = nCreatedCount + 1;
+  EndIf;
+
+  nAttributeIndex = nAttributeIndex + 1;
+End;
+
+ExecuteProcess(
+  'IMF.P.Log.Event',
+  'pPrefix', sPrefix,
+  'pSeverity', 'INFO',
+  'pObjectType', 'DIMENSION',
+  'pObjectName', sTargetDimension,
+  'pMessage', 'Attribute-definition copy created ' | STR(nCreatedCount, 12, 0) | ' attributes.',
+  'pRunId', sSourceDimension | '->' | sTargetDimension
+);
 #endregion
 
 #region metadata

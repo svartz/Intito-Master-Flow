@@ -24,6 +24,8 @@ EndIf;
 
 sSourceDimension = Trim(pSourceDimension);
 sTargetDimension = Trim(pTargetDimension);
+nCopiedCount = 0;
+nSkippedElementCount = 0;
 
 If(sSourceDimension @= '');
   ProcessBreak;
@@ -40,6 +42,8 @@ EndIf;
 
 sSourceAttrCube = '}ElementAttributes_' | sSourceDimension;
 sTargetAttrCube = '}ElementAttributes_' | sTargetDimension;
+sSourceAttrDimension = '}ElementAttributes_' | sSourceDimension;
+sTargetAttrDimension = '}ElementAttributes_' | sTargetDimension;
 
 If(CubeExists(sSourceAttrCube) = 0);
   ProcessBreak;
@@ -47,11 +51,48 @@ EndIf;
 If(CubeExists(sTargetAttrCube) = 0);
   ProcessBreak;
 EndIf;
+If(DimensionExists(sSourceAttrDimension) = 0);
+  ProcessBreak;
+EndIf;
 
-# Placeholder for attribute-value loop:
-# 1. iterate source elements
-# 2. iterate source attributes
-# 3. copy string or numeric value to the target intersection
+nElementIndex = 1;
+nElementCount = DIMSIZ(sSourceDimension);
+nAttributeCount = DIMSIZ(sSourceAttrDimension);
+
+While(nElementIndex <= nElementCount);
+  sElement = DIMNM(sSourceDimension, nElementIndex);
+  If(DIMIX(sTargetDimension, sElement) > 0);
+    nAttributeIndex = 1;
+    While(nAttributeIndex <= nAttributeCount);
+      sAttribute = DIMNM(sSourceAttrDimension, nAttributeIndex);
+      If(DIMIX(sTargetAttrDimension, sAttribute) > 0);
+        sAttributeType = Upper(Trim(AttrType(sSourceDimension, sAttribute)));
+        If(sAttributeType @= 'N');
+          nAttributeValue = AttrN(sSourceDimension, sElement, sAttribute);
+          AttrPutN(nAttributeValue, sTargetDimension, sElement, sAttribute);
+        Else;
+          sAttributeValue = AttrS(sSourceDimension, sElement, sAttribute);
+          AttrPutS(sAttributeValue, sTargetDimension, sElement, sAttribute);
+        EndIf;
+        nCopiedCount = nCopiedCount + 1;
+      EndIf;
+      nAttributeIndex = nAttributeIndex + 1;
+    End;
+  Else;
+    nSkippedElementCount = nSkippedElementCount + 1;
+  EndIf;
+  nElementIndex = nElementIndex + 1;
+End;
+
+ExecuteProcess(
+  sPrefix | '.P.Log.Event',
+  'pPrefix', sPrefix,
+  'pSeverity', 'INFO',
+  'pObjectType', 'DIMENSION',
+  'pObjectName', sTargetDimension,
+  'pMessage', 'Attribute-value copy wrote ' | STR(nCopiedCount, 12, 0) | ' values and skipped ' | STR(nSkippedElementCount, 12, 0) | ' missing target elements.',
+  'pRunId', sSourceDimension | '->' | sTargetDimension
+);
 #endregion
 
 #region metadata
