@@ -23,8 +23,46 @@ sEnvironment = Upper(Trim(pEnvironment));
 sOutputFile = Trim(pOutputFile);
 If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
 ExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_DIMENSION_SECURITY', 'pObjectType', 'DIMENSION', 'pObjectName', 'IMF_MODEL', 'pStatus', 'INFO', 'pMessage', 'Validating dimension security.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
-# TODO: Read effective access from }DimensionSecurity and compare against the documented IMF dimension matrix.
-# TODO: Write any mismatches to the shared security matrix export.
+If(sOutputFile @= ''); sOutputFile = 'docs/security/IMF_Security_Matrix.csv'; EndIf;
+ASCIIOutput(sOutputFile, 'ObjectType', 'ObjectName', 'Group', 'ExpectedAccess', 'ActualAccess', 'Status', 'Comment');
+If(CubeExists('}DimensionSecurity') = 0); ProcessBreak; EndIf;
+sDimensionSecurityDim1 = TABDIM('}DimensionSecurity', 1);
+
+If(sDimensionSecurityDim1 @= '}Groups');
+  sActualAccess = CellGetS('}DimensionSecurity', 'IMF_Viewer', 'IMF.D.Run');
+Else;
+  sActualAccess = CellGetS('}DimensionSecurity', 'IMF.D.Run', 'IMF_Viewer');
+EndIf;
+If(Upper(Trim(sActualAccess)) @= 'NONE');
+  sStatus = 'OK';
+Else;
+  sStatus = 'Mismatch';
+EndIf;
+ASCIIOutput(sOutputFile, 'DIMENSION', 'IMF.D.Run', 'IMF_Viewer', 'NONE', sActualAccess, sStatus, 'Dimension masking hides operational dimensions.');
+
+If(sDimensionSecurityDim1 @= '}Groups');
+  sActualAccess = CellGetS('}DimensionSecurity', 'IMF_Viewer', 'IMF.D.ChangeType');
+Else;
+  sActualAccess = CellGetS('}DimensionSecurity', 'IMF.D.ChangeType', 'IMF_Viewer');
+EndIf;
+If(Upper(Trim(sActualAccess)) @= 'NONE');
+  sStatus = 'OK';
+Else;
+  sStatus = 'Mismatch';
+EndIf;
+ASCIIOutput(sOutputFile, 'DIMENSION', 'IMF.D.ChangeType', 'IMF_Viewer', 'NONE', sActualAccess, sStatus, 'Dimension masking hides operational dimensions.');
+
+If(sDimensionSecurityDim1 @= '}Groups');
+  sActualAccess = CellGetS('}DimensionSecurity', 'IMF_Viewer', 'IMF.D.ImpactType');
+Else;
+  sActualAccess = CellGetS('}DimensionSecurity', 'IMF.D.ImpactType', 'IMF_Viewer');
+EndIf;
+If(Upper(Trim(sActualAccess)) @= 'NONE');
+  sStatus = 'OK';
+Else;
+  sStatus = 'Mismatch';
+EndIf;
+ASCIIOutput(sOutputFile, 'DIMENSION', 'IMF.D.ImpactType', 'IMF_Viewer', 'NONE', sActualAccess, sStatus, 'Dimension masking hides operational dimensions.');
 #endregion
 
 #region metadata

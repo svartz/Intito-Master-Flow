@@ -22,9 +22,14 @@
 sEnvironment = Upper(Trim(pEnvironment));
 sLogOnly = Upper(Trim(pLogOnly));
 If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
+If(sLogOnly @= ''); sLogOnly = 'N'; EndIf;
 ExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'APPLY_MODEL_START', 'pObjectType', 'SECURITY_MODEL', 'pObjectName', 'IMF', 'pStatus', 'INFO', 'pMessage', 'Applying IMF security model.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
-ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pLogOnly', sLogOnly, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
-ExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pLogOnly', sLogOnly, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.Config', 'pGroupName', 'IMF_Admin', 'pAccess', 'WRITE', 'pLogOnly', sLogOnly, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.Version', 'pGroupName', 'IMF_Operator', 'pAccess', 'WRITE', 'pLogOnly', sLogOnly, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+ExecuteProcess('IMF.P.Security.SetCubeAccess', 'pEnvironment', sEnvironment, 'pCubeName', 'IMF.C.EventLog', 'pGroupName', 'IMF_Auditor', 'pAccess', 'READ', 'pLogOnly', sLogOnly, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+ExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pDimensionName', 'IMF.D.Run', 'pGroupName', 'IMF_Viewer', 'pAccess', 'NONE', 'pLogOnly', sLogOnly, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+ExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pDimensionName', 'IMF.D.ChangeType', 'pGroupName', 'IMF_Viewer', 'pAccess', 'NONE', 'pLogOnly', sLogOnly, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
+ExecuteProcess('IMF.P.Security.SetDimensionAccess', 'pEnvironment', sEnvironment, 'pDimensionName', 'IMF.D.ImpactType', 'pGroupName', 'IMF_Viewer', 'pAccess', 'NONE', 'pLogOnly', sLogOnly, 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
 ExecuteProcess('IMF.P.Security.ApplyDimensionMasking', 'pEnvironment', sEnvironment, 'pDimensionName', '', 'pRoleFilter', '', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
 ExecuteProcess('IMF.P.Security.ApplyVersionOwnershipSecurity', 'pEnvironment', sEnvironment, 'pVersionId', '', 'pOwner', '', 'pStatus', '', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
 ExecuteProcess('IMF.P.Security.ApplyElementSecurity', 'pEnvironment', sEnvironment, 'pDimensionName', '', 'pVersionId', '', 'pRoleFilter', '', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);

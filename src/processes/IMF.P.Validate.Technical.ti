@@ -27,13 +27,19 @@ EndIf;
 sDimensionCode = Trim(pDimensionCode);
 sVersionId = Trim(pVersionId);
 
+sDimDimension = sPrefix | '.D.Dimension';
 sDimVersion = sPrefix | '.D.Version';
+sDimValidationRecord = sPrefix | '.D.ValidationRecord';
 sCubeVersion = sPrefix | '.C.Version';
+sCubeValidation = sPrefix | '.C.Validation';
 
 If(sDimensionCode @= '');
   ProcessBreak;
 EndIf;
 If(sVersionId @= '');
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimDimension, sDimensionCode) = 0);
   ProcessBreak;
 EndIf;
 If(DimensionElementExists(sDimVersion, sVersionId) = 0);
@@ -42,21 +48,81 @@ EndIf;
 If(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);
   ProcessBreak;
 EndIf;
+If((DimensionExists(sDimValidationRecord) = 0) % (CubeExists(sCubeValidation) = 0));
+  ProcessBreak;
+EndIf;
+
+sWorkDimension = Trim(CellGetS(sCubeVersion, sVersionId, 'WorkDimension'));
+If(sWorkDimension @= '');
+  ProcessBreak;
+EndIf;
+If(DimensionExists(sWorkDimension) = 0);
+  ProcessBreak;
+EndIf;
+
+nValidationIndex = DIMSIZ(sDimValidationRecord);
+While(nValidationIndex >= 1);
+  sValidationRecord = DIMNM(sDimValidationRecord, nValidationIndex);
+  If((sValidationRecord @<> 'All Validation Records') & (sValidationRecord @<> '__Template.ValidationRecord'));
+    If((Trim(AttrS(sDimValidationRecord, sValidationRecord, 'VersionId')) @= sVersionId) & (Trim(AttrS(sDimValidationRecord, sValidationRecord, 'DimensionCode')) @= sDimensionCode) & (Trim(AttrS(sDimValidationRecord, sValidationRecord, 'ValidationType')) @= 'TECHNICAL'));
+      DimensionElementDelete(sDimValidationRecord, sValidationRecord);
+    EndIf;
+  EndIf;
+  nValidationIndex = nValidationIndex - 1;
+End;
 
 ExecuteProcess(sPrefix | '.P.Validate.Attributes',
   'pPrefix', sPrefix,
   'pDimensionCode', sDimensionCode,
   'pVersionId', sVersionId);
 
-# Placeholder for remaining technical checks:
-# 1. duplicate keys
-# 2. invalid hierarchies
-# 3. orphan elements
-# 4. alias collisions
+nElementCount = DIMSIZ(sWorkDimension);
+nHasBlocker = 0;
+nHasWarning = 0;
 
-AttrPutS('Validated', sDimVersion, sVersionId, 'Status');
-CellPutS('Validated', sCubeVersion, sVersionId, 'Status');
-CellPutS('Technical validation executed for work version.', sCubeVersion, sVersionId, 'Notes');
+nElementIndex = 1;
+While(nElementIndex <= nElementCount);
+  sElement = DIMNM(sWorkDimension, nElementIndex);
+  sElementType = ELTYPE(sWorkDimension, sElement);
+  nComponentCount = ELNCOMP(sWorkDimension, sElement);
+
+  If((sElementType @= 'C') & (nComponentCount = 0));
+    sRecordId = 'VAL|' | sVersionId | '|TECHNICAL|EMPTY_CONSOLIDATION|' | sElement;
+    If(DIMIX(sDimValidationRecord, sRecordId) = 0);
+      DimensionElementInsert(sDimValidationRecord, '', sRecordId, 'N');
+      DimensionElementComponentAdd(sDimValidationRecord, 'All Validation Records', sRecordId, 1);
+    EndIf;
+    AttrPutS(sVersionId, sDimValidationRecord, sRecordId, 'VersionId');
+    AttrPutS(sDimensionCode, sDimValidationRecord, sRecordId, 'DimensionCode');
+    AttrPutS('TECHNICAL', sDimValidationRecord, sRecordId, 'ValidationType');
+    CellPutS(sVersionId, sCubeValidation, sRecordId, 'VersionId');
+    CellPutS(sDimensionCode, sCubeValidation, sRecordId, 'DimensionCode');
+    CellPutS('TECHNICAL', sCubeValidation, sRecordId, 'ValidationType');
+    CellPutS('EMPTY_CONSOLIDATION', sCubeValidation, sRecordId, 'RuleCode');
+    CellPutS(sElement, sCubeValidation, sRecordId, 'ObjectName');
+    CellPutS('', sCubeValidation, sRecordId, 'AttributeName');
+    CellPutS('BLOCKER', sCubeValidation, sRecordId, 'Severity');
+    CellPutS('Consolidated element has no children.', sCubeValidation, sRecordId, 'Message');
+    CellPutS(TIMST(NOW, '\Y-\m-\d \h:\i:\s'), sCubeValidation, sRecordId, 'DetectedAt');
+    nHasBlocker = 1;
+  EndIf;
+
+  nElementIndex = nElementIndex + 1;
+End;
+
+If(nHasBlocker = 1);
+  AttrPutS('Blocked', sDimVersion, sVersionId, 'Status');
+  CellPutS('Blocked', sCubeVersion, sVersionId, 'Status');
+  CellPutS('Technical validation found blocker-level issues in the work version.', sCubeVersion, sVersionId, 'Notes');
+ElseIf(nHasWarning = 1);
+  AttrPutS('Validated', sDimVersion, sVersionId, 'Status');
+  CellPutS('Validated', sCubeVersion, sVersionId, 'Status');
+  CellPutS('Technical validation completed with warnings.', sCubeVersion, sVersionId, 'Notes');
+Else;
+  AttrPutS('Validated', sDimVersion, sVersionId, 'Status');
+  CellPutS('Validated', sCubeVersion, sVersionId, 'Status');
+  CellPutS('Technical validation executed without technical findings.', sCubeVersion, sVersionId, 'Notes');
+EndIf;
 #endregion
 
 #region metadata

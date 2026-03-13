@@ -23,8 +23,46 @@ sEnvironment = Upper(Trim(pEnvironment));
 sOutputFile = Trim(pOutputFile);
 If(sEnvironment @= ''); sEnvironment = 'DEV'; EndIf;
 ExecuteProcess('IMF.P.Security.LogSecurityEvent', 'pEnvironment', sEnvironment, 'pAction', 'VALIDATE_CUBE_SECURITY', 'pObjectType', 'CUBE', 'pObjectName', 'IMF_MODEL', 'pStatus', 'INFO', 'pMessage', 'Validating cube security.', 'pLogToCube', pLogToCube, 'pLogFile', pLogFile);
-# TODO: Read effective access from }CubeSecurity and compare against the documented IMF cube matrix.
-# TODO: Write any mismatches to the shared security matrix export.
+If(sOutputFile @= ''); sOutputFile = 'docs/security/IMF_Security_Matrix.csv'; EndIf;
+ASCIIOutput(sOutputFile, 'ObjectType', 'ObjectName', 'Group', 'ExpectedAccess', 'ActualAccess', 'Status', 'Comment');
+If(CubeExists('}CubeSecurity') = 0); ProcessBreak; EndIf;
+sCubeSecurityDim1 = TABDIM('}CubeSecurity', 1);
+
+If(sCubeSecurityDim1 @= '}Groups');
+  sActualAccess = CellGetS('}CubeSecurity', 'IMF_Admin', 'IMF.C.Config');
+Else;
+  sActualAccess = CellGetS('}CubeSecurity', 'IMF.C.Config', 'IMF_Admin');
+EndIf;
+If(Upper(Trim(sActualAccess)) @= 'WRITE');
+  sStatus = 'OK';
+Else;
+  sStatus = 'Mismatch';
+EndIf;
+ASCIIOutput(sOutputFile, 'CUBE', 'IMF.C.Config', 'IMF_Admin', 'WRITE', sActualAccess, sStatus, 'Platform configuration cube.');
+
+If(sCubeSecurityDim1 @= '}Groups');
+  sActualAccess = CellGetS('}CubeSecurity', 'IMF_Operator', 'IMF.C.Version');
+Else;
+  sActualAccess = CellGetS('}CubeSecurity', 'IMF.C.Version', 'IMF_Operator');
+EndIf;
+If(Upper(Trim(sActualAccess)) @= 'WRITE');
+  sStatus = 'OK';
+Else;
+  sStatus = 'Mismatch';
+EndIf;
+ASCIIOutput(sOutputFile, 'CUBE', 'IMF.C.Version', 'IMF_Operator', 'WRITE', sActualAccess, sStatus, 'Version operations remain operator-enabled.');
+
+If(sCubeSecurityDim1 @= '}Groups');
+  sActualAccess = CellGetS('}CubeSecurity', 'IMF_Auditor', 'IMF.C.EventLog');
+Else;
+  sActualAccess = CellGetS('}CubeSecurity', 'IMF.C.EventLog', 'IMF_Auditor');
+EndIf;
+If(Upper(Trim(sActualAccess)) @= 'READ');
+  sStatus = 'OK';
+Else;
+  sStatus = 'Mismatch';
+EndIf;
+ASCIIOutput(sOutputFile, 'CUBE', 'IMF.C.EventLog', 'IMF_Auditor', 'READ', sActualAccess, sStatus, 'Audit transparency.');
 #endregion
 
 #region metadata
