@@ -1,0 +1,148 @@
+# IMF.P.PAW.BuildSubsets
+# Purpose: Build the baseline public subsets required by the IMF PAW workbook runtime pack.
+# Sources:
+# - IMF control dimensions
+# Parameters:
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# Prolog:
+# - Recreate the baseline PAW subsets for managed dimensions, versions, validation, and impact.
+# Metadata:
+# - No metadata tab logic is required.
+# Data:
+# - No Data tab logic is required.
+# Epilog:
+# - Leave public subsets available for PAW workbook views.
+
+#region prolog
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sDimDimension = sPrefix | '.D.Dimension';
+sDimVersion = sPrefix | '.D.Version';
+sDimVersionMeasure = sPrefix | '.D.VersionMeasure';
+sDimValidationRecord = sPrefix | '.D.ValidationRecord';
+sDimValidationMeasure = sPrefix | '.D.ValidationMeasure';
+sDimImpactRecord = sPrefix | '.D.ImpactRecord';
+sDimImpactMeasure = sPrefix | '.D.ImpactMeasure';
+
+If(DimensionExists(sDimDimension) = 0); ProcessBreak; EndIf;
+If(DimensionExists(sDimVersion) = 0); ProcessBreak; EndIf;
+If(DimensionExists(sDimVersionMeasure) = 0); ProcessBreak; EndIf;
+If(DimensionExists(sDimValidationRecord) = 0); ProcessBreak; EndIf;
+If(DimensionExists(sDimValidationMeasure) = 0); ProcessBreak; EndIf;
+If(DimensionExists(sDimImpactRecord) = 0); ProcessBreak; EndIf;
+If(DimensionExists(sDimImpactMeasure) = 0); ProcessBreak; EndIf;
+
+sSubset = 'IMF.PAW.SS.ManagedDimensions.Active';
+If(SubsetExists(sDimDimension, sSubset) = 1);
+  SubsetDestroy(sDimDimension, sSubset);
+EndIf;
+SubsetCreate(sDimDimension, sSubset);
+nIndex = 1;
+nCount = DIMSIZ(sDimDimension);
+While(nIndex <= nCount);
+  sElement = DIMNM(sDimDimension, nIndex);
+  If((ElementType(sDimDimension, sDimDimension, sElement) @<> 'Consolidated') & (sElement @<> '__Template.ManagedDimension'));
+    SubsetElementInsert(sDimDimension, sSubset, sElement, 1);
+  EndIf;
+  nIndex = nIndex + 1;
+End;
+
+sSubset = 'IMF.PAW.SS.Version.Open';
+If(SubsetExists(sDimVersion, sSubset) = 1);
+  SubsetDestroy(sDimVersion, sSubset);
+EndIf;
+SubsetCreate(sDimVersion, sSubset);
+nIndex = 1;
+nCount = DIMSIZ(sDimVersion);
+While(nIndex <= nCount);
+  sElement = DIMNM(sDimVersion, nIndex);
+  If((ElementType(sDimVersion, sDimVersion, sElement) @<> 'Consolidated') & (sElement @<> '__Template.Version'));
+    SubsetElementInsert(sDimVersion, sSubset, sElement, 1);
+  EndIf;
+  nIndex = nIndex + 1;
+End;
+
+sSubset = 'IMF.PAW.SS.VersionMeasure.Operational';
+If(SubsetExists(sDimVersionMeasure, sSubset) = 1);
+  SubsetDestroy(sDimVersionMeasure, sSubset);
+EndIf;
+SubsetCreate(sDimVersionMeasure, sSubset);
+SubsetElementInsert(sDimVersionMeasure, sSubset, 'DimensionCode', 1);
+SubsetElementInsert(sDimVersionMeasure, sSubset, 'Status', 1);
+SubsetElementInsert(sDimVersionMeasure, sSubset, 'WorkDimension', 1);
+SubsetElementInsert(sDimVersionMeasure, sSubset, 'IsLocked', 1);
+SubsetElementInsert(sDimVersionMeasure, sSubset, 'LockedBy', 1);
+SubsetElementInsert(sDimVersionMeasure, sSubset, 'ApprovalState', 1);
+SubsetElementInsert(sDimVersionMeasure, sSubset, 'CreatedAt', 1);
+SubsetElementInsert(sDimVersionMeasure, sSubset, 'CreatedBy', 1);
+SubsetElementInsert(sDimVersionMeasure, sSubset, 'Notes', 1);
+
+sSubset = 'IMF.PAW.SS.ValidationRecord.All';
+If(SubsetExists(sDimValidationRecord, sSubset) = 1);
+  SubsetDestroy(sDimValidationRecord, sSubset);
+EndIf;
+SubsetCreate(sDimValidationRecord, sSubset);
+nIndex = 1;
+nCount = DIMSIZ(sDimValidationRecord);
+While(nIndex <= nCount);
+  sElement = DIMNM(sDimValidationRecord, nIndex);
+  If((ElementType(sDimValidationRecord, sDimValidationRecord, sElement) @<> 'Consolidated') & (sElement @<> '__Template.ValidationRecord'));
+    SubsetElementInsert(sDimValidationRecord, sSubset, sElement, 1);
+  EndIf;
+  nIndex = nIndex + 1;
+End;
+
+sSubset = 'IMF.PAW.SS.ValidationMeasure.OpenVersionMeasures';
+If(SubsetExists(sDimValidationMeasure, sSubset) = 1);
+  SubsetDestroy(sDimValidationMeasure, sSubset);
+EndIf;
+SubsetCreate(sDimValidationMeasure, sSubset);
+SubsetElementInsert(sDimValidationMeasure, sSubset, 'VersionId', 1);
+SubsetElementInsert(sDimValidationMeasure, sSubset, 'ValidationType', 1);
+SubsetElementInsert(sDimValidationMeasure, sSubset, 'RuleCode', 1);
+SubsetElementInsert(sDimValidationMeasure, sSubset, 'ObjectName', 1);
+SubsetElementInsert(sDimValidationMeasure, sSubset, 'AttributeName', 1);
+SubsetElementInsert(sDimValidationMeasure, sSubset, 'Severity', 1);
+SubsetElementInsert(sDimValidationMeasure, sSubset, 'Message', 1);
+SubsetElementInsert(sDimValidationMeasure, sSubset, 'DetectedAt', 1);
+
+sSubset = 'IMF.PAW.SS.ImpactRecord.All';
+If(SubsetExists(sDimImpactRecord, sSubset) = 1);
+  SubsetDestroy(sDimImpactRecord, sSubset);
+EndIf;
+SubsetCreate(sDimImpactRecord, sSubset);
+nIndex = 1;
+nCount = DIMSIZ(sDimImpactRecord);
+While(nIndex <= nCount);
+  sElement = DIMNM(sDimImpactRecord, nIndex);
+  If((ElementType(sDimImpactRecord, sDimImpactRecord, sElement) @<> 'Consolidated') & (sElement @<> '__Template.ImpactRecord'));
+    SubsetElementInsert(sDimImpactRecord, sSubset, sElement, 1);
+  EndIf;
+  nIndex = nIndex + 1;
+End;
+
+sSubset = 'IMF.PAW.SS.ImpactMeasure.SummaryMeasures';
+If(SubsetExists(sDimImpactMeasure, sSubset) = 1);
+  SubsetDestroy(sDimImpactMeasure, sSubset);
+EndIf;
+SubsetCreate(sDimImpactMeasure, sSubset);
+SubsetElementInsert(sDimImpactMeasure, sSubset, 'VersionId', 1);
+SubsetElementInsert(sDimImpactMeasure, sSubset, 'ImpactDomain', 1);
+SubsetElementInsert(sDimImpactMeasure, sSubset, 'ObjectType', 1);
+SubsetElementInsert(sDimImpactMeasure, sSubset, 'ObjectName', 1);
+SubsetElementInsert(sDimImpactMeasure, sSubset, 'Severity', 1);
+SubsetElementInsert(sDimImpactMeasure, sSubset, 'Message', 1);
+SubsetElementInsert(sDimImpactMeasure, sSubset, 'DetectedAt', 1);
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

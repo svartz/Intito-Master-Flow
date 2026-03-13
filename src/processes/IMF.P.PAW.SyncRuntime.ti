@@ -1,0 +1,33 @@
+# IMF.P.PAW.SyncRuntime
+# Purpose: Build the baseline PAW runtime assets required by the IMF workbook pack.
+# Sources:
+# - IMF PAW subset and view build processes
+# Parameters:
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# Prolog:
+# - Run the subset and view builders in sequence.
+# Metadata:
+# - No metadata tab logic is required.
+# Data:
+# - No Data tab logic is required.
+# Epilog:
+# - Leave runtime-ready public subsets and views in TM1.
+
+#region prolog
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+ExecuteProcess(sPrefix | '.P.PAW.BuildSubsets', 'pPrefix', sPrefix);
+ExecuteProcess(sPrefix | '.P.PAW.BuildViews', 'pPrefix', sPrefix);
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

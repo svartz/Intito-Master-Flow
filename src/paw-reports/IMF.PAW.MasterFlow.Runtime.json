@@ -1,0 +1,21 @@
+{
+  "Workbook": "IMF.PAW.MasterFlow",
+  "Type": "PAWRuntimeSpec",
+  "Purpose": "Runtime contract for TM1 public subsets and views that back the first IMF PAW workbook tabs.",
+  "BuilderProcess": "IMF.P.PAW.SyncRuntime",
+  "PublicSubsets": [
+    "IMF.PAW.SS.ManagedDimensions.Active",
+    "IMF.PAW.SS.Version.Open",
+    "IMF.PAW.SS.VersionMeasure.Operational",
+    "IMF.PAW.SS.ValidationRecord.All",
+    "IMF.PAW.SS.ValidationMeasure.OpenVersionMeasures",
+    "IMF.PAW.SS.ImpactRecord.All",
+    "IMF.PAW.SS.ImpactMeasure.SummaryMeasures"
+  ],
+  "PublicViews": [
+    "IMF.PAW.V.Overview",
+    "IMF.PAW.V.Versions",
+    "IMF.PAW.V.Validation",
+    "IMF.PAW.V.Impact"
+  ]
+}

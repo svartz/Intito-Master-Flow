@@ -1,0 +1,71 @@
+# IMF.P.PAW.BuildViews
+# Purpose: Build the baseline public cube views used by the IMF PAW workbook runtime pack.
+# Sources:
+# - IMF control cubes
+# - IMF PAW public subsets
+# Parameters:
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# Prolog:
+# - Recreate the baseline PAW public views and assign the expected subsets.
+# Metadata:
+# - No metadata tab logic is required.
+# Data:
+# - No Data tab logic is required.
+# Epilog:
+# - Leave public views available for PAW workbook binding.
+
+#region prolog
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sCubeVersion = sPrefix | '.C.Version';
+sCubeValidation = sPrefix | '.C.Validation';
+sCubeImpact = sPrefix | '.C.Impact';
+
+If(CubeExists(sCubeVersion) = 0); ProcessBreak; EndIf;
+If(CubeExists(sCubeValidation) = 0); ProcessBreak; EndIf;
+If(CubeExists(sCubeImpact) = 0); ProcessBreak; EndIf;
+
+sView = 'IMF.PAW.V.Overview';
+If(ViewExists(sCubeVersion, sView) = 1);
+  ViewDestroy(sCubeVersion, sView);
+EndIf;
+ViewCreate(sCubeVersion, sView);
+ViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.Version', 'IMF.PAW.SS.Version.Open');
+ViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.VersionMeasure', 'IMF.PAW.SS.VersionMeasure.Operational');
+
+sView = 'IMF.PAW.V.Versions';
+If(ViewExists(sCubeVersion, sView) = 1);
+  ViewDestroy(sCubeVersion, sView);
+EndIf;
+ViewCreate(sCubeVersion, sView);
+ViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.Version', 'IMF.PAW.SS.Version.Open');
+ViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.VersionMeasure', 'IMF.PAW.SS.VersionMeasure.Operational');
+
+sView = 'IMF.PAW.V.Validation';
+If(ViewExists(sCubeValidation, sView) = 1);
+  ViewDestroy(sCubeValidation, sView);
+EndIf;
+ViewCreate(sCubeValidation, sView);
+ViewSubsetAssign(sCubeValidation, sView, sPrefix | '.D.ValidationRecord', 'IMF.PAW.SS.ValidationRecord.All');
+ViewSubsetAssign(sCubeValidation, sView, sPrefix | '.D.ValidationMeasure', 'IMF.PAW.SS.ValidationMeasure.OpenVersionMeasures');
+
+sView = 'IMF.PAW.V.Impact';
+If(ViewExists(sCubeImpact, sView) = 1);
+  ViewDestroy(sCubeImpact, sView);
+EndIf;
+ViewCreate(sCubeImpact, sView);
+ViewSubsetAssign(sCubeImpact, sView, sPrefix | '.D.ImpactRecord', 'IMF.PAW.SS.ImpactRecord.All');
+ViewSubsetAssign(sCubeImpact, sView, sPrefix | '.D.ImpactMeasure', 'IMF.PAW.SS.ImpactMeasure.SummaryMeasures');
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

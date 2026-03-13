@@ -1,0 +1,25 @@
+{
+  "Name": "IMF.P.PAW.SyncRuntime",
+  "Purpose": "Build the baseline PAW runtime assets required by the IMF workbook pack.",
+  "Code@Code.link": "IMF.P.PAW.SyncRuntime.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nExecuteProcess(sPrefix | '.P.PAW.BuildSubsets', 'pPrefix', sPrefix);\nExecuteProcess(sPrefix | '.P.PAW.BuildViews', 'pPrefix', sPrefix);",
+  "Metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "Runtime"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
+}

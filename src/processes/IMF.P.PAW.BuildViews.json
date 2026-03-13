@@ -1,0 +1,25 @@
+{
+  "Name": "IMF.P.PAW.BuildViews",
+  "Purpose": "Build the baseline public cube views used by the IMF PAW workbook runtime pack.",
+  "Code@Code.link": "IMF.P.PAW.BuildViews.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsCubeVersion = sPrefix | '.C.Version';\nsCubeValidation = sPrefix | '.C.Validation';\nsCubeImpact = sPrefix | '.C.Impact';\n\nIf(CubeExists(sCubeVersion) = 0); ProcessBreak; EndIf;\nIf(CubeExists(sCubeValidation) = 0); ProcessBreak; EndIf;\nIf(CubeExists(sCubeImpact) = 0); ProcessBreak; EndIf;\n\nsView = 'IMF.PAW.V.Overview';\nIf(ViewExists(sCubeVersion, sView) = 1);\n  ViewDestroy(sCubeVersion, sView);\nEndIf;\nViewCreate(sCubeVersion, sView);\nViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.Version', 'IMF.PAW.SS.Version.Open');\nViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.VersionMeasure', 'IMF.PAW.SS.VersionMeasure.Operational');\n\nsView = 'IMF.PAW.V.Versions';\nIf(ViewExists(sCubeVersion, sView) = 1);\n  ViewDestroy(sCubeVersion, sView);\nEndIf;\nViewCreate(sCubeVersion, sView);\nViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.Version', 'IMF.PAW.SS.Version.Open');\nViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.VersionMeasure', 'IMF.PAW.SS.VersionMeasure.Operational');\n\nsView = 'IMF.PAW.V.Validation';\nIf(ViewExists(sCubeValidation, sView) = 1);\n  ViewDestroy(sCubeValidation, sView);\nEndIf;\nViewCreate(sCubeValidation, sView);\nViewSubsetAssign(sCubeValidation, sView, sPrefix | '.D.ValidationRecord', 'IMF.PAW.SS.ValidationRecord.All');\nViewSubsetAssign(sCubeValidation, sView, sPrefix | '.D.ValidationMeasure', 'IMF.PAW.SS.ValidationMeasure.OpenVersionMeasures');\n\nsView = 'IMF.PAW.V.Impact';\nIf(ViewExists(sCubeImpact, sView) = 1);\n  ViewDestroy(sCubeImpact, sView);\nEndIf;\nViewCreate(sCubeImpact, sView);\nViewSubsetAssign(sCubeImpact, sView, sPrefix | '.D.ImpactRecord', 'IMF.PAW.SS.ImpactRecord.All');\nViewSubsetAssign(sCubeImpact, sView, sPrefix | '.D.ImpactMeasure', 'IMF.PAW.SS.ImpactMeasure.SummaryMeasures');",
+  "Metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "Runtime"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
+}
