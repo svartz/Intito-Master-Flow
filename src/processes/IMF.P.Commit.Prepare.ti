@@ -18,11 +18,60 @@
 #region prolog
 sPrefix = Trim(pPrefix); If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;
 sDimensionCode = Trim(pDimensionCode); sVersionId = Trim(pVersionId);
+sDimVersion = sPrefix | '.D.Version';
+sCubeVersion = sPrefix | '.C.Version';
+sDimValidationRecord = sPrefix | '.D.ValidationRecord';
+sCubeValidation = sPrefix | '.C.Validation';
+sDimImpactRecord = sPrefix | '.D.ImpactRecord';
+sCubeImpact = sPrefix | '.C.Impact';
 If((sDimensionCode @= '') % (sVersionId @= '')); ProcessBreak; EndIf;
+If(DimensionElementExists(sDimVersion, sVersionId) = 0); ProcessBreak; EndIf;
+If(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode); ProcessBreak; EndIf;
+If(Upper(Trim(CellGetS(sCubeVersion, sVersionId, 'IsLocked'))) @= 'Y'); ProcessBreak; EndIf;
 ExecuteProcess(sPrefix | '.P.Validate.Technical', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
 ExecuteProcess(sPrefix | '.P.Validate.Business', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
 ExecuteProcess(sPrefix | '.P.Impact.RunAll', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
-# TODO: Abort on blocker-level impact results once blocker severity is materialized in IMF.C.Impact.
+nValidationIndex = 1;
+nValidationCount = DIMSIZ(sDimValidationRecord);
+nHasBlocker = 0;
+While(nValidationIndex <= nValidationCount);
+  sValidationRecord = DIMNM(sDimValidationRecord, nValidationIndex);
+  If((sValidationRecord @<> 'All Validation Records') & (sValidationRecord @<> '__Template.ValidationRecord'));
+    If((Trim(AttrS(sDimValidationRecord, sValidationRecord, 'VersionId')) @= sVersionId) & (Trim(AttrS(sDimValidationRecord, sValidationRecord, 'DimensionCode')) @= sDimensionCode));
+      sSeverity = Upper(Trim(CellGetS(sCubeValidation, sValidationRecord, 'Severity')));
+      If((sSeverity @= 'BLOCKER') % (sSeverity @= 'ERROR') % (sSeverity @= 'MISSING_BLOCKING'));
+        nHasBlocker = 1;
+      EndIf;
+    EndIf;
+  EndIf;
+  nValidationIndex = nValidationIndex + 1;
+End;
+
+nImpactIndex = 1;
+nImpactCount = DIMSIZ(sDimImpactRecord);
+While((nImpactIndex <= nImpactCount) & (nHasBlocker = 0));
+  sImpactRecord = DIMNM(sDimImpactRecord, nImpactIndex);
+  If((sImpactRecord @<> 'All Impact Records') & (sImpactRecord @<> '__Template.ImpactRecord'));
+    If((Trim(AttrS(sDimImpactRecord, sImpactRecord, 'VersionId')) @= sVersionId) & (Trim(AttrS(sDimImpactRecord, sImpactRecord, 'DimensionCode')) @= sDimensionCode));
+      sSeverity = Upper(Trim(CellGetS(sCubeImpact, sImpactRecord, 'Severity')));
+      If((sSeverity @= 'BLOCKER') % (sSeverity @= 'ERROR'));
+        nHasBlocker = 1;
+      EndIf;
+    EndIf;
+  EndIf;
+  nImpactIndex = nImpactIndex + 1;
+End;
+
+If(nHasBlocker = 1);
+  CellPutS('Blocked', sCubeVersion, sVersionId, 'Status');
+  AttrPutS('Blocked', sDimVersion, sVersionId, 'Status');
+  CellPutS('Publish preparation detected blocker-level validation or impact findings.', sCubeVersion, sVersionId, 'Notes');
+  ProcessBreak;
+EndIf;
+
+CellPutS('Approved', sCubeVersion, sVersionId, 'Status');
+AttrPutS('Approved', sDimVersion, sVersionId, 'Status');
+CellPutS('Publish preparation completed without blocker-level findings.', sCubeVersion, sVersionId, 'Notes');
 #endregion
 
 #region metadata

@@ -27,13 +27,20 @@ EndIf;
 sDimensionCode = Trim(pDimensionCode);
 sVersionId = Trim(pVersionId);
 
+sDimDimension = sPrefix | '.D.Dimension';
 sDimVersion = sPrefix | '.D.Version';
 sCubeVersion = sPrefix | '.C.Version';
+sCubeConfig = sPrefix | '.C.Config';
+sDimValidationRecord = sPrefix | '.D.ValidationRecord';
+sCubeValidation = sPrefix | '.C.Validation';
 
 If(sDimensionCode @= '');
   ProcessBreak;
 EndIf;
 If(sVersionId @= '');
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimDimension, sDimensionCode) = 0);
   ProcessBreak;
 EndIf;
 If(DimensionElementExists(sDimVersion, sVersionId) = 0);
@@ -42,11 +49,67 @@ EndIf;
 If(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);
   ProcessBreak;
 EndIf;
+If((DimensionExists(sDimValidationRecord) = 0) % (CubeExists(sCubeValidation) = 0));
+  ProcessBreak;
+EndIf;
 
-# Placeholder for business validation checks:
-# 1. required business rollups
-# 2. required publish approvals
-# 3. business-owned attribute completeness
+sRequireApproval = Upper(Trim(CellGetS(sCubeConfig, sDimensionCode, 'RequireApproval')));
+If(sRequireApproval @= '');
+  sRequireApproval = Upper(Trim(CellGetS(sCubeConfig, '__Template.ManagedDimension', 'RequireApproval')));
+EndIf;
+sApprovalState = Upper(Trim(CellGetS(sCubeVersion, sVersionId, 'ApprovalState')));
+If(sApprovalState @= '');
+  sApprovalState = 'PENDING';
+EndIf;
+
+nValidationIndex = DIMSIZ(sDimValidationRecord);
+While(nValidationIndex >= 1);
+  sValidationRecord = DIMNM(sDimValidationRecord, nValidationIndex);
+  If((sValidationRecord @<> 'All Validation Records') & (sValidationRecord @<> '__Template.ValidationRecord'));
+    If((Trim(AttrS(sDimValidationRecord, sValidationRecord, 'VersionId')) @= sVersionId) & (Trim(AttrS(sDimValidationRecord, sValidationRecord, 'DimensionCode')) @= sDimensionCode) & (Trim(AttrS(sDimValidationRecord, sValidationRecord, 'ValidationType')) @= 'BUSINESS'));
+      DimensionElementDelete(sDimValidationRecord, sValidationRecord);
+    EndIf;
+  EndIf;
+  nValidationIndex = nValidationIndex - 1;
+End;
+
+If((sRequireApproval @= 'Y') & (sApprovalState @<> 'APPROVED'));
+  sRecordId = 'VAL|' | sVersionId | '|BUSINESS|APPROVAL_REQUIRED';
+  If(DIMIX(sDimValidationRecord, sRecordId) = 0);
+    DimensionElementInsert(sDimValidationRecord, '', sRecordId, 'N');
+    DimensionElementComponentAdd(sDimValidationRecord, 'All Validation Records', sRecordId, 1);
+  EndIf;
+  AttrPutS(sVersionId, sDimValidationRecord, sRecordId, 'VersionId');
+  AttrPutS(sDimensionCode, sDimValidationRecord, sRecordId, 'DimensionCode');
+  AttrPutS('BUSINESS', sDimValidationRecord, sRecordId, 'ValidationType');
+  CellPutS(sVersionId, sCubeValidation, sRecordId, 'VersionId');
+  CellPutS(sDimensionCode, sCubeValidation, sRecordId, 'DimensionCode');
+  CellPutS('BUSINESS', sCubeValidation, sRecordId, 'ValidationType');
+  CellPutS('APPROVAL_REQUIRED', sCubeValidation, sRecordId, 'RuleCode');
+  CellPutS(sVersionId, sCubeValidation, sRecordId, 'ObjectName');
+  CellPutS('', sCubeValidation, sRecordId, 'AttributeName');
+  CellPutS('BLOCKER', sCubeValidation, sRecordId, 'Severity');
+  CellPutS('Publish requires an approved version.', sCubeValidation, sRecordId, 'Message');
+  CellPutS(TIMST(NOW, '\Y-\m-\d \h:\i:\s'), sCubeValidation, sRecordId, 'DetectedAt');
+Else;
+  sRecordId = 'VAL|' | sVersionId | '|BUSINESS|APPROVAL_OK';
+  If(DIMIX(sDimValidationRecord, sRecordId) = 0);
+    DimensionElementInsert(sDimValidationRecord, '', sRecordId, 'N');
+    DimensionElementComponentAdd(sDimValidationRecord, 'All Validation Records', sRecordId, 1);
+  EndIf;
+  AttrPutS(sVersionId, sDimValidationRecord, sRecordId, 'VersionId');
+  AttrPutS(sDimensionCode, sDimValidationRecord, sRecordId, 'DimensionCode');
+  AttrPutS('BUSINESS', sDimValidationRecord, sRecordId, 'ValidationType');
+  CellPutS(sVersionId, sCubeValidation, sRecordId, 'VersionId');
+  CellPutS(sDimensionCode, sCubeValidation, sRecordId, 'DimensionCode');
+  CellPutS('BUSINESS', sCubeValidation, sRecordId, 'ValidationType');
+  CellPutS('APPROVAL_REQUIRED', sCubeValidation, sRecordId, 'RuleCode');
+  CellPutS(sVersionId, sCubeValidation, sRecordId, 'ObjectName');
+  CellPutS('', sCubeValidation, sRecordId, 'AttributeName');
+  CellPutS('INFO', sCubeValidation, sRecordId, 'Severity');
+  CellPutS('Business approval requirement is satisfied for publish.', sCubeValidation, sRecordId, 'Message');
+  CellPutS(TIMST(NOW, '\Y-\m-\d \h:\i:\s'), sCubeValidation, sRecordId, 'DetectedAt');
+EndIf;
 
 CellPutS('Business validation executed for work version.', sCubeVersion, sVersionId, 'Notes');
 #endregion

@@ -28,7 +28,11 @@ sDimensionCode = Trim(pDimensionCode);
 sVersionId = Trim(pVersionId);
 
 sDimVersion = sPrefix | '.D.Version';
+sDimDiffRecord = sPrefix | '.D.DiffRecord';
+sDimImpactRecord = sPrefix | '.D.ImpactRecord';
 sCubeVersion = sPrefix | '.C.Version';
+sCubeDiff = sPrefix | '.C.Diff';
+sCubeImpact = sPrefix | '.C.Impact';
 
 If(sDimensionCode @= '');
   ProcessBreak;
@@ -42,6 +46,12 @@ EndIf;
 If(CellGetS(sCubeVersion, sVersionId, 'DimensionCode') @<> sDimensionCode);
   ProcessBreak;
 EndIf;
+If((DimensionExists(sDimDiffRecord) = 0) % (DimensionExists(sDimImpactRecord) = 0));
+  ProcessBreak;
+EndIf;
+If((CubeExists(sCubeDiff) = 0) % (CubeExists(sCubeImpact) = 0));
+  ProcessBreak;
+EndIf;
 
 ExecuteProcess(sPrefix | '.P.Impact.Cubes', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
 ExecuteProcess(sPrefix | '.P.Impact.Views', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
@@ -49,6 +59,61 @@ ExecuteProcess(sPrefix | '.P.Impact.Subsets', 'pPrefix', sPrefix, 'pDimensionCod
 ExecuteProcess(sPrefix | '.P.Impact.Processes', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
 ExecuteProcess(sPrefix | '.P.Impact.Security', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
 ExecuteProcess(sPrefix | '.P.Impact.Integrations', 'pPrefix', sPrefix, 'pDimensionCode', sDimensionCode, 'pVersionId', sVersionId);
+
+nImpactIndex = DIMSIZ(sDimImpactRecord);
+While(nImpactIndex >= 1);
+  sImpactRecord = DIMNM(sDimImpactRecord, nImpactIndex);
+  If((sImpactRecord @<> 'All Impact Records') & (sImpactRecord @<> '__Template.ImpactRecord'));
+    If((Trim(AttrS(sDimImpactRecord, sImpactRecord, 'VersionId')) @= sVersionId) & (Trim(AttrS(sDimImpactRecord, sImpactRecord, 'DimensionCode')) @= sDimensionCode) & (Trim(AttrS(sDimImpactRecord, sImpactRecord, 'ImpactDomain')) @= 'SUMMARY'));
+      DimensionElementDelete(sDimImpactRecord, sImpactRecord);
+    EndIf;
+  EndIf;
+  nImpactIndex = nImpactIndex - 1;
+End;
+
+nDiffIndex = 1;
+nDiffCount = DIMSIZ(sDimDiffRecord);
+nHasBlocker = 0;
+nHasWarning = 0;
+While(nDiffIndex <= nDiffCount);
+  sDiffRecord = DIMNM(sDimDiffRecord, nDiffIndex);
+  If((sDiffRecord @<> 'All Diff Records') & (sDiffRecord @<> '__Template.DiffRecord'));
+    If((Trim(AttrS(sDimDiffRecord, sDiffRecord, 'VersionId')) @= sVersionId) & (Trim(AttrS(sDimDiffRecord, sDiffRecord, 'DimensionCode')) @= sDimensionCode));
+      sChangeType = Upper(Trim(CellGetS(sCubeDiff, sDiffRecord, 'ChangeType')));
+      If((sChangeType @= 'DELETE') % (sChangeType @= 'RELATION_DELETE') % (sChangeType @= 'ATTRIBUTE_DELETE'));
+        nHasBlocker = 1;
+      Else;
+        nHasWarning = 1;
+      EndIf;
+    EndIf;
+  EndIf;
+  nDiffIndex = nDiffIndex + 1;
+End;
+
+sImpactRecord = 'IMP|' | sVersionId | '|SUMMARY';
+If(DIMIX(sDimImpactRecord, sImpactRecord) = 0);
+  DimensionElementInsert(sDimImpactRecord, '', sImpactRecord, 'N');
+  DimensionElementComponentAdd(sDimImpactRecord, 'All Impact Records', sImpactRecord, 1);
+EndIf;
+AttrPutS(sVersionId, sDimImpactRecord, sImpactRecord, 'VersionId');
+AttrPutS(sDimensionCode, sDimImpactRecord, sImpactRecord, 'DimensionCode');
+AttrPutS('SUMMARY', sDimImpactRecord, sImpactRecord, 'ImpactDomain');
+CellPutS(sVersionId, sCubeImpact, sImpactRecord, 'VersionId');
+CellPutS(sDimensionCode, sCubeImpact, sImpactRecord, 'DimensionCode');
+CellPutS('SUMMARY', sCubeImpact, sImpactRecord, 'ImpactDomain');
+CellPutS('DIMENSION', sCubeImpact, sImpactRecord, 'ObjectType');
+CellPutS(sDimensionCode, sCubeImpact, sImpactRecord, 'ObjectName');
+If(nHasBlocker = 1);
+  CellPutS('BLOCKER', sCubeImpact, sImpactRecord, 'Severity');
+  CellPutS('Impact includes destructive changes that require explicit review before publish.', sCubeImpact, sImpactRecord, 'Message');
+ElseIf(nHasWarning = 1);
+  CellPutS('WARNING', sCubeImpact, sImpactRecord, 'Severity');
+  CellPutS('Impact includes non-destructive changes that should be reviewed before publish.', sCubeImpact, sImpactRecord, 'Message');
+Else;
+  CellPutS('INFO', sCubeImpact, sImpactRecord, 'Severity');
+  CellPutS('No structural impact differences were detected for this version.', sCubeImpact, sImpactRecord, 'Message');
+EndIf;
+CellPutS(TIMST(NOW, '\Y-\m-\d \h:\i:\s'), sCubeImpact, sImpactRecord, 'DetectedAt');
 
 AttrPutS('ImpactAnalyzed', sDimVersion, sVersionId, 'Status');
 CellPutS('ImpactAnalyzed', sCubeVersion, sVersionId, 'Status');
