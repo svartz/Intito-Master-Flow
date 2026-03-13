@@ -3,16 +3,15 @@
   "kind": "supporting-control-dimension",
   "purpose": "Configuration keys required to store project and per-dimension settings in IMF.C.Config.",
   "hierarchy": {
-    "root": "All Config Keys",
     "seedElements": [
-      { "name": "NamingPrefix", "type": "N", "parent": "All Config Keys", "weight": 1 },
-      { "name": "VersionDelimiter", "type": "N", "parent": "All Config Keys", "weight": 1 },
-      { "name": "ArchiveTimestampFormat", "type": "N", "parent": "All Config Keys", "weight": 1 },
-      { "name": "DefaultSourceType", "type": "N", "parent": "All Config Keys", "weight": 1 },
-      { "name": "RequireApproval", "type": "N", "parent": "All Config Keys", "weight": 1 },
-      { "name": "RetainArchives", "type": "N", "parent": "All Config Keys", "weight": 1 },
-      { "name": "ExportDefaultFormat", "type": "N", "parent": "All Config Keys", "weight": 1 },
-      { "name": "LogRetentionDays", "type": "N", "parent": "All Config Keys", "weight": 1 }
+      { "name": "NamingPrefix", "type": "S" },
+      { "name": "VersionDelimiter", "type": "S" },
+      { "name": "ArchiveTimestampFormat", "type": "S" },
+      { "name": "DefaultSourceType", "type": "S" },
+      { "name": "RequireApproval", "type": "S" },
+      { "name": "RetainArchives", "type": "S" },
+      { "name": "ExportDefaultFormat", "type": "S" },
+      { "name": "LogRetentionDays", "type": "S" }
     ]
   },
   "attributes": [

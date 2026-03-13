@@ -446,7 +446,7 @@ class TM1RestClient:
     def update_process(self, process_name: str, payload: dict[str, Any]) -> None:
         escaped = process_name.replace("'", "''")
         path = f"/Processes('{urllib.parse.quote(escaped, safe='')}')"
-        self.request("PATCH", path, payload=payload, expected_statuses=(204,))
+        self.request("PATCH", path, payload=payload, expected_statuses=(200, 204))
 
     def delete_process(self, process_name: str) -> None:
         escaped = process_name.replace("'", "''")

@@ -3,17 +3,16 @@
   "kind": "supporting-control-dimension",
   "purpose": "Measures stored for each technical or business validation result.",
   "hierarchy": {
-    "root": "All Validation Measures",
     "seedElements": [
-      { "name": "VersionId", "type": "N", "parent": "All Validation Measures", "weight": 1 },
-      { "name": "DimensionCode", "type": "N", "parent": "All Validation Measures", "weight": 1 },
-      { "name": "ValidationType", "type": "N", "parent": "All Validation Measures", "weight": 1 },
-      { "name": "RuleCode", "type": "N", "parent": "All Validation Measures", "weight": 1 },
-      { "name": "ObjectName", "type": "N", "parent": "All Validation Measures", "weight": 1 },
-      { "name": "AttributeName", "type": "N", "parent": "All Validation Measures", "weight": 1 },
-      { "name": "Severity", "type": "N", "parent": "All Validation Measures", "weight": 1 },
-      { "name": "Message", "type": "N", "parent": "All Validation Measures", "weight": 1 },
-      { "name": "DetectedAt", "type": "N", "parent": "All Validation Measures", "weight": 1 }
+      { "name": "VersionId", "type": "S" },
+      { "name": "DimensionCode", "type": "S" },
+      { "name": "ValidationType", "type": "S" },
+      { "name": "RuleCode", "type": "S" },
+      { "name": "ObjectName", "type": "S" },
+      { "name": "AttributeName", "type": "S" },
+      { "name": "Severity", "type": "S" },
+      { "name": "Message", "type": "S" },
+      { "name": "DetectedAt", "type": "S" }
     ]
   },
   "attributes": [

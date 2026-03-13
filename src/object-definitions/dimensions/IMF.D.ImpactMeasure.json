@@ -3,16 +3,15 @@
   "kind": "supporting-control-dimension",
   "purpose": "Measures stored for each impact analysis result.",
   "hierarchy": {
-    "root": "All Impact Measures",
     "seedElements": [
-      { "name": "VersionId", "type": "N", "parent": "All Impact Measures", "weight": 1 },
-      { "name": "DimensionCode", "type": "N", "parent": "All Impact Measures", "weight": 1 },
-      { "name": "ImpactDomain", "type": "N", "parent": "All Impact Measures", "weight": 1 },
-      { "name": "ObjectType", "type": "N", "parent": "All Impact Measures", "weight": 1 },
-      { "name": "ObjectName", "type": "N", "parent": "All Impact Measures", "weight": 1 },
-      { "name": "Severity", "type": "N", "parent": "All Impact Measures", "weight": 1 },
-      { "name": "Message", "type": "N", "parent": "All Impact Measures", "weight": 1 },
-      { "name": "DetectedAt", "type": "N", "parent": "All Impact Measures", "weight": 1 }
+      { "name": "VersionId", "type": "S" },
+      { "name": "DimensionCode", "type": "S" },
+      { "name": "ImpactDomain", "type": "S" },
+      { "name": "ObjectType", "type": "S" },
+      { "name": "ObjectName", "type": "S" },
+      { "name": "Severity", "type": "S" },
+      { "name": "Message", "type": "S" },
+      { "name": "DetectedAt", "type": "S" }
     ]
   },
   "attributes": [
