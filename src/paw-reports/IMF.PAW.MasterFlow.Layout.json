@@ -48,6 +48,24 @@
       ]
     },
     {
+      "TabId": "editing",
+      "Layout": "grid-with-side-panel",
+      "Widgets": [
+        {
+          "Id": "editing_grid",
+          "Type": "cube-view",
+          "View": "IMF.PAW.V.Editing",
+          "Position": "left"
+        },
+        {
+          "Id": "editing_help",
+          "Type": "text-panel",
+          "TextKey": "paw.help.editing",
+          "Position": "right"
+        }
+      ]
+    },
+    {
       "TabId": "validation",
       "Layout": "grid-with-side-panel",
       "Widgets": [

@@ -46,6 +46,14 @@ ViewCreate(sCubeVersion, sView);
 ViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.Version', 'IMF.PAW.SS.Version.Open');
 ViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.VersionMeasure', 'IMF.PAW.SS.VersionMeasure.Operational');
 
+sView = 'IMF.PAW.V.Editing';
+If(ViewExists(sCubeVersion, sView) = 1);
+  ViewDestroy(sCubeVersion, sView);
+EndIf;
+ViewCreate(sCubeVersion, sView);
+ViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.Version', 'IMF.PAW.SS.Version.Open');
+ViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.VersionMeasure', 'IMF.PAW.SS.VersionMeasure.Editing');
+
 sView = 'IMF.PAW.V.Validation';
 If(ViewExists(sCubeValidation, sView) = 1);
   ViewDestroy(sCubeValidation, sView);

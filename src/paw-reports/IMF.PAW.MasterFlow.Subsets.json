@@ -22,6 +22,12 @@
       "Purpose": "Version measures shown in overview and versions tabs."
     },
     {
+      "Name": "IMF.PAW.SS.VersionMeasure.Editing",
+      "Dimension": "IMF.D.VersionMeasure",
+      "Expression": "{[IMF.D.VersionMeasure].[DimensionCode],[IMF.D.VersionMeasure].[Status],[IMF.D.VersionMeasure].[WorkDimension],[IMF.D.VersionMeasure].[IsLocked],[IMF.D.VersionMeasure].[LockedBy],[IMF.D.VersionMeasure].[ApprovalState],[IMF.D.VersionMeasure].[Notes]}",
+      "Purpose": "Version measures shown in the editing tab."
+    },
+    {
       "Name": "IMF.PAW.SS.VersionMeasure.Publish",
       "Dimension": "IMF.D.VersionMeasure",
       "Expression": "{[IMF.D.VersionMeasure].[DimensionCode],[IMF.D.VersionMeasure].[Status],[IMF.D.VersionMeasure].[ApprovalState],[IMF.D.VersionMeasure].[WorkDimension],[IMF.D.VersionMeasure].[ArchiveDimension],[IMF.D.VersionMeasure].[PublishedAt],[IMF.D.VersionMeasure].[PublishedBy],[IMF.D.VersionMeasure].[Notes]}",
@@ -56,6 +62,12 @@
       "Dimension": "IMF.D.ConfigKey",
       "Expression": "{[IMF.D.ConfigKey].[NamingPrefix],[IMF.D.ConfigKey].[VersionDelimiter],[IMF.D.ConfigKey].[ArchiveTimestampFormat],[IMF.D.ConfigKey].[DefaultSourceType],[IMF.D.ConfigKey].[RequireApproval],[IMF.D.ConfigKey].[ExportDefaultFormat]}",
       "Purpose": "Configuration keys shown in the exchange tab."
+    },
+    {
+      "Name": "IMF.PAW.SS.TextKey.Editing",
+      "Dimension": "IMF.D.TextKey",
+      "Expression": "{[IMF.D.TextKey].[paw.tab.editing],[IMF.D.TextKey].[paw.help.editing]}",
+      "Purpose": "Editing-related text keys shown in the editing tab."
     }
   ]
 }

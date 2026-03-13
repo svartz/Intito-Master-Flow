@@ -43,8 +43,14 @@
       "Purpose": "Landing page for work-version editing with localized instructions and selected version metadata.",
       "Selectors": [
         "IMF.D.Version",
+        "IMF.D.VersionMeasure",
         "IMF.D.TextKey"
       ],
+      "DefaultSubsets": {
+        "IMF.D.Version": "IMF.PAW.SS.Version.Open",
+        "IMF.D.VersionMeasure": "IMF.PAW.SS.VersionMeasure.Editing",
+        "IMF.D.TextKey": "IMF.PAW.SS.TextKey.Editing"
+      },
       "LocalizedTextKeys": [
         "paw.tab.editing",
         "paw.help.editing"

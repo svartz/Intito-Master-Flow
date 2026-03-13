@@ -23,6 +23,7 @@ sDimDimension = sPrefix | '.D.Dimension';
 sDimVersion = sPrefix | '.D.Version';
 sDimVersionMeasure = sPrefix | '.D.VersionMeasure';
 sDimConfigKey = sPrefix | '.D.ConfigKey';
+sDimTextKey = sPrefix | '.D.TextKey';
 sDimValidationRecord = sPrefix | '.D.ValidationRecord';
 sDimValidationMeasure = sPrefix | '.D.ValidationMeasure';
 sDimImpactRecord = sPrefix | '.D.ImpactRecord';
@@ -32,6 +33,7 @@ If(DimensionExists(sDimDimension) = 0); ProcessBreak; EndIf;
 If(DimensionExists(sDimVersion) = 0); ProcessBreak; EndIf;
 If(DimensionExists(sDimVersionMeasure) = 0); ProcessBreak; EndIf;
 If(DimensionExists(sDimConfigKey) = 0); ProcessBreak; EndIf;
+If(DimensionExists(sDimTextKey) = 0); ProcessBreak; EndIf;
 If(DimensionExists(sDimValidationRecord) = 0); ProcessBreak; EndIf;
 If(DimensionExists(sDimValidationMeasure) = 0); ProcessBreak; EndIf;
 If(DimensionExists(sDimImpactRecord) = 0); ProcessBreak; EndIf;
@@ -83,6 +85,20 @@ SubsetElementInsert(sDimVersionMeasure, sSubset, 'LockedBy', 1);
 SubsetElementInsert(sDimVersionMeasure, sSubset, 'ApprovalState', 1);
 SubsetElementInsert(sDimVersionMeasure, sSubset, 'CreatedAt', 1);
 SubsetElementInsert(sDimVersionMeasure, sSubset, 'CreatedBy', 1);
+SubsetElementInsert(sDimVersionMeasure, sSubset, 'Notes', 1);
+
+sSubset = 'IMF.PAW.SS.VersionMeasure.Editing';
+If(SubsetExists(sDimVersionMeasure, sSubset) = 0);
+  SubsetCreate(sDimVersionMeasure, sSubset);
+Else;
+  SubsetDeleteAllElements(sDimVersionMeasure, sSubset);
+EndIf;
+SubsetElementInsert(sDimVersionMeasure, sSubset, 'DimensionCode', 1);
+SubsetElementInsert(sDimVersionMeasure, sSubset, 'Status', 1);
+SubsetElementInsert(sDimVersionMeasure, sSubset, 'WorkDimension', 1);
+SubsetElementInsert(sDimVersionMeasure, sSubset, 'IsLocked', 1);
+SubsetElementInsert(sDimVersionMeasure, sSubset, 'LockedBy', 1);
+SubsetElementInsert(sDimVersionMeasure, sSubset, 'ApprovalState', 1);
 SubsetElementInsert(sDimVersionMeasure, sSubset, 'Notes', 1);
 
 sSubset = 'IMF.PAW.SS.VersionMeasure.Publish';
@@ -198,6 +214,19 @@ SubsetElementInsert(sDimConfigKey, sSubset, 'ArchiveTimestampFormat', 1);
 SubsetElementInsert(sDimConfigKey, sSubset, 'DefaultSourceType', 1);
 SubsetElementInsert(sDimConfigKey, sSubset, 'RequireApproval', 1);
 SubsetElementInsert(sDimConfigKey, sSubset, 'ExportDefaultFormat', 1);
+
+sSubset = 'IMF.PAW.SS.TextKey.Editing';
+If(SubsetExists(sDimTextKey, sSubset) = 0);
+  SubsetCreate(sDimTextKey, sSubset);
+Else;
+  SubsetDeleteAllElements(sDimTextKey, sSubset);
+EndIf;
+If(DimensionElementExists(sDimTextKey, 'paw.tab.editing') = 1);
+  SubsetElementInsert(sDimTextKey, sSubset, 'paw.tab.editing', 1);
+EndIf;
+If(DimensionElementExists(sDimTextKey, 'paw.help.editing') = 1);
+  SubsetElementInsert(sDimTextKey, sSubset, 'paw.help.editing', 1);
+EndIf;
 #endregion
 
 #region metadata

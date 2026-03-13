@@ -39,6 +39,7 @@ The current runtime baseline now covers:
 
 - `Overview`
 - `Versions`
+- `Editing`
 - `Validation`
 - `Impact`
 - `Publish`
