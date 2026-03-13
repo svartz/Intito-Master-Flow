@@ -16,6 +16,30 @@
       "Purpose": "Leaf work versions for operational selection."
     },
     {
+      "Name": "IMF.PAW.SS.VersionMeasure.Operational",
+      "Dimension": "IMF.D.VersionMeasure",
+      "Expression": "{[IMF.D.VersionMeasure].[DimensionCode],[IMF.D.VersionMeasure].[Status],[IMF.D.VersionMeasure].[WorkDimension],[IMF.D.VersionMeasure].[IsLocked],[IMF.D.VersionMeasure].[LockedBy],[IMF.D.VersionMeasure].[ApprovalState],[IMF.D.VersionMeasure].[CreatedAt],[IMF.D.VersionMeasure].[CreatedBy],[IMF.D.VersionMeasure].[Notes]}",
+      "Purpose": "Version measures shown in overview and versions tabs."
+    },
+    {
+      "Name": "IMF.PAW.SS.VersionMeasure.Publish",
+      "Dimension": "IMF.D.VersionMeasure",
+      "Expression": "{[IMF.D.VersionMeasure].[DimensionCode],[IMF.D.VersionMeasure].[Status],[IMF.D.VersionMeasure].[ApprovalState],[IMF.D.VersionMeasure].[WorkDimension],[IMF.D.VersionMeasure].[ArchiveDimension],[IMF.D.VersionMeasure].[PublishedAt],[IMF.D.VersionMeasure].[PublishedBy],[IMF.D.VersionMeasure].[Notes]}",
+      "Purpose": "Version measures shown in the publish tab."
+    },
+    {
+      "Name": "IMF.PAW.SS.VersionMeasure.Archive",
+      "Dimension": "IMF.D.VersionMeasure",
+      "Expression": "{[IMF.D.VersionMeasure].[DimensionCode],[IMF.D.VersionMeasure].[ArchiveDimension],[IMF.D.VersionMeasure].[PublishedAt],[IMF.D.VersionMeasure].[PublishedBy],[IMF.D.VersionMeasure].[Notes]}",
+      "Purpose": "Version measures shown in the archive tab."
+    },
+    {
+      "Name": "IMF.PAW.SS.VersionMeasure.Rollback",
+      "Dimension": "IMF.D.VersionMeasure",
+      "Expression": "{[IMF.D.VersionMeasure].[DimensionCode],[IMF.D.VersionMeasure].[Status],[IMF.D.VersionMeasure].[ArchiveDimension],[IMF.D.VersionMeasure].[PublishedAt],[IMF.D.VersionMeasure].[PublishedBy],[IMF.D.VersionMeasure].[Notes]}",
+      "Purpose": "Version measures shown in the rollback tab."
+    },
+    {
       "Name": "IMF.PAW.SS.Validation.OpenVersionMeasures",
       "Dimension": "IMF.D.ValidationMeasure",
       "Expression": "{[IMF.D.ValidationMeasure].[VersionId],[IMF.D.ValidationMeasure].[ValidationType],[IMF.D.ValidationMeasure].[RuleCode],[IMF.D.ValidationMeasure].[ObjectName],[IMF.D.ValidationMeasure].[Severity],[IMF.D.ValidationMeasure].[Message],[IMF.D.ValidationMeasure].[DetectedAt]}",
@@ -26,6 +50,12 @@
       "Dimension": "IMF.D.ImpactMeasure",
       "Expression": "{[IMF.D.ImpactMeasure].[VersionId],[IMF.D.ImpactMeasure].[ImpactDomain],[IMF.D.ImpactMeasure].[ObjectType],[IMF.D.ImpactMeasure].[ObjectName],[IMF.D.ImpactMeasure].[Severity],[IMF.D.ImpactMeasure].[Message],[IMF.D.ImpactMeasure].[DetectedAt]}",
       "Purpose": "Impact measures shown in the impact tab."
+    },
+    {
+      "Name": "IMF.PAW.SS.ConfigKey.Exchange",
+      "Dimension": "IMF.D.ConfigKey",
+      "Expression": "{[IMF.D.ConfigKey].[NamingPrefix],[IMF.D.ConfigKey].[VersionDelimiter],[IMF.D.ConfigKey].[ArchiveTimestampFormat],[IMF.D.ConfigKey].[DefaultSourceType],[IMF.D.ConfigKey].[RequireApproval],[IMF.D.ConfigKey].[ExportDefaultFormat]}",
+      "Purpose": "Configuration keys shown in the exchange tab."
     }
   ]
 }

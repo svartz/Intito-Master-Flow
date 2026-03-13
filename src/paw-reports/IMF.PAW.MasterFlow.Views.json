@@ -92,6 +92,10 @@
         "IMF.D.Version",
         "IMF.D.VersionMeasure"
       ],
+      "DefaultSubsets": {
+        "IMF.D.Version": "IMF.PAW.SS.Version.Open",
+        "IMF.D.VersionMeasure": "IMF.PAW.SS.VersionMeasure.Publish"
+      },
       "LocalizedTextKeys": [
         "paw.tab.publish",
         "paw.help.publish"
@@ -105,6 +109,10 @@
         "IMF.D.Version",
         "IMF.D.VersionMeasure"
       ],
+      "DefaultSubsets": {
+        "IMF.D.Version": "IMF.PAW.SS.Version.Open",
+        "IMF.D.VersionMeasure": "IMF.PAW.SS.VersionMeasure.Archive"
+      },
       "LocalizedTextKeys": [
         "paw.tab.archive",
         "paw.column.archive_dimension"
@@ -118,6 +126,9 @@
         "IMF.D.Version",
         "IMF.D.TextKey"
       ],
+      "DefaultSubsets": {
+        "IMF.D.Version": "IMF.PAW.SS.Version.Open"
+      },
       "LocalizedTextKeys": [
         "paw.tab.rollback",
         "paw.help.rollback"
@@ -130,6 +141,9 @@
       "Selectors": [
         "IMF.D.ConfigKey"
       ],
+      "DefaultSubsets": {
+        "IMF.D.ConfigKey": "IMF.PAW.SS.ConfigKey.Exchange"
+      },
       "LocalizedTextKeys": [
         "paw.tab.export_import",
         "paw.help.exchange"

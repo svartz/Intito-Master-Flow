@@ -21,10 +21,12 @@ If(sPrefix @= '');
 EndIf;
 
 sCubeVersion = sPrefix | '.C.Version';
+sCubeConfig = sPrefix | '.C.Config';
 sCubeValidation = sPrefix | '.C.Validation';
 sCubeImpact = sPrefix | '.C.Impact';
 
 If(CubeExists(sCubeVersion) = 0); ProcessBreak; EndIf;
+If(CubeExists(sCubeConfig) = 0); ProcessBreak; EndIf;
 If(CubeExists(sCubeValidation) = 0); ProcessBreak; EndIf;
 If(CubeExists(sCubeImpact) = 0); ProcessBreak; EndIf;
 
@@ -59,6 +61,38 @@ EndIf;
 ViewCreate(sCubeImpact, sView);
 ViewSubsetAssign(sCubeImpact, sView, sPrefix | '.D.ImpactRecord', 'IMF.PAW.SS.ImpactRecord.All');
 ViewSubsetAssign(sCubeImpact, sView, sPrefix | '.D.ImpactMeasure', 'IMF.PAW.SS.ImpactMeasure.SummaryMeasures');
+
+sView = 'IMF.PAW.V.Publish';
+If(ViewExists(sCubeVersion, sView) = 1);
+  ViewDestroy(sCubeVersion, sView);
+EndIf;
+ViewCreate(sCubeVersion, sView);
+ViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.Version', 'IMF.PAW.SS.Version.Open');
+ViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.VersionMeasure', 'IMF.PAW.SS.VersionMeasure.Publish');
+
+sView = 'IMF.PAW.V.Archive';
+If(ViewExists(sCubeVersion, sView) = 1);
+  ViewDestroy(sCubeVersion, sView);
+EndIf;
+ViewCreate(sCubeVersion, sView);
+ViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.Version', 'IMF.PAW.SS.Version.Open');
+ViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.VersionMeasure', 'IMF.PAW.SS.VersionMeasure.Archive');
+
+sView = 'IMF.PAW.V.Rollback';
+If(ViewExists(sCubeVersion, sView) = 1);
+  ViewDestroy(sCubeVersion, sView);
+EndIf;
+ViewCreate(sCubeVersion, sView);
+ViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.Version', 'IMF.PAW.SS.Version.Open');
+ViewSubsetAssign(sCubeVersion, sView, sPrefix | '.D.VersionMeasure', 'IMF.PAW.SS.VersionMeasure.Rollback');
+
+sView = 'IMF.PAW.V.Exchange';
+If(ViewExists(sCubeConfig, sView) = 1);
+  ViewDestroy(sCubeConfig, sView);
+EndIf;
+ViewCreate(sCubeConfig, sView);
+ViewSubsetAssign(sCubeConfig, sView, sPrefix | '.D.Dimension', 'IMF.PAW.SS.ManagedDimensions.Active');
+ViewSubsetAssign(sCubeConfig, sView, sPrefix | '.D.ConfigKey', 'IMF.PAW.SS.ConfigKey.Exchange');
 #endregion
 
 #region metadata
