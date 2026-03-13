@@ -11,6 +11,8 @@ The repo now contains report-pack specifications under:
 - [`src/paw-reports/IMF.PAW.MasterFlow.Subsets.json`](/c:/Programming/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Subsets.json)
 - [`src/paw-reports/IMF.PAW.MasterFlow.Actions.json`](/c:/Programming/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Actions.json)
 - [`src/paw-reports/IMF.PAW.MasterFlow.Runtime.json`](/c:/Programming/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Runtime.json)
+- [`src/paw-reports/IMF.PAW.MasterFlow.Layout.json`](/c:/Programming/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Layout.json)
+- [`src/paw-reports/IMF.PAW.MasterFlow.Deployment.json`](/c:/Programming/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Deployment.json)
 
 These files are not exported PAW workbooks. They are deterministic workbook and view specifications intended for:
 
@@ -26,6 +28,8 @@ The current PAW track now includes:
 - default subset contract per tab
 - process-action contract for compare, validate, impact, and publish preparation
 - runtime contract for public subsets and public views
+- workbook layout contract per tab
+- deployment contract for target PAW book creation
 - builder processes:
   - `IMF.P.PAW.BuildSubsets`
   - `IMF.P.PAW.BuildViews`

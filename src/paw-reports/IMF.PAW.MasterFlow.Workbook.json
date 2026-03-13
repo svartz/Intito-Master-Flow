@@ -19,6 +19,8 @@
   },
   "ActionSpec": "IMF.PAW.MasterFlow.Actions",
   "SubsetSpec": "IMF.PAW.MasterFlow.Subsets",
+  "LayoutSpec": "IMF.PAW.MasterFlow.Layout",
+  "DeploymentSpec": "IMF.PAW.MasterFlow.Deployment",
   "Tabs": [
     {
       "Id": "overview",

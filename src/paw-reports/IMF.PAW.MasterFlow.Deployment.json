@@ -1,0 +1,31 @@
+{
+  "Workbook": "IMF.PAW.MasterFlow",
+  "Type": "PAWDeploymentSpec",
+  "Purpose": "Deployment contract for materializing the IMF PAW workbook in a target PAW environment.",
+  "Dependencies": {
+    "RuntimeSpec": "IMF.PAW.MasterFlow.Runtime",
+    "LayoutSpec": "IMF.PAW.MasterFlow.Layout",
+    "ActionSpec": "IMF.PAW.MasterFlow.Actions",
+    "ViewSpec": "IMF.PAW.MasterFlow.Views",
+    "SubsetSpec": "IMF.PAW.MasterFlow.Subsets"
+  },
+  "Target": {
+    "BookName": "IMF MasterFlow",
+    "FolderPath": "/Applications/Intito/IMF",
+    "Visibility": "Shared",
+    "DefaultLandingTab": "overview"
+  },
+  "DeploymentSequence": [
+    "Run IMF.P.PAW.SyncRuntime",
+    "Validate required public subsets",
+    "Validate required public views",
+    "Materialize workbook tabs from LayoutSpec",
+    "Bind action buttons to IMF processes",
+    "Resolve localized text keys"
+  ],
+  "OpenIssues": [
+    "Native PAW workbook creation is still environment-specific and not automated in this repo.",
+    "Localized workbook captions depend on IMF text-key resolution in the target environment.",
+    "Editing tab runtime assets remain to be implemented."
+  ]
+}

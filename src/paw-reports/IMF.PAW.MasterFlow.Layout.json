@@ -1,0 +1,152 @@
+{
+  "Workbook": "IMF.PAW.MasterFlow",
+  "Type": "PAWLayoutSpec",
+  "Purpose": "Source-controlled layout contract for the IMF PAW workbook, including widget composition and action placement.",
+  "Pages": [
+    {
+      "TabId": "overview",
+      "Layout": "two-column-summary",
+      "Widgets": [
+        {
+          "Id": "overview_header",
+          "Type": "title",
+          "TextKey": "paw.tab.overview"
+        },
+        {
+          "Id": "overview_grid",
+          "Type": "cube-view",
+          "View": "IMF.PAW.V.Overview",
+          "Position": "left"
+        },
+        {
+          "Id": "overview_help",
+          "Type": "text-panel",
+          "TextKey": "paw.help.overview",
+          "Position": "right"
+        }
+      ]
+    },
+    {
+      "TabId": "versions",
+      "Layout": "grid-with-actions",
+      "Widgets": [
+        {
+          "Id": "versions_grid",
+          "Type": "cube-view",
+          "View": "IMF.PAW.V.Versions"
+        },
+        {
+          "Id": "versions_actions",
+          "Type": "action-bar",
+          "Actions": [
+            "create_version",
+            "run_compare",
+            "run_validate",
+            "run_impact"
+          ]
+        }
+      ]
+    },
+    {
+      "TabId": "validation",
+      "Layout": "grid-with-side-panel",
+      "Widgets": [
+        {
+          "Id": "validation_grid",
+          "Type": "cube-view",
+          "View": "IMF.PAW.V.Validation",
+          "Position": "left"
+        },
+        {
+          "Id": "validation_help",
+          "Type": "text-panel",
+          "TextKey": "paw.help.validation",
+          "Position": "right"
+        }
+      ]
+    },
+    {
+      "TabId": "impact",
+      "Layout": "grid-with-side-panel",
+      "Widgets": [
+        {
+          "Id": "impact_grid",
+          "Type": "cube-view",
+          "View": "IMF.PAW.V.Impact",
+          "Position": "left"
+        },
+        {
+          "Id": "impact_help",
+          "Type": "text-panel",
+          "TextKey": "paw.help.impact",
+          "Position": "right"
+        }
+      ]
+    },
+    {
+      "TabId": "publish",
+      "Layout": "grid-with-actions",
+      "Widgets": [
+        {
+          "Id": "publish_grid",
+          "Type": "cube-view",
+          "View": "IMF.PAW.V.Publish"
+        },
+        {
+          "Id": "publish_actions",
+          "Type": "action-bar",
+          "Actions": [
+            "prepare_publish"
+          ]
+        }
+      ]
+    },
+    {
+      "TabId": "archive",
+      "Layout": "single-grid",
+      "Widgets": [
+        {
+          "Id": "archive_grid",
+          "Type": "cube-view",
+          "View": "IMF.PAW.V.Archive"
+        }
+      ]
+    },
+    {
+      "TabId": "rollback",
+      "Layout": "grid-with-side-panel",
+      "Widgets": [
+        {
+          "Id": "rollback_grid",
+          "Type": "cube-view",
+          "View": "IMF.PAW.V.Rollback",
+          "Position": "left"
+        },
+        {
+          "Id": "rollback_help",
+          "Type": "text-panel",
+          "TextKey": "paw.help.rollback",
+          "Position": "right"
+        }
+      ]
+    },
+    {
+      "TabId": "exchange",
+      "Layout": "grid-with-side-panel",
+      "Widgets": [
+        {
+          "Id": "exchange_grid",
+          "Type": "cube-view",
+          "View": "IMF.PAW.V.Exchange",
+          "Position": "left"
+        },
+        {
+          "Id": "exchange_help",
+          "Type": "text-panel",
+          "TextKey": "paw.help.exchange",
+          "Position": "right"
+        }
+      ]
+    }
+  ]
+}
