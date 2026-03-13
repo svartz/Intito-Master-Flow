@@ -43,12 +43,19 @@ EndIf;
 If((DimensionExists(sDimDiffRecord) = 0) % (CubeExists(sCubeDiff) = 0));
   ProcessBreak;
 EndIf;
-If((DimensionExists(sMasterAttrDimension) = 0) % (DimensionExists(sWorkAttrDimension) = 0));
-  ProcessBreak;
+If(DimensionExists(sMasterAttrDimension) = 1);
+  nMasterAttrCount = DIMSIZ(sMasterAttrDimension);
+Else;
+  nMasterAttrCount = 0;
+EndIf;
+
+If(DimensionExists(sWorkAttrDimension) = 1);
+  nWorkAttrCount = DIMSIZ(sWorkAttrDimension);
+Else;
+  nWorkAttrCount = 0;
 EndIf;
 
 nMasterAttrIndex = 1;
-nMasterAttrCount = DIMSIZ(sMasterAttrDimension);
 While(nMasterAttrIndex <= nMasterAttrCount);
   sAttribute = DIMNM(sMasterAttrDimension, nMasterAttrIndex);
   If(DIMIX(sWorkAttrDimension, sAttribute) = 0);
@@ -76,7 +83,6 @@ While(nMasterAttrIndex <= nMasterAttrCount);
 End;
 
 nWorkAttrIndex = 1;
-nWorkAttrCount = DIMSIZ(sWorkAttrDimension);
 While(nWorkAttrIndex <= nWorkAttrCount);
   sAttribute = DIMNM(sWorkAttrDimension, nWorkAttrIndex);
   If(DIMIX(sMasterAttrDimension, sAttribute) = 0);
