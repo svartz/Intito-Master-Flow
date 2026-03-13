@@ -111,7 +111,7 @@ nAttributeIndex = 1;
 nAttributeCount = DIMSIZ(sSourceAttrDimension);
 While(nAttributeIndex <= nAttributeCount);
   sAttribute = DIMNM(sSourceAttrDimension, nAttributeIndex);
-  sAttributeType = Upper(Trim(AttrType(sSourceDimension, sAttribute)));
+  sAttributeType = Upper(Trim(DTYPE(sSourceAttrDimension, sAttribute)));
   If(sAttributeType @= '');
     sAttributeType = 'S';
   EndIf;
