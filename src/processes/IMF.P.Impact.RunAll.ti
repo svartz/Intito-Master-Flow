@@ -119,6 +119,9 @@ CellPutS(TIMST(NOW, '\Y-\m-\d \h:\i:\s'), sCubeImpact, sImpactRecord, 'DetectedA
 AttrPutS('ImpactAnalyzed', sDimVersion, sVersionId, 'Status');
 CellPutS('ImpactAnalyzed', sCubeVersion, sVersionId, 'Status');
 CellPutS('Impact analysis executed across all configured domains.', sCubeVersion, sVersionId, 'Notes');
+
+ExecuteProcess(sPrefix | '.P.PAW.SyncRuntimeIfPresent',
+  'pPrefix', sPrefix);
 #endregion
 
 #region metadata

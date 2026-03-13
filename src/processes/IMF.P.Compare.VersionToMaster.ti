@@ -102,6 +102,9 @@ ExecuteProcess(sPrefix | '.P.Compare.Attributes',
   'pMasterDimension', sMasterDimension,
   'pWorkDimension', sWorkDimension);
 
+ExecuteProcess(sPrefix | '.P.PAW.SyncRuntimeIfPresent',
+  'pPrefix', sPrefix);
+
 CellPutS('Version compared to master via diff engine.', sCubeVersion, sVersionId, 'Notes');
 #endregion
 

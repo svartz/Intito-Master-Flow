@@ -34,6 +34,7 @@ The current PAW track now includes:
   - `IMF.P.PAW.BuildSubsets`
   - `IMF.P.PAW.BuildViews`
   - `IMF.P.PAW.SyncRuntime`
+  - `IMF.P.PAW.SyncRuntimeIfPresent`
 
 The current runtime baseline now covers:
 

@@ -123,6 +123,9 @@ Else;
   CellPutS('Validated', sCubeVersion, sVersionId, 'Status');
   CellPutS('Technical validation executed without technical findings.', sCubeVersion, sVersionId, 'Notes');
 EndIf;
+
+ExecuteProcess(sPrefix | '.P.PAW.SyncRuntimeIfPresent',
+  'pPrefix', sPrefix);
 #endregion
 
 #region metadata

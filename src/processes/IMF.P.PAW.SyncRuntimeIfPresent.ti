@@ -1,0 +1,35 @@
+# IMF.P.PAW.SyncRuntimeIfPresent
+# Purpose: Refresh PAW runtime subsets and views when the PAW runtime sync process is available.
+# Sources:
+# - IMF.P.PAW.SyncRuntime
+# Parameters:
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# Prolog:
+# - Execute the PAW runtime sync only when the runtime process exists.
+# Metadata:
+# - No metadata tab logic is required.
+# Data:
+# - No Data tab logic is required.
+# Epilog:
+# - Leave the model unchanged when PAW runtime support is not deployed.
+
+#region prolog
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sProcess = sPrefix | '.P.PAW.SyncRuntime';
+If(ProcessExists(sProcess) = 1);
+  ExecuteProcess(sProcess, 'pPrefix', sPrefix);
+EndIf;
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

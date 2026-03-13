@@ -114,6 +114,9 @@ Else;
 EndIf;
 
 CellPutS('Business validation executed for work version.', sCubeVersion, sVersionId, 'Notes');
+
+ExecuteProcess(sPrefix | '.P.PAW.SyncRuntimeIfPresent',
+  'pPrefix', sPrefix);
 #endregion
 
 #region metadata

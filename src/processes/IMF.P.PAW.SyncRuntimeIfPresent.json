@@ -1,0 +1,25 @@
+{
+  "Name": "IMF.P.PAW.SyncRuntimeIfPresent",
+  "Purpose": "Refresh PAW runtime subsets and views when the PAW runtime sync process is available.",
+  "Code@Code.link": "IMF.P.PAW.SyncRuntimeIfPresent.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsProcess = sPrefix | '.P.PAW.SyncRuntime';\nIf(ProcessExists(sProcess) = 1);\n  ExecuteProcess(sProcess, 'pPrefix', sPrefix);\nEndIf;",
+  "Metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "PAW",
+    "Runtime"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
+}
