@@ -1,0 +1,64 @@
+# IMF.P.Control.EnsureRecord
+# Purpose: Ensure a control-record element exists in a supporting IMF dimension before downstream writes.
+# Sources:
+# - IMF supporting control dimensions
+# Parameters:
+# - pDimension: Target dimension that stores control-record ids.
+# - pElement: Element id to ensure.
+# - pRoot: Root consolidated element that should own the record.
+# - pElementType: Element type for the ensured record. Default 'N'.
+# Prolog:
+# - Validate input and create the record if it does not exist.
+# Metadata:
+# - No metadata tab logic is required.
+# Data:
+# - No Data tab logic is required.
+# Epilog:
+# - Leave the ensured record available for subsequent caller writes.
+
+#region prolog
+sDimension = Trim(pDimension);
+sElement = Trim(pElement);
+sRoot = Trim(pRoot);
+sElementType = Upper(Trim(pElementType));
+
+If(sDimension @= '');
+  ProcessBreak;
+EndIf;
+If(sElement @= '');
+  ProcessBreak;
+EndIf;
+If(sRoot @= '');
+  ProcessBreak;
+EndIf;
+If(sElementType @= '');
+  sElementType = 'N';
+EndIf;
+
+If(DimensionExists(sDimension) = 0);
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimension, sRoot) = 0);
+  ProcessBreak;
+EndIf;
+
+If(DimensionElementExists(sDimension, sElement) = 0);
+  DimensionElementInsert(sDimension, '', sElement, sElementType);
+  If(DimensionElementExists(sDimension, sElement) = 0);
+    ProcessBreak;
+  EndIf;
+EndIf;
+
+If(ELISPAR(sDimension, sRoot, sElement) = 0);
+  DimensionElementComponentAdd(sDimension, sRoot, sElement, 1);
+EndIf;
+#endregion
+
+#region metadata
+#endregion
+
+#region data
+#endregion
+
+#region epilog
+#endregion

@@ -75,10 +75,11 @@ End;
 
 If((sRequireApproval @= 'Y') & (sApprovalState @<> 'APPROVED'));
   sRecordId = 'VAL|' | sVersionId | '|BUSINESS|APPROVAL_REQUIRED';
-  If(DIMIX(sDimValidationRecord, sRecordId) = 0);
-    DimensionElementInsert(sDimValidationRecord, '', sRecordId, 'N');
-    DimensionElementComponentAdd(sDimValidationRecord, 'All Validation Records', sRecordId, 1);
-  EndIf;
+  ExecuteProcess(sPrefix | '.P.Control.EnsureRecord',
+    'pDimension', sDimValidationRecord,
+    'pElement', sRecordId,
+    'pRoot', 'All Validation Records',
+    'pElementType', 'N');
   AttrPutS(sVersionId, sDimValidationRecord, sRecordId, 'VersionId');
   AttrPutS(sDimensionCode, sDimValidationRecord, sRecordId, 'DimensionCode');
   AttrPutS('BUSINESS', sDimValidationRecord, sRecordId, 'ValidationType');
@@ -93,10 +94,11 @@ If((sRequireApproval @= 'Y') & (sApprovalState @<> 'APPROVED'));
   CellPutS(TIMST(NOW, '\Y-\m-\d \h:\i:\s'), sCubeValidation, sRecordId, 'DetectedAt');
 Else;
   sRecordId = 'VAL|' | sVersionId | '|BUSINESS|APPROVAL_OK';
-  If(DIMIX(sDimValidationRecord, sRecordId) = 0);
-    DimensionElementInsert(sDimValidationRecord, '', sRecordId, 'N');
-    DimensionElementComponentAdd(sDimValidationRecord, 'All Validation Records', sRecordId, 1);
-  EndIf;
+  ExecuteProcess(sPrefix | '.P.Control.EnsureRecord',
+    'pDimension', sDimValidationRecord,
+    'pElement', sRecordId,
+    'pRoot', 'All Validation Records',
+    'pElementType', 'N');
   AttrPutS(sVersionId, sDimValidationRecord, sRecordId, 'VersionId');
   AttrPutS(sDimensionCode, sDimValidationRecord, sRecordId, 'DimensionCode');
   AttrPutS('BUSINESS', sDimValidationRecord, sRecordId, 'ValidationType');

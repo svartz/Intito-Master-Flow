@@ -13,6 +13,12 @@
     "da-DK",
     "de-DE"
   ],
+  "DefaultSelectors": {
+    "Dimension": "IMF.PAW.SS.ManagedDimensions.Active",
+    "Version": "IMF.PAW.SS.Version.Open"
+  },
+  "ActionSpec": "IMF.PAW.MasterFlow.Actions",
+  "SubsetSpec": "IMF.PAW.MasterFlow.Subsets",
   "Tabs": [
     {
       "Id": "overview",

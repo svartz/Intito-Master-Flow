@@ -91,10 +91,11 @@ While(nDiffIndex <= nDiffCount);
 End;
 
 sImpactRecord = 'IMP|' | sVersionId | '|SUMMARY';
-If(DIMIX(sDimImpactRecord, sImpactRecord) = 0);
-  DimensionElementInsert(sDimImpactRecord, '', sImpactRecord, 'N');
-  DimensionElementComponentAdd(sDimImpactRecord, 'All Impact Records', sImpactRecord, 1);
-EndIf;
+ExecuteProcess(sPrefix | '.P.Control.EnsureRecord',
+  'pDimension', sDimImpactRecord,
+  'pElement', sImpactRecord,
+  'pRoot', 'All Impact Records',
+  'pElementType', 'N');
 AttrPutS(sVersionId, sDimImpactRecord, sImpactRecord, 'VersionId');
 AttrPutS(sDimensionCode, sDimImpactRecord, sImpactRecord, 'DimensionCode');
 AttrPutS('SUMMARY', sDimImpactRecord, sImpactRecord, 'ImpactDomain');

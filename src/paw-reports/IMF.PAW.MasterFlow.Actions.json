@@ -1,0 +1,62 @@
+{
+  "Workbook": "IMF.PAW.MasterFlow",
+  "Type": "PAWActionSpec",
+  "Purpose": "Source-controlled process actions and navigation contract for the IMF PAW workbook.",
+  "Actions": [
+    {
+      "Id": "create_version",
+      "TitleKey": "paw.action.create_version",
+      "Process": "IMF.P.Version.Create",
+      "RequiredParameters": [
+        "pPrefix",
+        "pDimensionCode",
+        "pVersionId"
+      ],
+      "LaunchContext": "versions"
+    },
+    {
+      "Id": "run_compare",
+      "TitleKey": "paw.action.compare",
+      "Process": "IMF.P.Compare.VersionToMaster",
+      "RequiredParameters": [
+        "pPrefix",
+        "pDimensionCode",
+        "pVersionId"
+      ],
+      "LaunchContext": "validation"
+    },
+    {
+      "Id": "run_validate",
+      "TitleKey": "paw.action.validate",
+      "Process": "IMF.P.Validate.Technical",
+      "RequiredParameters": [
+        "pPrefix",
+        "pDimensionCode",
+        "pVersionId"
+      ],
+      "LaunchContext": "validation"
+    },
+    {
+      "Id": "run_impact",
+      "TitleKey": "paw.action.impact",
+      "Process": "IMF.P.Impact.RunAll",
+      "RequiredParameters": [
+        "pPrefix",
+        "pDimensionCode",
+        "pVersionId"
+      ],
+      "LaunchContext": "impact"
+    },
+    {
+      "Id": "prepare_publish",
+      "TitleKey": "paw.action.prepare_publish",
+      "Process": "IMF.P.Commit.Prepare",
+      "RequiredParameters": [
+        "pPrefix",
+        "pDimensionCode",
+        "pVersionId"
+      ],
+      "LaunchContext": "publish"
+    }
+  ]
+}

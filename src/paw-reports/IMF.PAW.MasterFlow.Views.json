@@ -9,6 +9,9 @@
         "IMF.D.Dimension",
         "IMF.D.VersionMeasure"
       ],
+      "DefaultSubsets": {
+        "IMF.D.Dimension": "IMF.PAW.SS.ManagedDimensions.Active"
+      },
       "LocalizedTextKeys": [
         "paw.tab.overview",
         "paw.status.blockers",
@@ -24,6 +27,9 @@
         "IMF.D.Version",
         "IMF.D.VersionMeasure"
       ],
+      "DefaultSubsets": {
+        "IMF.D.Version": "IMF.PAW.SS.Version.Open"
+      },
       "LocalizedTextKeys": [
         "paw.tab.versions",
         "paw.column.status",
@@ -52,6 +58,9 @@
         "IMF.D.ValidationRecord",
         "IMF.D.ValidationMeasure"
       ],
+      "DefaultSubsets": {
+        "IMF.D.ValidationMeasure": "IMF.PAW.SS.Validation.OpenVersionMeasures"
+      },
       "LocalizedTextKeys": [
         "paw.tab.validation",
         "validation.mandatory_attribute_missing",
@@ -66,6 +75,9 @@
         "IMF.D.ImpactRecord",
         "IMF.D.ImpactMeasure"
       ],
+      "DefaultSubsets": {
+        "IMF.D.ImpactMeasure": "IMF.PAW.SS.Impact.SummaryMeasures"
+      },
       "LocalizedTextKeys": [
         "paw.tab.impact",
         "paw.status.impact_warning",

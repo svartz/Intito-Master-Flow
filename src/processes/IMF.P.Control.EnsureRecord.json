@@ -1,0 +1,39 @@
+{
+  "Name": "IMF.P.Control.EnsureRecord",
+  "Purpose": "Ensure a control-record element exists in a supporting IMF dimension before downstream writes.",
+  "Code@Code.link": "IMF.P.Control.EnsureRecord.ti",
+  "Parameters": [
+    {
+      "Name": "pDimension",
+      "Prompt": "Dimension",
+      "Value": ""
+    },
+    {
+      "Name": "pElement",
+      "Prompt": "Element",
+      "Value": ""
+    },
+    {
+      "Name": "pRoot",
+      "Prompt": "Root",
+      "Value": ""
+    },
+    {
+      "Name": "pElementType",
+      "Prompt": "Element Type",
+      "Value": "N"
+    }
+  ],
+  "Prolog": "sDimension = Trim(pDimension);\nsElement = Trim(pElement);\nsRoot = Trim(pRoot);\nsElementType = Upper(Trim(pElementType));\n\nIf(sDimension @= '');\n  ProcessBreak;\nEndIf;\nIf(sElement @= '');\n  ProcessBreak;\nEndIf;\nIf(sRoot @= '');\n  ProcessBreak;\nEndIf;\nIf(sElementType @= '');\n  sElementType = 'N';\nEndIf;\n\nIf(DimensionExists(sDimension) = 0);\n  ProcessBreak;\nEndIf;\nIf(DimensionElementExists(sDimension, sRoot) = 0);\n  ProcessBreak;\nEndIf;\n\nIf(DimensionElementExists(sDimension, sElement) = 0);\n  DimensionElementInsert(sDimension, '', sElement, sElementType);\n  If(DimensionElementExists(sDimension, sElement) = 0);\n    ProcessBreak;\n  EndIf;\nEndIf;\n\nIf(ELISPAR(sDimension, sRoot, sElement) = 0);\n  DimensionElementComponentAdd(sDimension, sRoot, sElement, 1);\nEndIf;",
+  "Metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "Control"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST",
+    "PROD"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "Workbook": "IMF.PAW.MasterFlow",
+  "Type": "PAWSubsetSpec",
+  "Purpose": "Source-controlled subset specifications used by the IMF PAW workbook.",
+  "Subsets": [
+    {
+      "Name": "IMF.PAW.SS.ManagedDimensions.Active",
+      "Dimension": "IMF.D.Dimension",
+      "Expression": "{EXCEPT(TM1SUBSETALL([IMF.D.Dimension]), {[IMF.D.Dimension].[__Template.ManagedDimension]})}",
+      "Purpose": "All managed dimensions except the template member."
+    },
+    {
+      "Name": "IMF.PAW.SS.Version.Open",
+      "Dimension": "IMF.D.Version",
+      "Expression": "{TM1FILTERBYLEVEL(TM1SUBSETALL([IMF.D.Version]), 0)}",
+      "Purpose": "Leaf work versions for operational selection."
+    },
+    {
+      "Name": "IMF.PAW.SS.Validation.OpenVersionMeasures",
+      "Dimension": "IMF.D.ValidationMeasure",
+      "Expression": "{[IMF.D.ValidationMeasure].[VersionId],[IMF.D.ValidationMeasure].[ValidationType],[IMF.D.ValidationMeasure].[RuleCode],[IMF.D.ValidationMeasure].[ObjectName],[IMF.D.ValidationMeasure].[Severity],[IMF.D.ValidationMeasure].[Message],[IMF.D.ValidationMeasure].[DetectedAt]}",
+      "Purpose": "Validation measures shown in the validation tab."
+    },
+    {
+      "Name": "IMF.PAW.SS.Impact.SummaryMeasures",
+      "Dimension": "IMF.D.ImpactMeasure",
+      "Expression": "{[IMF.D.ImpactMeasure].[VersionId],[IMF.D.ImpactMeasure].[ImpactDomain],[IMF.D.ImpactMeasure].[ObjectType],[IMF.D.ImpactMeasure].[ObjectName],[IMF.D.ImpactMeasure].[Severity],[IMF.D.ImpactMeasure].[Message],[IMF.D.ImpactMeasure].[DetectedAt]}",
+      "Purpose": "Impact measures shown in the impact tab."
+    }
+  ]
+}
