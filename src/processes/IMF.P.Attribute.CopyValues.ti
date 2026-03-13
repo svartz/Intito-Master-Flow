@@ -67,7 +67,7 @@ While(nElementIndex <= nElementCount);
       sAttribute = DIMNM(sSourceAttrDimension, nAttributeIndex);
       If(DIMIX(sTargetAttrDimension, sAttribute) > 0);
         sAttributeType = Upper(Trim(DTYPE(sSourceAttrDimension, sAttribute)));
-        If(sAttributeType @= 'N');
+        If((sAttributeType @= 'AN') % (sAttributeType @= 'N'));
           nAttributeValue = AttrN(sSourceDimension, sElement, sAttribute);
           AttrPutN(nAttributeValue, sTargetDimension, sElement, sAttribute);
         Else;

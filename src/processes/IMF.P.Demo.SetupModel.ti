@@ -1,0 +1,105 @@
+# IMF.P.Demo.SetupModel
+# Purpose: Bootstrap a demo-ready IMF model with five managed dimensions and optional initial work versions.
+# Sources:
+# - IMF.P.Init.Project
+# - IMF.P.Dimension.Onboard
+# - IMF.P.Demo.SeedDimension
+# - IMF.P.Version.Create
+# Parameters:
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pCreateInitialVersions: Create an initial V001-style work version for each managed dimension. Default 'Y'.
+# - pInitialVersionId: Version id used when pCreateInitialVersions = Y. Default 'V001'.
+# - pCreatedBy: User id written to created-by metadata. Default 'DEMO'.
+# Prolog:
+# - Initialize IMF control metadata and onboard the five demo managed dimensions.
+# Metadata:
+# - Delegate structure seeding to IMF.P.Demo.SeedDimension for each managed dimension.
+# Data:
+# - Optionally create an initial work version per managed dimension.
+# Epilog:
+# - Leave the model populated with demo-ready managed dimensions for PAW and runtime tests.
+
+#region prolog
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sCreateInitialVersions = Upper(Trim(pCreateInitialVersions));
+sInitialVersionId = Trim(pInitialVersionId);
+sCreatedBy = Trim(pCreatedBy);
+
+If(sCreateInitialVersions @= '');
+  sCreateInitialVersions = 'Y';
+EndIf;
+If(sInitialVersionId @= '');
+  sInitialVersionId = 'V001';
+EndIf;
+If(sCreatedBy @= '');
+  sCreatedBy = 'DEMO';
+EndIf;
+
+ExecuteProcess(
+  sPrefix | '.P.Init.Project',
+  'pPrefix', sPrefix,
+  'pCreateSampleConfig', 'Y'
+);
+
+nDimensionIndex = 1;
+While(nDimensionIndex <= 5);
+  If(nDimensionIndex = 1);
+    sDimensionCode = 'Account';
+  ElseIf(nDimensionIndex = 2);
+    sDimensionCode = 'Organization';
+  ElseIf(nDimensionIndex = 3);
+    sDimensionCode = 'Product';
+  ElseIf(nDimensionIndex = 4);
+    sDimensionCode = 'Product Group';
+  Else;
+    sDimensionCode = 'Project';
+  EndIf;
+
+  ExecuteProcess(
+    sPrefix | '.P.Dimension.Onboard',
+    'pPrefix', sPrefix,
+    'pDimensionCode', sDimensionCode,
+    'pMasterDimensionName', sDimensionCode,
+    'pCreatePhysicalDimension', 'Y',
+    'pIsActive', 'Y'
+  );
+
+  ExecuteProcess(
+    sPrefix | '.P.Demo.SeedDimension',
+    'pPrefix', sPrefix,
+    'pDimensionCode', sDimensionCode,
+    'pCreatedBy', sCreatedBy
+  );
+
+  If(sCreateInitialVersions @= 'Y');
+    ExecuteProcess(
+      sPrefix | '.P.Version.Create',
+      'pPrefix', sPrefix,
+      'pDimensionCode', sDimensionCode,
+      'pVersionId', sInitialVersionId,
+      'pSourceType', 'MASTER',
+      'pSourceVersion', '',
+      'pCreatedBy', sCreatedBy,
+      'pNotes', 'Initial demo version created by IMF.P.Demo.SetupModel.'
+    );
+  EndIf;
+
+  nDimensionIndex = nDimensionIndex + 1;
+End;
+#endregion
+
+#region metadata
+# No metadata tab logic in this implementation.
+#endregion
+
+#region data
+# No Data tab logic in this implementation.
+#endregion
+
+#region epilog
+# No Epilog tab logic in this implementation.
+#endregion

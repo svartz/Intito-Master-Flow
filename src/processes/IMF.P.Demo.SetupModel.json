@@ -1,0 +1,39 @@
+{
+  "Name": "IMF.P.Demo.SetupModel",
+  "Purpose": "Bootstrap a demo-ready IMF model with five managed dimensions and optional initial work versions.",
+  "Code@Code.link": "IMF.P.Demo.SetupModel.ti",
+  "Parameters": [
+    {
+      "Name": "pPrefix",
+      "Prompt": "Prefix",
+      "Value": "IMF"
+    },
+    {
+      "Name": "pCreateInitialVersions",
+      "Prompt": "Create Initial Versions",
+      "Value": "Y"
+    },
+    {
+      "Name": "pInitialVersionId",
+      "Prompt": "Initial Version Id",
+      "Value": "V001"
+    },
+    {
+      "Name": "pCreatedBy",
+      "Prompt": "Created By",
+      "Value": "DEMO"
+    }
+  ],
+  "Prolog": "sPrefix = Trim(pPrefix);\nIf(sPrefix @= '');\n  sPrefix = 'IMF';\nEndIf;\n\nsCreateInitialVersions = Upper(Trim(pCreateInitialVersions));\nsInitialVersionId = Trim(pInitialVersionId);\nsCreatedBy = Trim(pCreatedBy);\n\nIf(sCreateInitialVersions @= '');\n  sCreateInitialVersions = 'Y';\nEndIf;\nIf(sInitialVersionId @= '');\n  sInitialVersionId = 'V001';\nEndIf;\nIf(sCreatedBy @= '');\n  sCreatedBy = 'DEMO';\nEndIf;\n\nExecuteProcess(\n  sPrefix | '.P.Init.Project',\n  'pPrefix', sPrefix,\n  'pCreateSampleConfig', 'Y'\n);\n\nnDimensionIndex = 1;\nWhile(nDimensionIndex <= 5);\n  If(nDimensionIndex = 1);\n    sDimensionCode = 'Account';\n  ElseIf(nDimensionIndex = 2);\n    sDimensionCode = 'Organization';\n  ElseIf(nDimensionIndex = 3);\n    sDimensionCode = 'Product';\n  ElseIf(nDimensionIndex = 4);\n    sDimensionCode = 'Product Group';\n  Else;\n    sDimensionCode = 'Project';\n  EndIf;\n\n  ExecuteProcess(\n    sPrefix | '.P.Dimension.Onboard',\n    'pPrefix', sPrefix,\n    'pDimensionCode', sDimensionCode,\n    'pMasterDimensionName', sDimensionCode,\n    'pCreatePhysicalDimension', 'Y',\n    'pIsActive', 'Y'\n  );\n\n  ExecuteProcess(\n    sPrefix | '.P.Demo.SeedDimension',\n    'pPrefix', sPrefix,\n    'pDimensionCode', sDimensionCode,\n    'pCreatedBy', sCreatedBy\n  );\n\n  If(sCreateInitialVersions @= 'Y');\n    ExecuteProcess(\n      sPrefix | '.P.Version.Create',\n      'pPrefix', sPrefix,\n      'pDimensionCode', sDimensionCode,\n      'pVersionId', sInitialVersionId,\n      'pSourceType', 'MASTER',\n      'pSourceVersion', '',\n      'pCreatedBy', sCreatedBy,\n      'pNotes', 'Initial demo version created by IMF.P.Demo.SetupModel.'\n    );\n  EndIf;\n\n  nDimensionIndex = nDimensionIndex + 1;\nEnd;",
+  "Metadata": "",
+  "tags": [
+    "IMF",
+    "TM1",
+    "Demo",
+    "Bootstrap"
+  ],
+  "environmentScope": [
+    "DEV",
+    "TEST"
+  ]
+}

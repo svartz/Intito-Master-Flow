@@ -1,0 +1,237 @@
+# IMF.P.Demo.SeedDimension
+# Purpose: Seed a managed demo dimension with sample elements, simple hierarchy, and lightweight attributes.
+# Sources:
+# - Managed master dimension resolved from pDimensionCode
+# Parameters:
+# - pPrefix: Naming prefix for Intito MasterFlow control objects. Default 'IMF'.
+# - pDimensionCode: One of Account, Organization, Product, Product Group, or Project.
+# - pCreatedBy: User id written into seeded attributes where relevant. Default 'DEMO'.
+# Prolog:
+# - Resolve the target master dimension and ensure shared demo attributes exist.
+# Metadata:
+# - Insert demo elements and hierarchy relations for the requested dimension.
+# Data:
+# - Seed lightweight demo attributes such as DemoLabel and DemoOwner.
+# Epilog:
+# - Leave the target master dimension populated and ready for version cloning.
+
+#region prolog
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sDimensionCode = Trim(pDimensionCode);
+sCreatedBy = Trim(pCreatedBy);
+If(sCreatedBy @= '');
+  sCreatedBy = 'DEMO';
+EndIf;
+
+sDimDimension = sPrefix | '.D.Dimension';
+If(sDimensionCode @= '');
+  ProcessBreak;
+EndIf;
+If(DimensionExists(sDimDimension) = 0);
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimDimension, sDimensionCode) = 0);
+  ProcessBreak;
+EndIf;
+
+sTargetDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));
+If(sTargetDimension @= '');
+  sTargetDimension = sDimensionCode;
+EndIf;
+If(DimensionExists(sTargetDimension) = 0);
+  ProcessBreak;
+EndIf;
+
+If(AttrInsert(sTargetDimension, '', 'DemoLabel', 'S') = 0);
+EndIf;
+If(AttrInsert(sTargetDimension, '', 'DemoOwner', 'S') = 0);
+EndIf;
+If(AttrInsert(sTargetDimension, '', 'DemoSource', 'S') = 0);
+EndIf;
+
+If(sDimensionCode @= 'Account');
+  sRoot = 'Account Total';
+  If(DimensionElementExists(sTargetDimension, sRoot) = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', sRoot, 'C');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'Revenue') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'Revenue', 'C');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'Expense') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'Expense', 'C');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, '1000 Sales') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', '1000 Sales', 'N');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, '1100 Services') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', '1100 Services', 'N');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, '2000 COGS') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', '2000 COGS', 'N');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, '2100 Opex') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', '2100 Opex', 'N');
+  EndIf;
+ElseIf(sDimensionCode @= 'Organization');
+  sRoot = 'Organization Total';
+  If(DimensionElementExists(sTargetDimension, sRoot) = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', sRoot, 'C');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'North Region') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'North Region', 'C');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'South Region') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'South Region', 'C');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'Stockholm') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'Stockholm', 'N');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'Gothenburg') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'Gothenburg', 'N');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'Malmo') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'Malmo', 'N');
+  EndIf;
+ElseIf(sDimensionCode @= 'Product');
+  sRoot = 'Product Total';
+  If(DimensionElementExists(sTargetDimension, sRoot) = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', sRoot, 'C');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'Hardware') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'Hardware', 'C');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'Software') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'Software', 'C');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'PRD-100 Laptop') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'PRD-100 Laptop', 'N');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'PRD-200 Server') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'PRD-200 Server', 'N');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'PRD-300 Analytics') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'PRD-300 Analytics', 'N');
+  EndIf;
+ElseIf(sDimensionCode @= 'Product Group');
+  sRoot = 'Product Group Total';
+  If(DimensionElementExists(sTargetDimension, sRoot) = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', sRoot, 'C');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'Client Devices') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'Client Devices', 'N');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'Infrastructure') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'Infrastructure', 'N');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'Applications') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'Applications', 'N');
+  EndIf;
+ElseIf(sDimensionCode @= 'Project');
+  sRoot = 'Project Total';
+  If(DimensionElementExists(sTargetDimension, sRoot) = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', sRoot, 'C');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'Internal Projects') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'Internal Projects', 'C');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'Customer Projects') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'Customer Projects', 'C');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'PRJ-001 Finance Modernization') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'PRJ-001 Finance Modernization', 'N');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'PRJ-010 Retail Rollout') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'PRJ-010 Retail Rollout', 'N');
+  EndIf;
+  If(DimensionElementExists(sTargetDimension, 'PRJ-020 Data Platform') = 0);
+    DimensionElementInsertDirect(sTargetDimension, '', 'PRJ-020 Data Platform', 'N');
+  EndIf;
+Else;
+  ProcessBreak;
+EndIf;
+
+DimensionUpdateDirect(sTargetDimension);
+
+If(sDimensionCode @= 'Account');
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, sRoot, 'Revenue', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, sRoot, 'Expense', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, 'Revenue', '1000 Sales', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, 'Revenue', '1100 Services', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, 'Expense', '2000 COGS', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, 'Expense', '2100 Opex', 1) = 0);
+  EndIf;
+ElseIf(sDimensionCode @= 'Organization');
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, sRoot, 'North Region', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, sRoot, 'South Region', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, 'North Region', 'Stockholm', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, 'North Region', 'Gothenburg', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, 'South Region', 'Malmo', 1) = 0);
+  EndIf;
+ElseIf(sDimensionCode @= 'Product');
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, sRoot, 'Hardware', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, sRoot, 'Software', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, 'Hardware', 'PRD-100 Laptop', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, 'Hardware', 'PRD-200 Server', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, 'Software', 'PRD-300 Analytics', 1) = 0);
+  EndIf;
+ElseIf(sDimensionCode @= 'Product Group');
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, sRoot, 'Client Devices', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, sRoot, 'Infrastructure', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, sRoot, 'Applications', 1) = 0);
+  EndIf;
+ElseIf(sDimensionCode @= 'Project');
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, sRoot, 'Internal Projects', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, sRoot, 'Customer Projects', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, 'Internal Projects', 'PRJ-001 Finance Modernization', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, 'Customer Projects', 'PRJ-010 Retail Rollout', 1) = 0);
+  EndIf;
+  If(HierarchyElementComponentAdd(sTargetDimension, sTargetDimension, 'Internal Projects', 'PRJ-020 Data Platform', 1) = 0);
+  EndIf;
+EndIf;
+
+DimensionUpdateDirect(sTargetDimension);
+
+nElementIndex = 1;
+nElementCount = DIMSIZ(sTargetDimension);
+While(nElementIndex <= nElementCount);
+  sElement = DIMNM(sTargetDimension, nElementIndex);
+  AttrPutS(sElement, sTargetDimension, sElement, 'DemoLabel');
+  AttrPutS(sCreatedBy, sTargetDimension, sElement, 'DemoOwner');
+  AttrPutS('IMF.P.Demo.SeedDimension', sTargetDimension, sElement, 'DemoSource');
+  nElementIndex = nElementIndex + 1;
+End;
+#endregion
+
+#region metadata
+# No metadata tab logic in this implementation.
+#endregion
+
+#region data
+# No Data tab logic in this implementation.
+#endregion
+
+#region epilog
+# No Epilog tab logic in this implementation.
+#endregion

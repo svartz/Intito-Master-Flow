@@ -112,7 +112,9 @@ nAttributeCount = DIMSIZ(sSourceAttrDimension);
 While(nAttributeIndex <= nAttributeCount);
   sAttribute = DIMNM(sSourceAttrDimension, nAttributeIndex);
   sAttributeType = Upper(Trim(DTYPE(sSourceAttrDimension, sAttribute)));
-  If(sAttributeType @= '');
+  If((sAttributeType @= 'AN') % (sAttributeType @= 'N'));
+    sAttributeType = 'N';
+  ElseIf((sAttributeType @= 'AS') % (sAttributeType @= 'S') % (sAttributeType @= 'C'));
     sAttributeType = 'S';
   EndIf;
 
