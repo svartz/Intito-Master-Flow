@@ -58,7 +58,7 @@ If(nUseNativeReplay = 1);
   nElementIndex = 1;
   While(nElementIndex <= nSourceElementCount);
     sElement = DIMNM(sSourceDimension, nElementIndex);
-    sElementType = Upper(Trim(DTYPE(sSourceDimension, sElement)));
+    sElementType = Upper(Trim(ElementType(sSourceDimension, sSourceDimension, sElement)));
     If(sElementType @= '');
       sElementType = 'N';
     EndIf;

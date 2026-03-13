@@ -83,8 +83,8 @@ nHasWarning = 0;
 nElementIndex = 1;
 While(nElementIndex <= nElementCount);
   sElement = DIMNM(sWorkDimension, nElementIndex);
-  sElementType = ELTYPE(sWorkDimension, sElement);
-  nComponentCount = ELNCOMP(sWorkDimension, sElement);
+  sElementType = Upper(Trim(ElementType(sWorkDimension, sWorkDimension, sElement)));
+  nComponentCount = ElementComponentCount(sWorkDimension, sWorkDimension, sElement);
 
   If((sElementType @= 'C') & (nComponentCount = 0));
     sRecordId = 'VAL|' | sVersionId | '|TECHNICAL|EMPTY_CONSOLIDATION|' | sElement;

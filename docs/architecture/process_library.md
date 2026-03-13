@@ -77,3 +77,31 @@ See:
 For IMF processes that optionally delegate to Bedrock, use the verified contract in [IMF_Bedrock_Parameter_Spec.md](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Parameter_Spec.md) instead of assumed wrapper-style parameters.
 
 Mismatch tracking is maintained in [IMF_Bedrock_Parameter_Mismatch.csv](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Parameter_Mismatch.csv).
+
+## TI Function Policy
+
+IMF standardizes on modern, hierarchy-aware TM1 TI functions wherever hierarchy semantics matter.
+
+Use these functions by default:
+
+- `ElementType(dimension, hierarchy, element)`
+- `ElementComponentCount(dimension, hierarchy, element)`
+- `ElementComponent(dimension, hierarchy, element, index)`
+- `ElementWeight(dimension, hierarchy, parent, component)`
+
+For attribute-definition type checks, use the attribute dimension directly:
+
+- `DTYPE('}ElementAttributes_' | dimension_name, attribute_name)`
+
+Avoid these legacy or non-hierarchy-aware patterns in IMF process logic:
+
+- `AttrType(...)`
+- `ELTYPE(...)`
+- `ELNCOMP(...)`
+- `ELCOMPN(...)`
+- `ELWEIGHT(...)`
+
+Default rule:
+
+- if a process manipulates elements, parents, components, or weights, it must use explicit `dimension + hierarchy` function calls
+- if a process inspects attribute-definition types, it must inspect the attribute dimension, not the business dimension

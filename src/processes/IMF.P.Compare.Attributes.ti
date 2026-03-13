@@ -100,7 +100,7 @@ While(nWorkAttrIndex <= nWorkAttrCount);
     CellPutS('INFO', sCubeDiff, sRecordId, 'Severity');
     CellPutS(TIMST(NOW, '\Y-\m-\d \h:\i:\s'), sCubeDiff, sRecordId, 'DetectedAt');
   Else;
-    sAttributeType = Upper(Trim(AttrType(sMasterDimension, sAttribute)));
+    sAttributeType = Upper(Trim(DTYPE(sMasterAttrDimension, sAttribute)));
     nElementIndex = 1;
     nElementCount = DIMSIZ(sMasterDimension);
     While(nElementIndex <= nElementCount);
