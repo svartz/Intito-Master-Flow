@@ -24,21 +24,23 @@ sPrefix = Trim(pPrefix);
 If(sPrefix @= ''); sPrefix = 'IMF'; EndIf;
 sSourceDimension = Trim(pSourceDimension); sTargetDimension = Trim(pTargetDimension);
 sUseBedrock = Upper(Trim(pUseBedrock)); sBedrockProcess = Trim(pBedrockProcess); sStrictBedrock = Upper(Trim(pStrictBedrock));
+nBedrockEnabled = 0;
 nBedrockReturn = ProcessExitNormal();
+sBedrockStrictError = '0';
 nUseNativeReplay = 1;
 nSourceElementCount = 0;
 nRelationCount = 0;
 If(sUseBedrock @= ''); sUseBedrock = 'N'; EndIf;
 If(sBedrockProcess @= ''); sBedrockProcess = '}bedrock.hier.clone'; EndIf;
 If(sStrictBedrock @= ''); sStrictBedrock = 'N'; EndIf;
+If(sStrictBedrock @= 'Y'); sBedrockStrictError = '1'; EndIf;
 If((sSourceDimension @= '') % (sTargetDimension @= '')); ProcessBreak; EndIf;
 If((DimensionExists(sSourceDimension) = 0) % (DimensionExists(sTargetDimension) = 0)); ProcessBreak; EndIf;
 If(sUseBedrock @= 'Y');
   If(ProcessExists(sBedrockProcess) = 1);
+    nBedrockEnabled = 1;
     ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'INFO', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Delegating dimension relation copy to Bedrock.', 'pRunId', sSourceDimension | '->' | sTargetDimension);
-    # TODO: Confirm Bedrock hierarchy clone/move parameter contracts, including hierarchy names and weight handling.
-    # Current delegation assumes wrapper-compatible parameters pSourceDimension and pTargetDimension.
-    nBedrockReturn = ExecuteProcess(sBedrockProcess, 'pSourceDimension', sSourceDimension, 'pTargetDimension', sTargetDimension);
+    nBedrockReturn = ExecuteProcess(sBedrockProcess, 'pSrcDim', sSourceDimension, 'pSrcHier', sSourceDimension, 'pTgtDim', sTargetDimension, 'pTgtHier', sTargetDimension, 'pAttr', '0', 'pUnwind', '0', 'pLogOutput', '0', 'pStrictErrorHandling', sBedrockStrictError);
     If(nBedrockReturn = ProcessExitNormal());
       nUseNativeReplay = 0;
       ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'INFO', 'pObjectType', 'DIMENSION', 'pObjectName', sTargetDimension, 'pMessage', 'Bedrock relation replay completed.', 'pRunId', sSourceDimension | '->' | sTargetDimension);

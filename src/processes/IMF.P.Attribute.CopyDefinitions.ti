@@ -32,6 +32,9 @@ sTargetDimension = Trim(pTargetDimension);
 sUseBedrock = Upper(Trim(pUseBedrock));
 sBedrockProcess = Trim(pBedrockProcess);
 sStrictBedrock = Upper(Trim(pStrictBedrock));
+nBedrockEnabled = 0;
+nBedrockReturn = ProcessExitNormal();
+sBedrockStrictError = '0';
 nCreatedCount = 0;
 
 If(sUseBedrock @= '');
@@ -42,6 +45,9 @@ If(sBedrockProcess @= '');
 EndIf;
 If(sStrictBedrock @= '');
   sStrictBedrock = 'N';
+EndIf;
+If(sStrictBedrock @= 'Y');
+  sBedrockStrictError = '1';
 EndIf;
 
 If(sSourceDimension @= '');
@@ -75,6 +81,7 @@ EndIf;
 
 If(sUseBedrock @= 'Y');
   If(ProcessExists(sBedrockProcess) = 1);
+    nBedrockEnabled = 1;
     ExecuteProcess(
       'IMF.P.Log.Event',
       'pPrefix', sPrefix,
@@ -84,8 +91,6 @@ If(sUseBedrock @= 'Y');
       'pMessage', 'Bedrock-backed attribute-definition mode is enabled for this copy boundary.',
       'pRunId', sSourceDimension | '->' | sTargetDimension
     );
-    # TODO: Confirm the exact }bedrock.dim.attr.create parameter contract.
-    # Until the contract is confirmed, native IMF attribute creation remains the authoritative baseline.
   Else;
     ExecuteProcess(
       'IMF.P.Log.Event',
@@ -112,7 +117,34 @@ While(nAttributeIndex <= nAttributeCount);
   EndIf;
 
   If(DIMIX(sTargetAttrDimension, sAttribute) = 0);
-    AttrInsert(sTargetDimension, '', sAttribute, sAttributeType);
+    If(nBedrockEnabled = 1);
+      nBedrockReturn = ExecuteProcess(
+        sBedrockProcess,
+        'pDim', sTargetDimension,
+        'pAttr', sAttribute,
+        'pAttrType', sAttributeType,
+        'pLogOutput', '0',
+        'pStrictErrorHandling', sBedrockStrictError
+      );
+      If(nBedrockReturn <> ProcessExitNormal());
+        ExecuteProcess(
+          'IMF.P.Log.Event',
+          'pPrefix', sPrefix,
+          'pSeverity', 'WARNING',
+          'pObjectType', 'PROCESS',
+          'pObjectName', sBedrockProcess,
+          'pMessage', 'Bedrock attribute creation failed for ' | sAttribute | '. Native fallback will be used if allowed.',
+          'pRunId', sSourceDimension | '->' | sTargetDimension
+        );
+        If(sStrictBedrock @= 'Y');
+          ProcessBreak;
+        Else;
+          AttrInsert(sTargetDimension, '', sAttribute, sAttributeType);
+        EndIf;
+      EndIf;
+    Else;
+      AttrInsert(sTargetDimension, '', sAttribute, sAttributeType);
+    EndIf;
     nCreatedCount = nCreatedCount + 1;
   EndIf;
 

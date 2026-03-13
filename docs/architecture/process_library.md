@@ -72,3 +72,8 @@ See:
 - [IMF_Bedrock_Adoption_Design.md](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Adoption_Design.md)
 - [IMF_Bedrock_Process_Mapping.csv](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Process_Mapping.csv)
 - [IMF_Bedrock_Refactor_Register.yaml](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Refactor_Register.yaml)
+## Bedrock verification
+
+For IMF processes that optionally delegate to Bedrock, use the verified contract in [IMF_Bedrock_Parameter_Spec.md](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Parameter_Spec.md) instead of assumed wrapper-style parameters.
+
+Mismatch tracking is maintained in [IMF_Bedrock_Parameter_Mismatch.csv](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Parameter_Mismatch.csv).

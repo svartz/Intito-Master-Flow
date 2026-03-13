@@ -39,14 +39,14 @@ These should be refactored first:
 
 Current wave 1 state:
 
-1. `IMF.P.Dimension.Create` - hybridized in source
-2. `IMF.P.Dimension.Clear` - hybridized in source
-3. `IMF.P.Dimension.CopyRelations` - native baseline implemented, Bedrock contract still in progress
-4. `IMF.P.Attribute.CopyDefinitions` - in progress
-5. `IMF.P.Security.CreateGroups` - in progress
-6. `IMF.P.Security.SetCubeAccess` - in progress
-7. `IMF.P.Security.SetDimensionAccess` - in progress
-8. `IMF.P.Log.Event` - hybridized in source
+1. `IMF.P.Dimension.Create` - verified parameter mapping implemented in source
+2. `IMF.P.Dimension.Clear` - direct Bedrock call intentionally disabled until a wrapper exists
+3. `IMF.P.Dimension.CopyRelations` - verified hierarchy-clone parameter mapping implemented for single-hierarchy flow
+4. `IMF.P.Attribute.CopyDefinitions` - verified attribute-create parameter mapping implemented
+5. `IMF.P.Security.CreateGroups` - verified group-create parameter mapping implemented
+6. `IMF.P.Security.SetCubeAccess` - verified object-assign parameter mapping implemented
+7. `IMF.P.Security.SetDimensionAccess` - verified object-assign parameter mapping implemented
+8. `IMF.P.Log.Event` - verified server-log parameter mapping implemented
 
 ## Tier 2 Targets
 
@@ -77,3 +77,20 @@ Whenever Bedrock adoption status changes:
 - update the YAML register first
 - update this summary second
 - note the change in `docs/releases/unreleased.md`
+## Parameter verification
+
+Bedrock parameter contracts used by IMF are now verified against the Bedrock 5 GitHub repository.
+
+Reference artifacts:
+- [IMF_Bedrock_Parameter_Spec.md](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Parameter_Spec.md)
+- [IMF_Bedrock_Parameter_Mismatch.csv](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Parameter_Mismatch.csv)
+
+Current result:
+- `IMF.P.Dimension.Create`: fixed to use `pDim`
+- `IMF.P.Dimension.Clear`: no longer makes an invalid direct Bedrock call
+- `IMF.P.Dimension.CopyRelations`: fixed to use `pSrcDim`, `pSrcHier`, `pTgtDim`, `pTgtHier`
+- `IMF.P.Attribute.CopyDefinitions`: fixed to use `pDim`, `pAttr`, `pAttrType`
+- `IMF.P.Security.CreateGroups`: fixed to use `pGroup`
+- `IMF.P.Security.SetCubeAccess`: fixed to use `pGroup`, `pObjectType`, `pObject`, `pSecurityLevel`
+- `IMF.P.Security.SetDimensionAccess`: fixed to use `pGroup`, `pObjectType`, `pObject`, `pSecurityLevel`
+- `IMF.P.Log.Event`: fixed to use `pLevel` and `pMessage`

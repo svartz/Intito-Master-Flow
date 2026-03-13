@@ -16,7 +16,7 @@ This document should be updated whenever a meaningful IMF process implementation
 | Domain | Current status | Notes |
 |---|---|---|
 | Versioning | partial | Core flows exist, but several processes still contain TM1-environment TODOs. |
-| Dimension operations | partial | Native create, clear, and relation replay baselines now exist; multi-hierarchy and Bedrock contract work remain. |
+| Dimension operations | partial | Native create, clear, relation replay, and managed-dimension onboarding baselines now exist; multi-hierarchy and Bedrock contract work remain. |
 | Attributes | partial | Native definition/value copy baselines now exist; publish semantics and Bedrock contract confirmation remain. |
 | Diff | partial | Version-to-master diff baselines now write records to `IMF.C.Diff`; severity tuning and richer semantics remain. |
 | Validation | partial | Technical/business validation shells exist with targeted TODOs. |
@@ -24,7 +24,7 @@ This document should be updated whenever a meaningful IMF process implementation
 | Publish / rollback | partial | Baseline archive, publish, and rollback structure-copy flows now exist; production hardening and safety checks remain. |
 | Security | partial | Strong scaffold coverage through phase 3, still environment-dependent in several areas. |
 | Import / export | partial | Contracts exist, full payload parsing and replay remain incomplete. |
-| Logging | partial | Logging entry points exist, but TM1 persistence targets remain TODO-driven. |
+| Logging | partial | Logging entry points exist, Bedrock message-log integration is now parameter-correct, and TM1 persistence targets remain TODO-driven. |
 
 ## Priority Focus
 

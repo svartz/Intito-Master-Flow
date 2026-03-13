@@ -25,23 +25,14 @@ sTargetDimension = Trim(pTargetDimension);
 sUseBedrock = Upper(Trim(pUseBedrock));
 sBedrockProcess = Trim(pBedrockProcess);
 sStrictBedrock = Upper(Trim(pStrictBedrock));
-nBedrockReturn = ProcessExitNormal();
 If(sUseBedrock @= ''); sUseBedrock = 'N'; EndIf;
 If(sBedrockProcess @= ''); sBedrockProcess = '}bedrock.dim.clone'; EndIf;
 If(sStrictBedrock @= ''); sStrictBedrock = 'N'; EndIf;
 If((sTargetDimension @= '') % (DimensionExists(sTargetDimension) = 0)); ProcessBreak; EndIf;
 If(sUseBedrock @= 'Y');
   If(ProcessExists(sBedrockProcess) = 1);
-    ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'INFO', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Delegating dimension clear pattern to Bedrock.', 'pRunId', sTargetDimension);
-    # TODO: Confirm whether Bedrock clear should be implemented as recreate-and-swap or clone-from-empty in the target environment.
-    # Current delegation assumes a wrapper-compatible parameter named pDimension.
-    nBedrockReturn = ExecuteProcess(sBedrockProcess, 'pDimension', sTargetDimension);
-    If(nBedrockReturn = ProcessExitNormal());
-      ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'INFO', 'pObjectType', 'DIMENSION', 'pObjectName', sTargetDimension, 'pMessage', 'Bedrock clear delegation completed.', 'pRunId', sTargetDimension);
-    Else;
-      ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'WARNING', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Bedrock clear delegation failed. Native fallback will be used if allowed.', 'pRunId', sTargetDimension);
-      If(sStrictBedrock @= 'Y'); ProcessBreak; EndIf;
-    EndIf;
+    ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'WARNING', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Direct Bedrock delegation is intentionally disabled for IMF.P.Dimension.Clear until a Bedrock-compatible clear wrapper exists.', 'pRunId', sTargetDimension);
+    If(sStrictBedrock @= 'Y'); ProcessBreak; EndIf;
   Else;
     ExecuteProcess('IMF.P.Log.Event', 'pPrefix', sPrefix, 'pSeverity', 'WARNING', 'pObjectType', 'PROCESS', 'pObjectName', sBedrockProcess, 'pMessage', 'Requested Bedrock clear process was not found. Native fallback will be used if allowed.', 'pRunId', sTargetDimension);
     If(sStrictBedrock @= 'Y'); ProcessBreak; EndIf;

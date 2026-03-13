@@ -1,0 +1,143 @@
+# IMF.P.Dimension.Onboard
+# Purpose: Onboard a new managed master dimension into IMF from start to finish.
+# Sources:
+# - IMF.D.Dimension
+# - IMF.D.ConfigKey
+# - IMF.C.Config
+# - IMF.P.Dimension.Create
+# Parameters:
+# - pPrefix: Parameter pPrefix Default 'IMF'.
+# - pDimensionCode: Parameter pDimensionCode Default ''.
+# - pMasterDimensionName: Parameter pMasterDimensionName Default ''.
+# - pCreatePhysicalDimension: Parameter pCreatePhysicalDimension Default 'Y'.
+# - pIsActive: Parameter pIsActive Default 'Y'.
+# - pValidationProcess: Parameter pValidationProcess Default ''.
+# - pImpactProcess: Parameter pImpactProcess Default ''.
+# - pExportProfile: Parameter pExportProfile Default 'DEFAULT'.
+# Prolog:
+# - Validate IMF control objects and create a managed-dimension registry entry.
+# - Optionally create the physical master dimension.
+# Metadata:
+# - Seed managed-dimension attributes and copy template config values.
+# Data:
+# - No Data tab logic is implemented unless explicitly required later.
+# Epilog:
+# - Leave the managed dimension ready for version creation and downstream IMF workflows.
+
+#region prolog
+sPrefix = Trim(pPrefix);
+If(sPrefix @= '');
+  sPrefix = 'IMF';
+EndIf;
+
+sDimensionCode = Trim(pDimensionCode);
+sMasterDimensionName = Trim(pMasterDimensionName);
+sCreatePhysicalDimension = Upper(Trim(pCreatePhysicalDimension));
+sIsActive = Upper(Trim(pIsActive));
+sValidationProcess = Trim(pValidationProcess);
+sImpactProcess = Trim(pImpactProcess);
+sExportProfile = Trim(pExportProfile);
+
+If(sCreatePhysicalDimension @= '');
+  sCreatePhysicalDimension = 'Y';
+EndIf;
+If(sIsActive @= '');
+  sIsActive = 'Y';
+EndIf;
+If(sValidationProcess @= '');
+  sValidationProcess = sPrefix | '.P.Validate.Technical';
+EndIf;
+If(sImpactProcess @= '');
+  sImpactProcess = sPrefix | '.P.Impact.RunAll';
+EndIf;
+If(sExportProfile @= '');
+  sExportProfile = 'DEFAULT';
+EndIf;
+
+If(sDimensionCode @= '');
+  ProcessBreak;
+EndIf;
+If(sMasterDimensionName @= '');
+  sMasterDimensionName = sDimensionCode;
+EndIf;
+
+sDimDimension = sPrefix | '.D.Dimension';
+sDimConfigKey = sPrefix | '.D.ConfigKey';
+sCubeConfig = sPrefix | '.C.Config';
+sTemplateCode = '__Template.ManagedDimension';
+
+If(DimensionExists(sDimDimension) = 0);
+  ProcessBreak;
+EndIf;
+If(DimensionExists(sDimConfigKey) = 0);
+  ProcessBreak;
+EndIf;
+If(CubeExists(sCubeConfig) = 0);
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimDimension, sTemplateCode) = 0);
+  ProcessBreak;
+EndIf;
+If(DimensionElementExists(sDimDimension, sDimensionCode) = 1);
+  ProcessBreak;
+EndIf;
+
+If(sCreatePhysicalDimension @= 'Y');
+  ExecuteProcess(
+    sPrefix | '.P.Dimension.Create',
+    'pPrefix', sPrefix,
+    'pTargetDimension', sMasterDimensionName
+  );
+ElseIf(DimensionExists(sMasterDimensionName) = 0);
+  ProcessBreak;
+EndIf;
+
+If(DimensionElementExists(sDimDimension, 'All Managed Dimensions') = 0);
+  DimensionElementInsert(sDimDimension, '', 'All Managed Dimensions', 'C');
+EndIf;
+
+DimensionElementInsert(sDimDimension, '', sDimensionCode, 'N');
+DimensionElementComponentAdd(sDimDimension, 'All Managed Dimensions', sDimensionCode, 1);
+
+AttrPutS(sMasterDimensionName, sDimDimension, sDimensionCode, 'MasterDimensionName');
+AttrPutS('', sDimDimension, sDimensionCode, 'ActiveVersion');
+AttrPutS('', sDimDimension, sDimensionCode, 'LastPublishedVersion');
+AttrPutS('', sDimDimension, sDimensionCode, 'LastArchivedDimension');
+AttrPutS(sValidationProcess, sDimDimension, sDimensionCode, 'ValidationProcess');
+AttrPutS(sImpactProcess, sDimDimension, sDimensionCode, 'ImpactProcess');
+AttrPutS(sExportProfile, sDimDimension, sDimensionCode, 'ExportProfile');
+AttrPutS(sIsActive, sDimDimension, sDimensionCode, 'IsActive');
+
+nConfigIndex = 1;
+nConfigCount = DIMSIZ(sDimConfigKey);
+While(nConfigIndex <= nConfigCount);
+  sConfigKey = DIMNM(sDimConfigKey, nConfigIndex);
+  If(sConfigKey @<> 'All Config Keys');
+    sConfigValue = CellGetS(sCubeConfig, sTemplateCode, sConfigKey);
+    CellPutS(sConfigValue, sCubeConfig, sDimensionCode, sConfigKey);
+  EndIf;
+  nConfigIndex = nConfigIndex + 1;
+End;
+
+ExecuteProcess(
+  sPrefix | '.P.Log.Event',
+  'pPrefix', sPrefix,
+  'pSeverity', 'INFO',
+  'pObjectType', 'DIMENSION',
+  'pObjectName', sDimensionCode,
+  'pMessage', 'Managed dimension onboarded with master dimension ' | sMasterDimensionName | '.',
+  'pRunId', sDimensionCode
+);
+#endregion
+
+#region metadata
+# No metadata tab logic in this implementation.
+#endregion
+
+#region data
+# No Data tab logic in this implementation.
+#endregion
+
+#region epilog
+# No Epilog tab logic beyond onboarding orchestration.
+#endregion

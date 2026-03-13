@@ -1,0 +1,9 @@
+IMFProcess,BedrockProcess,CurrentIMFParameters,VerifiedBedrockParameters,Assessment,RecommendedAction
+IMF.P.Dimension.Create,}bedrock.dim.create,pDimension,pDim,Wrong,"Replace Bedrock call with pDim and optionally pLogOutput/pStrictErrorHandling"
+IMF.P.Dimension.Clear,}bedrock.dim.clone,pDimension,"pSrcDim,pTgtDim,pHier,pAttr,pUnwind,pSub",Wrong,"Do not call Bedrock directly until clear strategy is redesigned or wrapped"
+IMF.P.Dimension.CopyRelations,}bedrock.hier.clone,"pSourceDimension,pTargetDimension","pSrcDim,pSrcHier,pTgtDim,pTgtHier,pAttr,pUnwind",Wrong,"Map to hierarchy-aware Bedrock contract and provide explicit hierarchy names"
+IMF.P.Attribute.CopyDefinitions,}bedrock.dim.attr.create,none,"pDim,pAttr,pPrevAttr,pAttrType",Incomplete,"Design list or loop-based Bedrock call before enabling delegation"
+IMF.P.Security.CreateGroups,}bedrock.security.group.create,none,"pGroup,pAlias",Incomplete,"Map IMF group list to pGroup"
+IMF.P.Security.SetCubeAccess,}bedrock.security.object.assign,none,"pGroup,pObjectType,pObject,pSecurityLevel,pSecurityRefresh",Incomplete,"Map cube access fields into Bedrock object-security contract"
+IMF.P.Security.SetDimensionAccess,}bedrock.security.object.assign,none,"pGroup,pObjectType,pObject,pSecurityLevel,pSecurityRefresh",Incomplete,"Map dimension access fields into Bedrock object-security contract"
+IMF.P.Log.Event,}bedrock.server.writetomessagelog,pMessage,"pLevel,pMessage",Wrong,"Pass both severity and message to Bedrock"

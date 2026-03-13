@@ -8,6 +8,7 @@
 - Static test coverage for language process pairs, fallback marker behavior, and text-key seeding.
 - Static test coverage for Wave 1 Bedrock facade parameters and source markers.
 - Source-controlled PAW workbook specifications for `IMF.PAW.MasterFlow`.
+- `IMF.P.Dimension.Onboard` as an end-to-end onboarding process for new managed dimensions.
 
 ## Changed
 
@@ -23,6 +24,7 @@
 - `IMF.P.Commit.PublishVersion` now replaces the master dimension from the work version after archive creation.
 - `IMF.P.Rollback.Validate` and `IMF.P.Rollback.ToArchive` now perform baseline restore validation and master backup before rollback.
 - `IMF.P.Dimension.Clear`, `IMF.P.Dimension.CopyRelations`, `IMF.P.Security.CreateGroups`, `IMF.P.Security.SetCubeAccess`, and `IMF.P.Security.SetDimensionAccess` now include Wave 1 Bedrock delegation parameters and documented contract boundaries.
+- Bedrock v5 parameter contracts are now verified against the upstream GitHub process definitions, with IMF source corrected to use the verified Bedrock parameter names.
 
 ## Fixed
 

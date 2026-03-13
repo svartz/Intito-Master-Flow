@@ -27,7 +27,9 @@ sTargetDimension = Trim(pTargetDimension);
 sUseBedrock = Upper(Trim(pUseBedrock));
 sBedrockProcess = Trim(pBedrockProcess);
 sStrictBedrock = Upper(Trim(pStrictBedrock));
+nBedrockEnabled = 0;
 nBedrockReturn = ProcessExitNormal();
+sBedrockStrictError = '0';
 
 If(sUseBedrock @= '');
   sUseBedrock = 'N';
@@ -38,6 +40,9 @@ EndIf;
 If(sStrictBedrock @= '');
   sStrictBedrock = 'N';
 EndIf;
+If(sStrictBedrock @= 'Y');
+  sBedrockStrictError = '1';
+EndIf;
 
 If(sTargetDimension @= '');
   ProcessBreak;
@@ -45,6 +50,7 @@ EndIf;
 
 If(sUseBedrock @= 'Y');
   If(ProcessExists(sBedrockProcess) = 1);
+    nBedrockEnabled = 1;
     ExecuteProcess(
       'IMF.P.Log.Event',
       'pPrefix', sPrefix,
@@ -54,11 +60,11 @@ If(sUseBedrock @= 'Y');
       'pMessage', 'Delegating dimension shell creation to Bedrock.',
       'pRunId', sTargetDimension
     );
-    # TODO: Confirm the exact Bedrock parameter contract in the target environment.
-    # Current delegation assumes a wrapper-compatible parameter named pDimension.
     nBedrockReturn = ExecuteProcess(
       sBedrockProcess,
-      'pDimension', sTargetDimension
+      'pDim', sTargetDimension,
+      'pLogOutput', '0',
+      'pStrictErrorHandling', sBedrockStrictError
     );
     If(nBedrockReturn <> ProcessExitNormal());
       ExecuteProcess(
@@ -90,7 +96,11 @@ If(sUseBedrock @= 'Y');
   EndIf;
 EndIf;
 
-If(DimensionExists(sTargetDimension) = 0);
+If((nBedrockEnabled = 0) % (nBedrockReturn <> ProcessExitNormal()));
+  If(DimensionExists(sTargetDimension) = 0);
+    DimensionCreate(sTargetDimension);
+  EndIf;
+ElseIf(DimensionExists(sTargetDimension) = 0);
   DimensionCreate(sTargetDimension);
 EndIf;
 #endregion

@@ -31,6 +31,22 @@ def test_wave1_bedrock_json_contracts_exist() -> None:
 def test_wave1_bedrock_ti_files_document_delegation() -> None:
     for process_name, bedrock_process in TARGETS.items():
         source = (PROCESS_DIR / f"{process_name}.ti").read_text(encoding="utf-8")
-        assert "TODO:" in source
         assert bedrock_process in source
         assert "pUseBedrock" in source
+
+
+def test_verified_bedrock_parameter_names_are_used() -> None:
+    expected_snippets = {
+        "IMF.P.Dimension.Create": ["'pDim'", "'pStrictErrorHandling'"],
+        "IMF.P.Dimension.Clear": ["Bedrock-compatible clear wrapper exists"],
+        "IMF.P.Dimension.CopyRelations": ["'pSrcDim'", "'pSrcHier'", "'pTgtDim'", "'pTgtHier'"],
+        "IMF.P.Attribute.CopyDefinitions": ["'pDim'", "'pAttr'", "'pAttrType'"],
+        "IMF.P.Security.CreateGroups": ["'pGroup'", "'pStrictErrorHandling'"],
+        "IMF.P.Security.SetCubeAccess": ["'pGroup'", "'pObjectType'", "'pObject'", "'pSecurityLevel'"],
+        "IMF.P.Security.SetDimensionAccess": ["'pGroup'", "'pObjectType'", "'pObject'", "'pSecurityLevel'"],
+        "IMF.P.Log.Event": ["'pLevel'", "'pMessage'"],
+    }
+    for process_name, snippets in expected_snippets.items():
+        source = (PROCESS_DIR / f"{process_name}.ti").read_text(encoding="utf-8")
+        for snippet in snippets:
+            assert snippet in source, f"{process_name} missing verified Bedrock snippet {snippet}"
