@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate and deploy TM1 v12 process artifacts from this repository.
+"""Validate and deploy TM1 v12 IMF artifacts from this repository.
 
 This script is intentionally conservative:
 - validate local source structure before any network call
@@ -9,8 +9,8 @@ This script is intentionally conservative:
 
 Current deployment scope:
 - deploys processes from src/processes
-- validates custom object-definition JSON files, but does not compile them
-  into native TM1 dimensions or cubes yet
+- deploys custom IMF object definitions from src/object-definitions into
+  native TM1 dimensions and cubes
 """
 
 from __future__ import annotations
@@ -31,6 +31,7 @@ from typing import Any
 
 PROCESS_JSON_GLOB = "*.json"
 TI_REGION_NAMES = ("prolog", "metadata", "data", "epilog")
+STRING_ESCAPE = "\\'"
 
 
 class DeployError(RuntimeError):
@@ -57,11 +58,11 @@ class Config:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Validate and deploy TM1 v12 repo artifacts.")
+    parser = argparse.ArgumentParser(description="Validate and deploy TM1 v12 IMF artifacts.")
     parser.add_argument(
         "command",
-        choices=["validate", "plan", "deploy-processes"],
-        help="validate local files, print a deployment plan, or deploy processes",
+        choices=["validate", "plan", "deploy-processes", "deploy-objects"],
+        help="validate local files, print a deployment plan, deploy processes, or deploy native objects",
     )
     parser.add_argument(
         "--config",
@@ -82,6 +83,11 @@ def parse_args() -> argparse.Namespace:
         "--filter",
         default="",
         help="Optional substring filter on process names.",
+    )
+    parser.add_argument(
+        "--deploy-objects",
+        action="store_true",
+        help="When used with deploy-processes, deploy native object definitions after processes.",
     )
     return parser.parse_args()
 
@@ -121,7 +127,11 @@ def load_config(config_path: Path, repo_root: Path) -> Config:
         return file_config.get(name, default)
 
     base_url = str(cfg("base_url", "IMF_TM1_BASE_URL", "")).rstrip("/")
-    api_path = str(cfg("api_path", "IMF_TM1_API_PATH", "/api/v1"))
+    api_path = str(cfg("api_path", "IMF_TM1_API_PATH", "/api/v1")).strip()
+    if api_path in {".", "/"}:
+        api_path = ""
+    elif api_path and not api_path.startswith("/"):
+        api_path = f"/{api_path}"
     auth_mode = str(cfg("auth_mode", "IMF_TM1_AUTH_MODE", "basic")).lower()
     user = str(cfg("user", "IMF_TM1_USER", ""))
     password = str(cfg("password", "IMF_TM1_PASSWORD", ""))
@@ -218,16 +228,28 @@ def load_process_definitions(process_root: Path, name_filter: str) -> list[dict[
         parameters = data.get("Parameters", [])
         if not isinstance(parameters, list):
             raise DeployError(f"Parameters must be a list in {json_path}")
+        sanitized_parameters: list[dict[str, Any]] = []
+        for parameter in parameters:
+            if not isinstance(parameter, dict):
+                raise DeployError(f"Each parameter must be an object in {json_path}")
+            sanitized_parameter = {
+                key: parameter[key]
+                for key in ("Name", "Prompt", "Value")
+                if key in parameter
+            }
+            if "Name" not in sanitized_parameter:
+                raise DeployError(f"Parameter missing Name in {json_path}")
+            sanitized_parameters.append(sanitized_parameter)
 
         process_defs.append(
             {
                 "name": name,
                 "json_path": json_path,
                 "ti_path": ti_path,
-                "parameters": parameters,
+                "parameters": sanitized_parameters,
                 "payload": {
                     "Name": name,
-                    "Parameters": parameters,
+                    "Parameters": sanitized_parameters,
                     "PrologProcedure": regions["prolog"],
                     "MetadataProcedure": regions["metadata"],
                     "DataProcedure": regions["data"],
@@ -251,19 +273,85 @@ def validate_object_definitions(object_root: Path) -> list[str]:
         data = read_json_file(json_path)
         if "name" not in data:
             warnings.append(f"{json_path} does not contain a top-level 'name' field.")
-
-    warnings.append(
-        "Custom object-definition JSON files are validated only for structure here; "
-        "native TM1 dimension/cube compilation is not implemented in this deploy script."
-    )
     return warnings
+
+
+def load_object_definitions(object_root: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    if not object_root.exists():
+        raise DeployError(f"Object-definition root does not exist: {object_root}")
+
+    dimension_defs: list[dict[str, Any]] = []
+    cube_defs: list[dict[str, Any]] = []
+
+    for json_path in sorted(object_root.rglob("*.json")):
+        data = read_json_file(json_path)
+        name = data.get("name")
+        kind = data.get("kind")
+        if not name or not isinstance(name, str):
+            raise DeployError(f"Object-definition missing valid 'name': {json_path}")
+        if not kind or not isinstance(kind, str):
+            raise DeployError(f"Object-definition missing valid 'kind': {json_path}")
+        record = {"path": json_path, "name": name, "kind": kind, "data": data}
+        if "dimension" in kind:
+            dimension_defs.append(record)
+        elif "cube" in kind:
+            cube_defs.append(record)
+        else:
+            raise DeployError(f"Unsupported object kind '{kind}' in {json_path}")
+
+    if not dimension_defs and not cube_defs:
+        raise DeployError(f"No object definitions found in {object_root}")
+
+    return dimension_defs, cube_defs
+
+
+def tm1_element_type(element_type: str) -> str:
+    normalized = element_type.strip().upper()
+    mapping = {
+        "N": "Numeric",
+        "NUMERIC": "Numeric",
+        "S": "String",
+        "STRING": "String",
+        "C": "Consolidated",
+        "CONSOLIDATED": "Consolidated",
+    }
+    if normalized not in mapping:
+        raise DeployError(f"Unsupported element type '{element_type}' in object definition.")
+    return mapping[normalized]
+
+
+def tm1_attribute_type(attribute_type: str) -> str:
+    normalized = attribute_type.strip().lower()
+    mapping = {
+        "string": "String",
+        "numeric": "Numeric",
+        "number": "Numeric",
+        "alias": "Alias",
+    }
+    if normalized not in mapping:
+        raise DeployError(f"Unsupported attribute type '{attribute_type}' in object definition.")
+    return mapping[normalized]
+
+
+def ti_escape(value: str) -> str:
+    return value.replace("\\", "\\\\").replace("'", STRING_ESCAPE)
 
 
 def build_headers(config: Config) -> dict[str, str]:
     headers = {
-        "Accept": "application/json",
+        "Accept": "application/json, text/plain, */*",
         "Content-Type": "application/json; charset=utf-8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/123.0.0.0 Safari/537.36"
+        ),
     }
+    parsed_base = urllib.parse.urlparse(config.base_url)
+    origin = f"{parsed_base.scheme}://{parsed_base.netloc}"
+    headers["Origin"] = origin
+    headers["Referer"] = f"{origin}/"
 
     if config.authorization_header:
         headers["Authorization"] = config.authorization_header
@@ -296,7 +384,7 @@ class TM1RestClient:
         if not config.base_url:
             raise DeployError("Missing TM1 base URL. Set IMF_TM1_BASE_URL or use a local config file.")
         self.config = config
-        self.base_api_url = f"{config.base_url}{config.api_path}"
+        self.base_api_url = f"{config.base_url}{config.api_path}".rstrip("/")
         self.headers = build_headers(config)
         self.ssl_context = build_ssl_context(config.verify_ssl)
 
@@ -344,7 +432,7 @@ class TM1RestClient:
             return status, raw
 
     def ping(self) -> None:
-        self.request("GET", "/Configuration", expected_statuses=(200,))
+        self.request("GET", "/Processes?$top=1", expected_statuses=(200,))
 
     def process_exists(self, process_name: str) -> bool:
         escaped = process_name.replace("'", "''")
@@ -359,6 +447,96 @@ class TM1RestClient:
         escaped = process_name.replace("'", "''")
         path = f"/Processes('{urllib.parse.quote(escaped, safe='')}')"
         self.request("PATCH", path, payload=payload, expected_statuses=(204,))
+
+    def delete_process(self, process_name: str) -> None:
+        escaped = process_name.replace("'", "''")
+        path = f"/Processes('{urllib.parse.quote(escaped, safe='')}')"
+        self.request("DELETE", path, expected_statuses=(204, 404))
+
+    def execute_process(self, process_name: str) -> None:
+        escaped = process_name.replace("'", "''")
+        path = f"/Processes('{urllib.parse.quote(escaped, safe='')}')/tm1.Execute"
+        self.request("POST", path, payload={}, expected_statuses=(204,))
+
+    def dimension_exists(self, dimension_name: str) -> bool:
+        escaped = dimension_name.replace("'", "''")
+        path = f"/Dimensions('{urllib.parse.quote(escaped, safe='')}')?$select=Name"
+        status, _ = self.request("GET", path, expected_statuses=(200, 404))
+        return status == 200
+
+    def create_dimension(self, dimension_name: str) -> None:
+        self.request("POST", "/Dimensions", payload={"Name": dimension_name}, expected_statuses=(201,))
+
+    def create_hierarchy(self, dimension_name: str, hierarchy_name: str) -> None:
+        escaped = dimension_name.replace("'", "''")
+        path = f"/Dimensions('{urllib.parse.quote(escaped, safe='')}')/Hierarchies"
+        self.request("POST", path, payload={"Name": hierarchy_name}, expected_statuses=(201,))
+
+    def get_hierarchy_snapshot(self, dimension_name: str, hierarchy_name: str) -> dict[str, Any]:
+        escaped_dimension = dimension_name.replace("'", "''")
+        escaped_hierarchy = hierarchy_name.replace("'", "''")
+        path = (
+            f"/Dimensions('{urllib.parse.quote(escaped_dimension, safe='')}')"
+            f"/Hierarchies('{urllib.parse.quote(escaped_hierarchy, safe='')}')"
+            "?$expand=Elements,Edges,ElementAttributes"
+        )
+        _, payload = self.request("GET", path, expected_statuses=(200,))
+        if not isinstance(payload, dict):
+            raise DeployError(f"Unexpected hierarchy payload for {dimension_name}:{hierarchy_name}")
+        return payload
+
+    def create_element(self, dimension_name: str, hierarchy_name: str, element_name: str, element_type: str) -> None:
+        escaped_dimension = dimension_name.replace("'", "''")
+        escaped_hierarchy = hierarchy_name.replace("'", "''")
+        path = (
+            f"/Dimensions('{urllib.parse.quote(escaped_dimension, safe='')}')"
+            f"/Hierarchies('{urllib.parse.quote(escaped_hierarchy, safe='')}')/Elements"
+        )
+        self.request(
+            "POST",
+            path,
+            payload={"Name": element_name, "Type": element_type},
+            expected_statuses=(201,),
+        )
+
+    def create_edge(self, dimension_name: str, hierarchy_name: str, parent_name: str, component_name: str, weight: float) -> None:
+        escaped_dimension = dimension_name.replace("'", "''")
+        escaped_hierarchy = hierarchy_name.replace("'", "''")
+        path = (
+            f"/Dimensions('{urllib.parse.quote(escaped_dimension, safe='')}')"
+            f"/Hierarchies('{urllib.parse.quote(escaped_hierarchy, safe='')}')/Edges"
+        )
+        self.request(
+            "POST",
+            path,
+            payload={"ParentName": parent_name, "ComponentName": component_name, "Weight": weight},
+            expected_statuses=(201,),
+        )
+
+    def create_element_attribute(self, dimension_name: str, hierarchy_name: str, attribute_name: str, attribute_type: str) -> None:
+        escaped_dimension = dimension_name.replace("'", "''")
+        escaped_hierarchy = hierarchy_name.replace("'", "''")
+        path = (
+            f"/Dimensions('{urllib.parse.quote(escaped_dimension, safe='')}')"
+            f"/Hierarchies('{urllib.parse.quote(escaped_hierarchy, safe='')}')/ElementAttributes"
+        )
+        self.request(
+            "POST",
+            path,
+            payload={"Name": attribute_name, "Type": attribute_type},
+            expected_statuses=(201,),
+        )
+
+    def cube_exists(self, cube_name: str) -> bool:
+        escaped = cube_name.replace("'", "''")
+        path = f"/Cubes('{urllib.parse.quote(escaped, safe='')}')?$select=Name"
+        status, _ = self.request("GET", path, expected_statuses=(200, 404))
+        return status == 200
+
+    def create_cube(self, cube_name: str, dimensions: list[str]) -> None:
+        binds = [f"Dimensions('{dimension_name}')" for dimension_name in dimensions]
+        payload = {"Name": cube_name, "Dimensions@odata.bind": binds}
+        self.request("POST", "/Cubes", payload=payload, expected_statuses=(201,))
 
 
 def print_plan(process_defs: list[dict[str, Any]], object_warnings: list[str]) -> None:
@@ -404,6 +582,214 @@ def deploy_processes(config: Config, process_defs: list[dict[str, Any]]) -> None
     print(f"Deployment complete. created={created} updated={updated} skipped={skipped}")
 
 
+def deploy_dimensions(client: TM1RestClient, dimension_defs: list[dict[str, Any]]) -> None:
+    created = 0
+    updated = 0
+
+    for definition in dimension_defs:
+        data = definition["data"]
+        dimension_name = definition["name"]
+        hierarchy = data.get("hierarchy", {})
+        hierarchy_name = str(hierarchy.get("name") or dimension_name)
+        root_name = hierarchy.get("root")
+        seed_elements = hierarchy.get("seedElements", [])
+        attributes = data.get("attributes", [])
+
+        if not client.dimension_exists(dimension_name):
+            client.create_dimension(dimension_name)
+            created += 1
+            print(f"POST  dimension {dimension_name}")
+        else:
+            print(f"KEEP  dimension {dimension_name}")
+
+        try:
+            snapshot = client.get_hierarchy_snapshot(dimension_name, hierarchy_name)
+        except DeployError:
+            client.create_hierarchy(dimension_name, hierarchy_name)
+            updated += 1
+            print(f"POST  hierarchy {dimension_name}:{hierarchy_name}")
+            snapshot = client.get_hierarchy_snapshot(dimension_name, hierarchy_name)
+
+        existing_elements = {
+            element.get("Name")
+            for element in snapshot.get("Elements", [])
+            if isinstance(element, dict) and element.get("Name")
+        }
+        existing_edges = {
+            (
+                edge.get("ParentName"),
+                edge.get("ComponentName"),
+                float(edge.get("Weight", 1)),
+            )
+            for edge in snapshot.get("Edges", [])
+            if isinstance(edge, dict)
+        }
+        existing_attributes = {
+            attribute.get("Name")
+            for attribute in snapshot.get("ElementAttributes", [])
+            if isinstance(attribute, dict) and attribute.get("Name")
+        }
+
+        if root_name and root_name not in existing_elements:
+            client.create_element(dimension_name, hierarchy_name, root_name, "Consolidated")
+            existing_elements.add(root_name)
+            updated += 1
+            print(f"POST  element {dimension_name}:{root_name}")
+
+        for element in seed_elements:
+            element_name = element["name"]
+            element_type = tm1_element_type(str(element.get("type", "N")))
+            if element_name not in existing_elements:
+                client.create_element(dimension_name, hierarchy_name, element_name, element_type)
+                existing_elements.add(element_name)
+                updated += 1
+                print(f"POST  element {dimension_name}:{element_name}")
+
+        for element in seed_elements:
+            parent_name = element.get("parent")
+            if not parent_name:
+                continue
+            weight = float(element.get("weight", 1))
+            edge_key = (parent_name, element["name"], weight)
+            if edge_key not in existing_edges:
+                client.create_edge(dimension_name, hierarchy_name, parent_name, element["name"], weight)
+                existing_edges.add(edge_key)
+                updated += 1
+                print(f"POST  edge {dimension_name}:{parent_name}->{element['name']}")
+
+        for attribute in attributes:
+            attribute_name = attribute["name"]
+            attribute_type = tm1_attribute_type(str(attribute.get("type", "string")))
+            if attribute_name not in existing_attributes:
+                client.create_element_attribute(dimension_name, hierarchy_name, attribute_name, attribute_type)
+                existing_attributes.add(attribute_name)
+                updated += 1
+                print(f"POST  attribute {dimension_name}:{attribute_name}")
+
+    print("")
+    print(f"Dimension deployment complete. created={created} updated={updated}")
+
+
+def deploy_cubes(client: TM1RestClient, cube_defs: list[dict[str, Any]]) -> None:
+    created = 0
+
+    for definition in cube_defs:
+        cube_name = definition["name"]
+        dimensions = definition["data"].get("dimensions", [])
+        if not isinstance(dimensions, list) or not dimensions:
+            raise DeployError(f"Cube {cube_name} must define a non-empty dimensions list.")
+        if client.cube_exists(cube_name):
+            print(f"KEEP  cube {cube_name}")
+            continue
+        client.create_cube(cube_name, [str(name) for name in dimensions])
+        created += 1
+        print(f"POST  cube {cube_name}")
+
+    print("")
+    print(f"Cube deployment complete. created={created}")
+
+
+def build_seed_process_payload(process_name: str, statements: list[str]) -> dict[str, Any]:
+    prolog_lines = [
+        "#region prolog",
+        f"# Generated seed process: {process_name}",
+        "#endregion",
+        "",
+        "#region metadata",
+        "#endregion",
+        "",
+        "#region data",
+        "#endregion",
+        "",
+        "#region epilog",
+    ]
+    prolog_lines.extend(statements)
+    prolog_lines.append("#endregion")
+    regions = parse_ti_regions_from_text("\n".join(prolog_lines))
+    return {
+        "Name": process_name,
+        "Parameters": [],
+        "PrologProcedure": regions["prolog"],
+        "MetadataProcedure": regions["metadata"],
+        "DataProcedure": regions["data"],
+        "EpilogProcedure": regions["epilog"],
+    }
+
+
+def parse_ti_regions_from_text(text: str) -> dict[str, str]:
+    lines = text.splitlines()
+    sections = {name: [] for name in TI_REGION_NAMES}
+    seen_regions: set[str] = set()
+    current: str | None = None
+
+    for line in lines:
+        stripped = line.strip().lower()
+        if stripped.startswith("#region "):
+            region_name = stripped.split(maxsplit=1)[1]
+            if region_name in sections:
+                seen_regions.add(region_name)
+            current = region_name if region_name in sections else None
+            continue
+        if stripped == "#endregion":
+            current = None
+            continue
+        if current:
+            sections[current].append(line)
+
+    missing = [name for name in TI_REGION_NAMES if name not in seen_regions]
+    if missing:
+        raise DeployError(f"Generated TI text is missing required regions: {', '.join(missing)}")
+
+    return {name: "\n".join(content).strip() for name, content in sections.items()}
+
+
+def deploy_seed_data(client: TM1RestClient, cube_defs: list[dict[str, Any]]) -> None:
+    statements: list[str] = []
+    process_name = "ZZZ.Codex.Seed.IMF.Objects"
+
+    for definition in cube_defs:
+        cube_name = definition["name"]
+        seed_data = definition["data"].get("seedData", [])
+        if not isinstance(seed_data, list):
+            raise DeployError(f"Cube {cube_name} seedData must be a list.")
+        for seed in seed_data:
+            intersection = seed.get("intersection", [])
+            if not isinstance(intersection, list) or not intersection:
+                raise DeployError(f"Cube {cube_name} has invalid seedData intersection.")
+            coordinates = ", ".join(f"'{ti_escape(str(item))}'" for item in intersection)
+            value = seed.get("value")
+            if isinstance(value, (int, float)) and not isinstance(value, bool):
+                statements.append(f"CellPutN({value}, '{ti_escape(cube_name)}', {coordinates});")
+            else:
+                statements.append(
+                    f"CellPutS('{ti_escape(str(value))}', '{ti_escape(cube_name)}', {coordinates});"
+                )
+
+    if not statements:
+        print("No cube seed data to apply.")
+        return
+
+    payload = build_seed_process_payload(process_name, statements)
+    if client.process_exists(process_name):
+        client.delete_process(process_name)
+    client.create_process(payload)
+    try:
+        client.execute_process(process_name)
+        print(f"EXEC  seed-data {process_name}")
+    finally:
+        client.delete_process(process_name)
+        print(f"DELETE seed-data {process_name}")
+
+
+def deploy_objects(config: Config, dimension_defs: list[dict[str, Any]], cube_defs: list[dict[str, Any]]) -> None:
+    client = TM1RestClient(config)
+    client.ping()
+    print(f"Connected to {config.base_url}{config.api_path}")
+    deploy_dimensions(client, dimension_defs)
+    deploy_cubes(client, cube_defs)
+    deploy_seed_data(client, cube_defs)
+
+
 def validate_config_for_deploy(config: Config) -> None:
     if not config.deploy_processes:
         raise DeployError("deploy_processes=false in config; refusing to deploy.")
@@ -434,8 +820,11 @@ def main() -> int:
             )
 
         object_warnings = []
+        dimension_defs: list[dict[str, Any]] = []
+        cube_defs: list[dict[str, Any]] = []
         if config.validate_object_definitions:
             object_warnings = validate_object_definitions(config.object_definition_root)
+            dimension_defs, cube_defs = load_object_definitions(config.object_definition_root)
 
         if args.command == "validate":
             print_plan(process_defs, object_warnings)
@@ -453,7 +842,12 @@ def main() -> int:
         if not args.execute:
             raise DeployError("Refusing to deploy without --execute.")
 
-        deploy_processes(config, process_defs)
+        if args.command == "deploy-objects":
+            deploy_objects(config, dimension_defs, cube_defs)
+        else:
+            deploy_processes(config, process_defs)
+            if args.deploy_objects:
+                deploy_objects(config, dimension_defs, cube_defs)
         if object_warnings:
             print("")
             print("Post-deploy warnings:")

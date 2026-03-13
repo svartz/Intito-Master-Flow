@@ -20,11 +20,14 @@ Implemented:
 - validates paired process artifacts (`*.json` + linked `*.ti`)
 - parses TI regions: `prolog`, `metadata`, `data`, `epilog`
 - deploys processes to TM1 through the REST API
+- uses a lightweight TM1 preflight against `/Processes?$top=1` before deploy
 - validates custom object-definition JSON structure under `src/object-definitions`
+- deploys native TM1 dimensions from `src/object-definitions/dimensions`
+- deploys native TM1 cubes from `src/object-definitions/cubes`
+- applies supported cube seed data through a temporary generated TI process
 
 Not yet implemented:
 
-- compilation of custom object-definition JSON into native TM1 dimensions and cubes
 - process execution after deploy, such as `IMF.P.Init.Project`
 - environment-specific auth flows beyond Basic auth or a caller-supplied `Authorization` header
 
@@ -58,6 +61,35 @@ Supported environment variables:
 - `IMF_TM1_PROCESS_PREFIX`
 - `IMF_TM1_ALLOW_OVERWRITE`
 
+## Base URL patterns
+
+The deploy utility supports two base URL styles:
+
+### Standard TM1 REST root
+
+Use:
+
+- `base_url = https://host:port`
+- `api_path = /api/v1`
+
+This results in requests such as:
+
+- `https://host:port/api/v1/Processes`
+
+### Planning Analytics as a Service direct TM1 root
+
+Use:
+
+- `base_url = https://germanywestcentral.planninganalytics.saas.ibm.com/api/<tenant>/v0/tm1/<database>`
+- `api_path = ""`
+
+This results in requests such as:
+
+- `https://germanywestcentral.planninganalytics.saas.ibm.com/api/<tenant>/v0/tm1/<database>/Processes`
+
+For PA as a Service environments, this direct TM1 root may work even when the `/api/v1` suffix does not.
+The client also sends browser-like `User-Agent`, `Origin`, `Referer`, and `Accept-Language` headers because some PA as a Service tenants block the default Python client signature on object endpoints.
+
 ## Safe usage
 
 Validate only:
@@ -76,6 +108,18 @@ Deploy processes:
 
 ```powershell
 python tools/tm1_deploy.py deploy-processes --execute
+```
+
+Deploy native TM1 objects:
+
+```powershell
+python tools/tm1_deploy.py deploy-objects --execute
+```
+
+Deploy processes and then native TM1 objects:
+
+```powershell
+python tools/tm1_deploy.py deploy-processes --deploy-objects --execute
 ```
 
 Deploy only security processes:
@@ -122,4 +166,4 @@ For GitHub Actions or another runner:
 
 ## Important limitation
 
-The repository's dimension and cube JSON files under `src/object-definitions` are custom IMF definitions, not native TM1 REST payloads. The deploy script validates them for structure but does not yet transform and publish them as TM1 objects.
+The repository's dimension and cube JSON files under `src/object-definitions` are custom IMF definitions, not native TM1 REST payloads. The deploy script now transforms a supported subset of that schema into native TM1 dimensions, hierarchies, attributes, cubes, and cube seed data. More advanced constructs such as rules, chores, TI-driven post-processing, and broader object classes are still outside the current scope.
