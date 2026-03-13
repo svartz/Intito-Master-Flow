@@ -51,17 +51,18 @@ EndIf;
 If(sVersionId @= '');
   ProcessBreak;
 EndIf;
-If((sSourceType @<> 'MASTER') % (sSourceType @<> 'VERSION'));
+If((sSourceType @<> 'MASTER') & (sSourceType @<> 'VERSION'));
   ProcessBreak;
 EndIf;
-If((sSourceType @= 'VERSION') % (sSourceVersion @= ''));
+If((sSourceType @= 'VERSION') & (sSourceVersion @= ''));
   ProcessBreak;
 EndIf;
 If(DimensionElementExists(sDimDimension, sDimensionCode) = 0);
   ProcessBreak;
 EndIf;
+sVersionExists = 'N';
 If(DimensionElementExists(sDimVersion, sVersionId) = 1);
-  ProcessBreak;
+  sVersionExists = 'Y';
 EndIf;
 
 sMasterDimension = Trim(AttrS(sDimDimension, sDimensionCode, 'MasterDimensionName'));
@@ -84,8 +85,11 @@ If(DimensionElementExists(sDimVersion, 'All Versions') = 0);
   DimensionElementInsert(sDimVersion, '', 'All Versions', 'C');
 EndIf;
 
-DimensionElementInsert(sDimVersion, '', sVersionId, 'N');
-DimensionElementComponentAdd(sDimVersion, 'All Versions', sVersionId, 1);
+If(sVersionExists @<> 'Y');
+  DimensionElementInsert(sDimVersion, '', sVersionId, 'N');
+  DimensionElementComponentAdd(sDimVersion, 'All Versions', sVersionId, 1);
+  DimensionUpdateDirect(sDimVersion);
+EndIf;
 
 AttrPutS(sDimensionCode, sDimVersion, sVersionId, 'DimensionCode');
 AttrPutS('Draft', sDimVersion, sVersionId, 'Status');

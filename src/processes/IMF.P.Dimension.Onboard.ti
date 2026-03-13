@@ -78,8 +78,9 @@ EndIf;
 If(DimensionElementExists(sDimDimension, sTemplateCode) = 0);
   ProcessBreak;
 EndIf;
+sRegistryExists = 'N';
 If(DimensionElementExists(sDimDimension, sDimensionCode) = 1);
-  ProcessBreak;
+  sRegistryExists = 'Y';
 EndIf;
 
 If(sCreatePhysicalDimension @= 'Y');
@@ -96,8 +97,11 @@ If(DimensionElementExists(sDimDimension, 'All Managed Dimensions') = 0);
   DimensionElementInsert(sDimDimension, '', 'All Managed Dimensions', 'C');
 EndIf;
 
-DimensionElementInsert(sDimDimension, '', sDimensionCode, 'N');
-DimensionElementComponentAdd(sDimDimension, 'All Managed Dimensions', sDimensionCode, 1);
+If(sRegistryExists @<> 'Y');
+  DimensionElementInsert(sDimDimension, '', sDimensionCode, 'N');
+  DimensionElementComponentAdd(sDimDimension, 'All Managed Dimensions', sDimensionCode, 1);
+  DimensionUpdateDirect(sDimDimension);
+EndIf;
 
 AttrPutS(sMasterDimensionName, sDimDimension, sDimensionCode, 'MasterDimensionName');
 AttrPutS('', sDimDimension, sDimensionCode, 'ActiveVersion');
