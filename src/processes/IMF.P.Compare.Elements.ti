@@ -47,10 +47,11 @@ While(nMasterIndex <= nMasterCount);
   sElement = DIMNM(sMasterDimension, nMasterIndex);
   If(DIMIX(sWorkDimension, sElement) = 0);
     sRecordId = 'DIFF|' | sVersionId | '|ELEMENT|DELETE|' | sElement;
-    If(DIMIX(sDimDiffRecord, sRecordId) = 0);
-      DimensionElementInsert(sDimDiffRecord, '', sRecordId, 'N');
-      DimensionElementComponentAdd(sDimDiffRecord, 'All Diff Records', sRecordId, 1);
-    EndIf;
+    ExecuteProcess(sPrefix | '.P.Control.EnsureRecord',
+      'pDimension', sDimDiffRecord,
+      'pElement', sRecordId,
+      'pRoot', 'All Diff Records',
+      'pElementType', 'N');
     AttrPutS(sVersionId, sDimDiffRecord, sRecordId, 'VersionId');
     AttrPutS(sDimensionCode, sDimDiffRecord, sRecordId, 'DimensionCode');
     AttrPutS('DELETE', sDimDiffRecord, sRecordId, 'ChangeType');
@@ -75,10 +76,11 @@ While(nWorkIndex <= nWorkCount);
   sElement = DIMNM(sWorkDimension, nWorkIndex);
   If(DIMIX(sMasterDimension, sElement) = 0);
     sRecordId = 'DIFF|' | sVersionId | '|ELEMENT|ADD|' | sElement;
-    If(DIMIX(sDimDiffRecord, sRecordId) = 0);
-      DimensionElementInsert(sDimDiffRecord, '', sRecordId, 'N');
-      DimensionElementComponentAdd(sDimDiffRecord, 'All Diff Records', sRecordId, 1);
-    EndIf;
+    ExecuteProcess(sPrefix | '.P.Control.EnsureRecord',
+      'pDimension', sDimDiffRecord,
+      'pElement', sRecordId,
+      'pRoot', 'All Diff Records',
+      'pElementType', 'N');
     AttrPutS(sVersionId, sDimDiffRecord, sRecordId, 'VersionId');
     AttrPutS(sDimensionCode, sDimDiffRecord, sRecordId, 'DimensionCode');
     AttrPutS('ADD', sDimDiffRecord, sRecordId, 'ChangeType');
