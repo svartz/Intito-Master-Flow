@@ -1,0 +1,600 @@
+{
+  "workbook": {
+    "Name": "IMF.PAW.MasterFlow",
+    "Type": "PAWWorkbookSpec",
+    "Purpose": "Source-controlled specification for the primary IMF operator workbook in PAW.",
+    "DefaultLanguage": "en-US",
+    "FallbackLanguage": "en-US",
+    "SupportedLanguages": [
+      "en-US",
+      "sv-SE",
+      "fi-FI",
+      "sv-FI",
+      "no-NO",
+      "da-DK",
+      "de-DE"
+    ],
+    "DefaultSelectors": {
+      "Dimension": "IMF.PAW.SS.ManagedDimensions.Active",
+      "Version": "IMF.PAW.SS.Version.Open"
+    },
+    "ActionSpec": "IMF.PAW.MasterFlow.Actions",
+    "SubsetSpec": "IMF.PAW.MasterFlow.Subsets",
+    "LayoutSpec": "IMF.PAW.MasterFlow.Layout",
+    "DeploymentSpec": "IMF.PAW.MasterFlow.Deployment",
+    "Tabs": [
+      {
+        "Id": "overview",
+        "TitleKey": "paw.tab.overview",
+        "ViewSpec": "IMF.PAW.MasterFlow.Tab.Overview"
+      },
+      {
+        "Id": "versions",
+        "TitleKey": "paw.tab.versions",
+        "ViewSpec": "IMF.PAW.MasterFlow.Tab.Versions"
+      },
+      {
+        "Id": "editing",
+        "TitleKey": "paw.tab.editing",
+        "ViewSpec": "IMF.PAW.MasterFlow.Tab.Editing"
+      },
+      {
+        "Id": "validation",
+        "TitleKey": "paw.tab.validation",
+        "ViewSpec": "IMF.PAW.MasterFlow.Tab.Validation"
+      },
+      {
+        "Id": "impact",
+        "TitleKey": "paw.tab.impact",
+        "ViewSpec": "IMF.PAW.MasterFlow.Tab.Impact"
+      },
+      {
+        "Id": "publish",
+        "TitleKey": "paw.tab.publish",
+        "ViewSpec": "IMF.PAW.MasterFlow.Tab.Publish"
+      },
+      {
+        "Id": "archive",
+        "TitleKey": "paw.tab.archive",
+        "ViewSpec": "IMF.PAW.MasterFlow.Tab.Archive"
+      },
+      {
+        "Id": "rollback",
+        "TitleKey": "paw.tab.rollback",
+        "ViewSpec": "IMF.PAW.MasterFlow.Tab.Rollback"
+      },
+      {
+        "Id": "exchange",
+        "TitleKey": "paw.tab.export_import",
+        "ViewSpec": "IMF.PAW.MasterFlow.Tab.Exchange"
+      }
+    ]
+  },
+  "actions": {
+    "Workbook": "IMF.PAW.MasterFlow",
+    "Type": "PAWActionSpec",
+    "Purpose": "Source-controlled process actions and navigation contract for the IMF PAW workbook.",
+    "Actions": [
+      {
+        "Id": "create_version",
+        "TitleKey": "paw.action.create_version",
+        "Process": "IMF.P.Version.Create",
+        "RequiredParameters": [
+          "pPrefix",
+          "pDimensionCode",
+          "pVersionId"
+        ],
+        "LaunchContext": "versions"
+      },
+      {
+        "Id": "run_compare",
+        "TitleKey": "paw.action.compare",
+        "Process": "IMF.P.Compare.VersionToMaster",
+        "RequiredParameters": [
+          "pPrefix",
+          "pDimensionCode",
+          "pVersionId"
+        ],
+        "LaunchContext": "validation"
+      },
+      {
+        "Id": "run_validate",
+        "TitleKey": "paw.action.validate",
+        "Process": "IMF.P.Validate.Technical",
+        "RequiredParameters": [
+          "pPrefix",
+          "pDimensionCode",
+          "pVersionId"
+        ],
+        "LaunchContext": "validation"
+      },
+      {
+        "Id": "run_impact",
+        "TitleKey": "paw.action.impact",
+        "Process": "IMF.P.Impact.RunAll",
+        "RequiredParameters": [
+          "pPrefix",
+          "pDimensionCode",
+          "pVersionId"
+        ],
+        "LaunchContext": "impact"
+      },
+      {
+        "Id": "prepare_publish",
+        "TitleKey": "paw.action.prepare_publish",
+        "Process": "IMF.P.Commit.Prepare",
+        "RequiredParameters": [
+          "pPrefix",
+          "pDimensionCode",
+          "pVersionId"
+        ],
+        "LaunchContext": "publish"
+      }
+    ]
+  },
+  "subsets": {
+    "Workbook": "IMF.PAW.MasterFlow",
+    "Type": "PAWSubsetSpec",
+    "Purpose": "Source-controlled subset specifications used by the IMF PAW workbook.",
+    "Subsets": [
+      {
+        "Name": "IMF.PAW.SS.ManagedDimensions.Active",
+        "Dimension": "IMF.D.Dimension",
+        "Expression": "{EXCEPT(TM1SUBSETALL([IMF.D.Dimension]), {[IMF.D.Dimension].[__Template.ManagedDimension]})}",
+        "Purpose": "All managed dimensions except the template member."
+      },
+      {
+        "Name": "IMF.PAW.SS.Version.Open",
+        "Dimension": "IMF.D.Version",
+        "Expression": "{TM1FILTERBYLEVEL(TM1SUBSETALL([IMF.D.Version]), 0)}",
+        "Purpose": "Leaf work versions for operational selection."
+      },
+      {
+        "Name": "IMF.PAW.SS.VersionMeasure.Operational",
+        "Dimension": "IMF.D.VersionMeasure",
+        "Expression": "{[IMF.D.VersionMeasure].[DimensionCode],[IMF.D.VersionMeasure].[Status],[IMF.D.VersionMeasure].[WorkDimension],[IMF.D.VersionMeasure].[IsLocked],[IMF.D.VersionMeasure].[LockedBy],[IMF.D.VersionMeasure].[ApprovalState],[IMF.D.VersionMeasure].[CreatedAt],[IMF.D.VersionMeasure].[CreatedBy],[IMF.D.VersionMeasure].[Notes]}",
+        "Purpose": "Version measures shown in overview and versions tabs."
+      },
+      {
+        "Name": "IMF.PAW.SS.VersionMeasure.Editing",
+        "Dimension": "IMF.D.VersionMeasure",
+        "Expression": "{[IMF.D.VersionMeasure].[DimensionCode],[IMF.D.VersionMeasure].[Status],[IMF.D.VersionMeasure].[WorkDimension],[IMF.D.VersionMeasure].[IsLocked],[IMF.D.VersionMeasure].[LockedBy],[IMF.D.VersionMeasure].[ApprovalState],[IMF.D.VersionMeasure].[Notes]}",
+        "Purpose": "Version measures shown in the editing tab."
+      },
+      {
+        "Name": "IMF.PAW.SS.VersionMeasure.Publish",
+        "Dimension": "IMF.D.VersionMeasure",
+        "Expression": "{[IMF.D.VersionMeasure].[DimensionCode],[IMF.D.VersionMeasure].[Status],[IMF.D.VersionMeasure].[ApprovalState],[IMF.D.VersionMeasure].[WorkDimension],[IMF.D.VersionMeasure].[ArchiveDimension],[IMF.D.VersionMeasure].[PublishedAt],[IMF.D.VersionMeasure].[PublishedBy],[IMF.D.VersionMeasure].[Notes]}",
+        "Purpose": "Version measures shown in the publish tab."
+      },
+      {
+        "Name": "IMF.PAW.SS.VersionMeasure.Archive",
+        "Dimension": "IMF.D.VersionMeasure",
+        "Expression": "{[IMF.D.VersionMeasure].[DimensionCode],[IMF.D.VersionMeasure].[ArchiveDimension],[IMF.D.VersionMeasure].[PublishedAt],[IMF.D.VersionMeasure].[PublishedBy],[IMF.D.VersionMeasure].[Notes]}",
+        "Purpose": "Version measures shown in the archive tab."
+      },
+      {
+        "Name": "IMF.PAW.SS.VersionMeasure.Rollback",
+        "Dimension": "IMF.D.VersionMeasure",
+        "Expression": "{[IMF.D.VersionMeasure].[DimensionCode],[IMF.D.VersionMeasure].[Status],[IMF.D.VersionMeasure].[ArchiveDimension],[IMF.D.VersionMeasure].[PublishedAt],[IMF.D.VersionMeasure].[PublishedBy],[IMF.D.VersionMeasure].[Notes]}",
+        "Purpose": "Version measures shown in the rollback tab."
+      },
+      {
+        "Name": "IMF.PAW.SS.ValidationMeasure.OpenVersionMeasures",
+        "Dimension": "IMF.D.ValidationMeasure",
+        "Expression": "{[IMF.D.ValidationMeasure].[VersionId],[IMF.D.ValidationMeasure].[ValidationType],[IMF.D.ValidationMeasure].[RuleCode],[IMF.D.ValidationMeasure].[ObjectName],[IMF.D.ValidationMeasure].[Severity],[IMF.D.ValidationMeasure].[Message],[IMF.D.ValidationMeasure].[DetectedAt]}",
+        "Purpose": "Validation measures shown in the validation tab."
+      },
+      {
+        "Name": "IMF.PAW.SS.ImpactMeasure.SummaryMeasures",
+        "Dimension": "IMF.D.ImpactMeasure",
+        "Expression": "{[IMF.D.ImpactMeasure].[VersionId],[IMF.D.ImpactMeasure].[ImpactDomain],[IMF.D.ImpactMeasure].[ObjectType],[IMF.D.ImpactMeasure].[ObjectName],[IMF.D.ImpactMeasure].[Severity],[IMF.D.ImpactMeasure].[Message],[IMF.D.ImpactMeasure].[DetectedAt]}",
+        "Purpose": "Impact measures shown in the impact tab."
+      },
+      {
+        "Name": "IMF.PAW.SS.ConfigKey.Exchange",
+        "Dimension": "IMF.D.ConfigKey",
+        "Expression": "{[IMF.D.ConfigKey].[NamingPrefix],[IMF.D.ConfigKey].[VersionDelimiter],[IMF.D.ConfigKey].[ArchiveTimestampFormat],[IMF.D.ConfigKey].[DefaultSourceType],[IMF.D.ConfigKey].[RequireApproval],[IMF.D.ConfigKey].[ExportDefaultFormat]}",
+        "Purpose": "Configuration keys shown in the exchange tab."
+      },
+      {
+        "Name": "IMF.PAW.SS.TextKey.Editing",
+        "Dimension": "IMF.D.TextKey",
+        "Expression": "{[IMF.D.TextKey].[paw.tab.editing],[IMF.D.TextKey].[paw.help.editing]}",
+        "Purpose": "Editing-related text keys shown in the editing tab."
+      }
+    ]
+  },
+  "views": {
+    "Workbook": "IMF.PAW.MasterFlow",
+    "Views": [
+      {
+        "Name": "IMF.PAW.MasterFlow.Tab.Overview",
+        "PrimaryObject": "IMF.C.Version",
+        "Purpose": "Overview of active managed dimensions, open versions, latest publish, blockers, and latest impact state.",
+        "Selectors": [
+          "IMF.D.Dimension",
+          "IMF.D.VersionMeasure"
+        ],
+        "DefaultSubsets": {
+          "IMF.D.Dimension": "IMF.PAW.SS.ManagedDimensions.Active"
+        },
+        "LocalizedTextKeys": [
+          "paw.tab.overview",
+          "paw.status.blockers",
+          "paw.status.latest_publish",
+          "paw.status.open_versions"
+        ]
+      },
+      {
+        "Name": "IMF.PAW.MasterFlow.Tab.Versions",
+        "PrimaryObject": "IMF.C.Version",
+        "Purpose": "Operational grid over all work versions with owner, status, lock state, and approval metadata.",
+        "Selectors": [
+          "IMF.D.Version",
+          "IMF.D.VersionMeasure"
+        ],
+        "DefaultSubsets": {
+          "IMF.D.Version": "IMF.PAW.SS.Version.Open"
+        },
+        "LocalizedTextKeys": [
+          "paw.tab.versions",
+          "paw.column.status",
+          "paw.column.owner",
+          "paw.column.lock_state"
+        ]
+      },
+      {
+        "Name": "IMF.PAW.MasterFlow.Tab.Editing",
+        "PrimaryObject": "IMF.C.Version",
+        "Purpose": "Landing page for work-version editing with localized instructions and selected version metadata.",
+        "Selectors": [
+          "IMF.D.Version",
+          "IMF.D.VersionMeasure",
+          "IMF.D.TextKey"
+        ],
+        "DefaultSubsets": {
+          "IMF.D.Version": "IMF.PAW.SS.Version.Open",
+          "IMF.D.VersionMeasure": "IMF.PAW.SS.VersionMeasure.Editing",
+          "IMF.D.TextKey": "IMF.PAW.SS.TextKey.Editing"
+        },
+        "LocalizedTextKeys": [
+          "paw.tab.editing",
+          "paw.help.editing"
+        ]
+      },
+      {
+        "Name": "IMF.PAW.MasterFlow.Tab.Validation",
+        "PrimaryObject": "IMF.C.Validation",
+        "Purpose": "Validation findings grid for technical and business checks.",
+        "Selectors": [
+          "IMF.D.ValidationRecord",
+          "IMF.D.ValidationMeasure"
+        ],
+        "DefaultSubsets": {
+          "IMF.D.ValidationMeasure": "IMF.PAW.SS.ValidationMeasure.OpenVersionMeasures"
+        },
+        "LocalizedTextKeys": [
+          "paw.tab.validation",
+          "validation.mandatory_attribute_missing",
+          "validation.alias_collision"
+        ]
+      },
+      {
+        "Name": "IMF.PAW.MasterFlow.Tab.Impact",
+        "PrimaryObject": "IMF.C.Impact",
+        "Purpose": "Impact analysis view across cubes, subsets, views, processes, security, and integrations.",
+        "Selectors": [
+          "IMF.D.ImpactRecord",
+          "IMF.D.ImpactMeasure"
+        ],
+        "DefaultSubsets": {
+          "IMF.D.ImpactMeasure": "IMF.PAW.SS.ImpactMeasure.SummaryMeasures"
+        },
+        "LocalizedTextKeys": [
+          "paw.tab.impact",
+          "paw.status.impact_warning",
+          "paw.status.impact_blocker"
+        ]
+      },
+      {
+        "Name": "IMF.PAW.MasterFlow.Tab.Publish",
+        "PrimaryObject": "IMF.C.Version",
+        "Purpose": "Publish cockpit with pre-publish checks, target archive name, and localized guidance.",
+        "Selectors": [
+          "IMF.D.Version",
+          "IMF.D.VersionMeasure"
+        ],
+        "DefaultSubsets": {
+          "IMF.D.Version": "IMF.PAW.SS.Version.Open",
+          "IMF.D.VersionMeasure": "IMF.PAW.SS.VersionMeasure.Publish"
+        },
+        "LocalizedTextKeys": [
+          "paw.tab.publish",
+          "paw.help.publish"
+        ]
+      },
+      {
+        "Name": "IMF.PAW.MasterFlow.Tab.Archive",
+        "PrimaryObject": "IMF.C.Version",
+        "Purpose": "Archive history view over published and archived master snapshots.",
+        "Selectors": [
+          "IMF.D.Version",
+          "IMF.D.VersionMeasure"
+        ],
+        "DefaultSubsets": {
+          "IMF.D.Version": "IMF.PAW.SS.Version.Open",
+          "IMF.D.VersionMeasure": "IMF.PAW.SS.VersionMeasure.Archive"
+        },
+        "LocalizedTextKeys": [
+          "paw.tab.archive",
+          "paw.column.archive_dimension"
+        ]
+      },
+      {
+        "Name": "IMF.PAW.MasterFlow.Tab.Rollback",
+        "PrimaryObject": "IMF.C.Version",
+        "Purpose": "Rollback selection and guidance screen over archived master candidates.",
+        "Selectors": [
+          "IMF.D.Version",
+          "IMF.D.TextKey"
+        ],
+        "DefaultSubsets": {
+          "IMF.D.Version": "IMF.PAW.SS.Version.Open"
+        },
+        "LocalizedTextKeys": [
+          "paw.tab.rollback",
+          "paw.help.rollback"
+        ]
+      },
+      {
+        "Name": "IMF.PAW.MasterFlow.Tab.Exchange",
+        "PrimaryObject": "IMF.C.Config",
+        "Purpose": "Export and import control surface for CSV, JSON, and SQL exchange patterns.",
+        "Selectors": [
+          "IMF.D.ConfigKey"
+        ],
+        "DefaultSubsets": {
+          "IMF.D.ConfigKey": "IMF.PAW.SS.ConfigKey.Exchange"
+        },
+        "LocalizedTextKeys": [
+          "paw.tab.export_import",
+          "paw.help.exchange"
+        ]
+      }
+    ]
+  },
+  "runtime": {
+    "Workbook": "IMF.PAW.MasterFlow",
+    "Type": "PAWRuntimeSpec",
+    "Purpose": "Runtime contract for TM1 public subsets and views that back the first IMF PAW workbook tabs.",
+    "BuilderProcess": "IMF.P.PAW.SyncRuntime",
+    "PublicSubsets": [
+      "IMF.PAW.SS.ManagedDimensions.Active",
+      "IMF.PAW.SS.Version.Open",
+      "IMF.PAW.SS.VersionMeasure.Operational",
+      "IMF.PAW.SS.VersionMeasure.Editing",
+      "IMF.PAW.SS.VersionMeasure.Publish",
+      "IMF.PAW.SS.VersionMeasure.Archive",
+      "IMF.PAW.SS.VersionMeasure.Rollback",
+      "IMF.PAW.SS.ValidationRecord.All",
+      "IMF.PAW.SS.ValidationMeasure.OpenVersionMeasures",
+      "IMF.PAW.SS.ImpactRecord.All",
+      "IMF.PAW.SS.ImpactMeasure.SummaryMeasures",
+      "IMF.PAW.SS.ConfigKey.Exchange",
+      "IMF.PAW.SS.TextKey.Editing"
+    ],
+    "PublicViews": [
+      "IMF.PAW.V.Overview",
+      "IMF.PAW.V.Versions",
+      "IMF.PAW.V.Editing",
+      "IMF.PAW.V.Validation",
+      "IMF.PAW.V.Impact",
+      "IMF.PAW.V.Publish",
+      "IMF.PAW.V.Archive",
+      "IMF.PAW.V.Rollback",
+      "IMF.PAW.V.Exchange"
+    ]
+  },
+  "layout": {
+    "Workbook": "IMF.PAW.MasterFlow",
+    "Type": "PAWLayoutSpec",
+    "Purpose": "Source-controlled layout contract for the IMF PAW workbook, including widget composition and action placement.",
+    "Pages": [
+      {
+        "TabId": "overview",
+        "Layout": "two-column-summary",
+        "Widgets": [
+          {
+            "Id": "overview_header",
+            "Type": "title",
+            "TextKey": "paw.tab.overview"
+          },
+          {
+            "Id": "overview_grid",
+            "Type": "cube-view",
+            "View": "IMF.PAW.V.Overview",
+            "Position": "left"
+          },
+          {
+            "Id": "overview_help",
+            "Type": "text-panel",
+            "TextKey": "paw.help.overview",
+            "Position": "right"
+          }
+        ]
+      },
+      {
+        "TabId": "versions",
+        "Layout": "grid-with-actions",
+        "Widgets": [
+          {
+            "Id": "versions_grid",
+            "Type": "cube-view",
+            "View": "IMF.PAW.V.Versions"
+          },
+          {
+            "Id": "versions_actions",
+            "Type": "action-bar",
+            "Actions": [
+              "create_version",
+              "run_compare",
+              "run_validate",
+              "run_impact"
+            ]
+          }
+        ]
+      },
+      {
+        "TabId": "editing",
+        "Layout": "grid-with-side-panel",
+        "Widgets": [
+          {
+            "Id": "editing_grid",
+            "Type": "cube-view",
+            "View": "IMF.PAW.V.Editing",
+            "Position": "left"
+          },
+          {
+            "Id": "editing_help",
+            "Type": "text-panel",
+            "TextKey": "paw.help.editing",
+            "Position": "right"
+          }
+        ]
+      },
+      {
+        "TabId": "validation",
+        "Layout": "grid-with-side-panel",
+        "Widgets": [
+          {
+            "Id": "validation_grid",
+            "Type": "cube-view",
+            "View": "IMF.PAW.V.Validation",
+            "Position": "left"
+          },
+          {
+            "Id": "validation_help",
+            "Type": "text-panel",
+            "TextKey": "paw.help.validation",
+            "Position": "right"
+          }
+        ]
+      },
+      {
+        "TabId": "impact",
+        "Layout": "grid-with-side-panel",
+        "Widgets": [
+          {
+            "Id": "impact_grid",
+            "Type": "cube-view",
+            "View": "IMF.PAW.V.Impact",
+            "Position": "left"
+          },
+          {
+            "Id": "impact_help",
+            "Type": "text-panel",
+            "TextKey": "paw.help.impact",
+            "Position": "right"
+          }
+        ]
+      },
+      {
+        "TabId": "publish",
+        "Layout": "grid-with-actions",
+        "Widgets": [
+          {
+            "Id": "publish_grid",
+            "Type": "cube-view",
+            "View": "IMF.PAW.V.Publish"
+          },
+          {
+            "Id": "publish_actions",
+            "Type": "action-bar",
+            "Actions": [
+              "prepare_publish"
+            ]
+          }
+        ]
+      },
+      {
+        "TabId": "archive",
+        "Layout": "single-grid",
+        "Widgets": [
+          {
+            "Id": "archive_grid",
+            "Type": "cube-view",
+            "View": "IMF.PAW.V.Archive"
+          }
+        ]
+      },
+      {
+        "TabId": "rollback",
+        "Layout": "grid-with-side-panel",
+        "Widgets": [
+          {
+            "Id": "rollback_grid",
+            "Type": "cube-view",
+            "View": "IMF.PAW.V.Rollback",
+            "Position": "left"
+          },
+          {
+            "Id": "rollback_help",
+            "Type": "text-panel",
+            "TextKey": "paw.help.rollback",
+            "Position": "right"
+          }
+        ]
+      },
+      {
+        "TabId": "exchange",
+        "Layout": "grid-with-side-panel",
+        "Widgets": [
+          {
+            "Id": "exchange_grid",
+            "Type": "cube-view",
+            "View": "IMF.PAW.V.Exchange",
+            "Position": "left"
+          },
+          {
+            "Id": "exchange_help",
+            "Type": "text-panel",
+            "TextKey": "paw.help.exchange",
+            "Position": "right"
+          }
+        ]
+      }
+    ]
+  },
+  "deployment": {
+    "Workbook": "IMF.PAW.MasterFlow",
+    "Type": "PAWDeploymentSpec",
+    "Purpose": "Deployment contract for materializing the IMF PAW workbook in a target PAW environment.",
+    "Dependencies": {
+      "RuntimeSpec": "IMF.PAW.MasterFlow.Runtime",
+      "LayoutSpec": "IMF.PAW.MasterFlow.Layout",
+      "ActionSpec": "IMF.PAW.MasterFlow.Actions",
+      "ViewSpec": "IMF.PAW.MasterFlow.Views",
+      "SubsetSpec": "IMF.PAW.MasterFlow.Subsets"
+    },
+    "Target": {
+      "BookName": "IMF MasterFlow",
+      "FolderPath": "/Applications/Intito/IMF",
+      "Visibility": "Shared",
+      "DefaultLandingTab": "overview"
+    },
+    "DeploymentSequence": [
+      "Run IMF.P.PAW.SyncRuntime",
+      "Validate required public subsets",
+      "Validate required public views",
+      "Materialize workbook tabs from LayoutSpec",
+      "Bind action buttons to IMF processes",
+      "Resolve localized text keys"
+    ],
+    "OpenIssues": [
+      "Native PAW workbook creation is still environment-specific and not automated in this repo.",
+      "Localized workbook captions depend on IMF text-key resolution in the target environment.",
+      "Editing tab runtime assets remain to be implemented."
+    ]
+  }
+}

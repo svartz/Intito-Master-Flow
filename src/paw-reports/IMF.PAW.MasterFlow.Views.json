@@ -65,7 +65,7 @@
         "IMF.D.ValidationMeasure"
       ],
       "DefaultSubsets": {
-        "IMF.D.ValidationMeasure": "IMF.PAW.SS.Validation.OpenVersionMeasures"
+        "IMF.D.ValidationMeasure": "IMF.PAW.SS.ValidationMeasure.OpenVersionMeasures"
       },
       "LocalizedTextKeys": [
         "paw.tab.validation",
@@ -82,7 +82,7 @@
         "IMF.D.ImpactMeasure"
       ],
       "DefaultSubsets": {
-        "IMF.D.ImpactMeasure": "IMF.PAW.SS.Impact.SummaryMeasures"
+        "IMF.D.ImpactMeasure": "IMF.PAW.SS.ImpactMeasure.SummaryMeasures"
       },
       "LocalizedTextKeys": [
         "paw.tab.impact",

@@ -46,13 +46,13 @@
       "Purpose": "Version measures shown in the rollback tab."
     },
     {
-      "Name": "IMF.PAW.SS.Validation.OpenVersionMeasures",
+      "Name": "IMF.PAW.SS.ValidationMeasure.OpenVersionMeasures",
       "Dimension": "IMF.D.ValidationMeasure",
       "Expression": "{[IMF.D.ValidationMeasure].[VersionId],[IMF.D.ValidationMeasure].[ValidationType],[IMF.D.ValidationMeasure].[RuleCode],[IMF.D.ValidationMeasure].[ObjectName],[IMF.D.ValidationMeasure].[Severity],[IMF.D.ValidationMeasure].[Message],[IMF.D.ValidationMeasure].[DetectedAt]}",
       "Purpose": "Validation measures shown in the validation tab."
     },
     {
-      "Name": "IMF.PAW.SS.Impact.SummaryMeasures",
+      "Name": "IMF.PAW.SS.ImpactMeasure.SummaryMeasures",
       "Dimension": "IMF.D.ImpactMeasure",
       "Expression": "{[IMF.D.ImpactMeasure].[VersionId],[IMF.D.ImpactMeasure].[ImpactDomain],[IMF.D.ImpactMeasure].[ObjectType],[IMF.D.ImpactMeasure].[ObjectName],[IMF.D.ImpactMeasure].[Severity],[IMF.D.ImpactMeasure].[Message],[IMF.D.ImpactMeasure].[DetectedAt]}",
       "Purpose": "Impact measures shown in the impact tab."
