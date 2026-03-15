@@ -6,7 +6,7 @@ This document summarizes the current Bedrock adoption status for IMF.
 
 The authoritative machine-readable register is:
 
-- [IMF_Bedrock_Refactor_Register.yaml](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Refactor_Register.yaml)
+- [IMF_Bedrock_Refactor_Register.yaml](/c:/Git/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Refactor_Register.yaml)
 
 ## Current Phase
 
@@ -82,8 +82,8 @@ Whenever Bedrock adoption status changes:
 Bedrock parameter contracts used by IMF are now verified against the Bedrock 5 GitHub repository.
 
 Reference artifacts:
-- [IMF_Bedrock_Parameter_Spec.md](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Parameter_Spec.md)
-- [IMF_Bedrock_Parameter_Mismatch.csv](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Parameter_Mismatch.csv)
+- [IMF_Bedrock_Parameter_Spec.md](/c:/Git/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Parameter_Spec.md)
+- [IMF_Bedrock_Parameter_Mismatch.csv](/c:/Git/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Parameter_Mismatch.csv)
 
 Current result:
 - `IMF.P.Dimension.Create`: fixed to use `pDim`

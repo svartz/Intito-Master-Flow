@@ -239,8 +239,8 @@ Bedrock may help with generic file and metadata utility patterns, but IMF-specif
 ## Concrete Mapping Strategy
 See:
 
-- [IMF_Bedrock_Process_Mapping.csv](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Process_Mapping.csv)
-- [IMF_Bedrock_Refactor_Register.yaml](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Refactor_Register.yaml)
+- [IMF_Bedrock_Process_Mapping.csv](/c:/Git/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Process_Mapping.csv)
+- [IMF_Bedrock_Refactor_Register.yaml](/c:/Git/Intito-Master-Flow/docs/architecture/IMF_Bedrock_Refactor_Register.yaml)
 
 Summary:
 

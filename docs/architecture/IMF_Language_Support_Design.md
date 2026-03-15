@@ -261,15 +261,15 @@ The PAW UI design should explicitly distinguish:
 
 Language additions and translation lifecycle are governed in:
 
-- [IMF_Language_Governance.md](/c:/Programming/Intito-Master-Flow/docs/governance/IMF_Language_Governance.md)
+- [IMF_Language_Governance.md](/c:/Git/Intito-Master-Flow/docs/governance/IMF_Language_Governance.md)
 
 Status tracking is maintained in:
 
-- [language_support_status.md](/c:/Programming/Intito-Master-Flow/docs/status/language_support_status.md)
+- [language_support_status.md](/c:/Git/Intito-Master-Flow/docs/status/language_support_status.md)
 
 Key inventory is maintained in:
 
-- [IMF_Language_Key_Register.csv](/c:/Programming/Intito-Master-Flow/docs/architecture/IMF_Language_Key_Register.csv)
+- [IMF_Language_Key_Register.csv](/c:/Git/Intito-Master-Flow/docs/architecture/IMF_Language_Key_Register.csv)
 
 ## Release And Build Traceability
 

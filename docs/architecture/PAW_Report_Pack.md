@@ -6,13 +6,13 @@ This document defines the source-controlled PAW workbook baseline for IMF.
 
 The repo now contains report-pack specifications under:
 
-- [`src/paw-reports/IMF.PAW.MasterFlow.Workbook.json`](/c:/Programming/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Workbook.json)
-- [`src/paw-reports/IMF.PAW.MasterFlow.Views.json`](/c:/Programming/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Views.json)
-- [`src/paw-reports/IMF.PAW.MasterFlow.Subsets.json`](/c:/Programming/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Subsets.json)
-- [`src/paw-reports/IMF.PAW.MasterFlow.Actions.json`](/c:/Programming/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Actions.json)
-- [`src/paw-reports/IMF.PAW.MasterFlow.Runtime.json`](/c:/Programming/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Runtime.json)
-- [`src/paw-reports/IMF.PAW.MasterFlow.Layout.json`](/c:/Programming/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Layout.json)
-- [`src/paw-reports/IMF.PAW.MasterFlow.Deployment.json`](/c:/Programming/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Deployment.json)
+- [`src/paw-reports/IMF.PAW.MasterFlow.Workbook.json`](/c:/Git/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Workbook.json)
+- [`src/paw-reports/IMF.PAW.MasterFlow.Views.json`](/c:/Git/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Views.json)
+- [`src/paw-reports/IMF.PAW.MasterFlow.Subsets.json`](/c:/Git/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Subsets.json)
+- [`src/paw-reports/IMF.PAW.MasterFlow.Actions.json`](/c:/Git/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Actions.json)
+- [`src/paw-reports/IMF.PAW.MasterFlow.Runtime.json`](/c:/Git/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Runtime.json)
+- [`src/paw-reports/IMF.PAW.MasterFlow.Layout.json`](/c:/Git/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Layout.json)
+- [`src/paw-reports/IMF.PAW.MasterFlow.Deployment.json`](/c:/Git/Intito-Master-Flow/src/paw-reports/IMF.PAW.MasterFlow.Deployment.json)
 
 These files are not exported PAW workbooks. They are deterministic workbook and view specifications intended for:
 

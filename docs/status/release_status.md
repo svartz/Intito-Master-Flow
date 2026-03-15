@@ -14,8 +14,8 @@ This document shows the latest known release state by environment.
 
 ## Current Working Release
 
-- Unreleased notes: [unreleased.md](/c:/Programming/Intito-Master-Flow/docs/releases/unreleased.md)
-- Build template: [imf-build-template.json](/c:/Programming/Intito-Master-Flow/build/manifests/imf-build-template.json)
+- Unreleased notes: [unreleased.md](/c:/Git/Intito-Master-Flow/docs/releases/unreleased.md)
+- Build template: [imf-build-template.json](/c:/Git/Intito-Master-Flow/build/manifests/imf-build-template.json)
 
 ## Update Rule
 

@@ -6,7 +6,7 @@ This document describes the current deploy flow for IMF PAW workbook specificati
 
 The repo now contains a deterministic PAW packaging utility:
 
-- [`tools/paw_deploy.py`](/c:/Programming/Intito-Master-Flow/tools/paw_deploy.py)
+- [`tools/paw_deploy.py`](/c:/Git/Intito-Master-Flow/tools/paw_deploy.py)
 
 The utility does not create native PAW books directly yet. It validates and packages the PAW source specifications into a deploy bundle that can later be transformed or consumed by a PAW-specific automation step.
 
