@@ -3,6 +3,12 @@
 
 Framework for version-controlled master data management in IBM Planning Analytics (TM1).
 
+## User Guide
+
+For a simple end-user explanation of how IMF works:
+
+- [IMF_For_Dummies_Guide.md](/c:/Git/Intito-Master-Flow/docs/IMF_For_Dummies_Guide.md)
+
 ## Key Capabilities
 
 - Versioned dimension changes
